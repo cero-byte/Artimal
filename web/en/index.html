@@ -1,0 +1,2893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>artimal IMAGINATION FLOW · ENGLISH imagination flow fixed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#1A2E44;--navy-mid:#22405C;--navy-light:#2E5274;
+  --ink:#15212F;--steel:#4A7196;--mist:#8FB3CE;
+  --pale:#C7DCEA;--fog:#E3EFF6;
+  --gold:#CBAA76;--gold-light:#E9D9B8;--white:#FAFBFA;
+  --deep:#060e18;
+}
+html,body{min-height:100vh;background:var(--navy);display:flex;align-items:flex-start;justify-content:center;padding:32px 16px 48px;}
+.app{width:100%;max-width:680px;background:var(--navy);border-radius:20px;border:0.5px solid rgba(143,179,206,.15);overflow:visible;font-family:'Inter',sans-serif;color:var(--fog);}
+.hdr{padding:26px 36px 0;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Playfair Display',serif;font-size:16px;letter-spacing:.12em;color:var(--gold);font-style:italic;}
+.dots{display:flex;gap:7px;align-items:center;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--steel);transition:all .4s cubic-bezier(.4,0,.2,1);}
+.dot.on{background:var(--gold);width:18px;border-radius:3px;}
+.body{padding:28px 36px 36px;}
+.screen{display:none;}
+.screen.on{display:block;animation:fIn .45s cubic-bezier(.4,0,.2,1);}
+@keyframes fIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.ai-lbl{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.ai-lbl::after{content:'';flex:1;height:.5px;background:rgba(203,170,118,.2);}
+.headline{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:var(--white);line-height:1.35;margin-bottom:5px;}
+.headline em{color:var(--gold);font-style:italic;}
+.sub{font-size:13px;color:var(--mist);font-weight:300;margin-bottom:26px;line-height:1.6;}
+.prompt-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:13px;}
+.p-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);min-width:76px;padding-top:13px;font-weight:500;}
+.p-input{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(143,179,206,.22);border-radius:9px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--white);outline:none;resize:none;transition:border-color .25s,background .25s;line-height:1.55;font-weight:300;}
+.p-input::placeholder{color:rgba(143,179,206,.4);}
+.p-input:focus{border-color:rgba(203,170,118,.5);background:rgba(255,255,255,.06);}
+.divider{height:.5px;background:rgba(143,179,206,.12);margin:8px 0 20px;}
+.tags-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:10px;font-weight:400;}
+.word-group{margin-bottom:16px;}
+.word-group-label{font-size:10px;color:rgba(143,179,206,.6);margin-bottom:8px;font-weight:400;letter-spacing:.03em;}
+.tags{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{padding:6px 14px;border-radius:20px;font-size:12px;border:.5px solid rgba(143,179,206,.28);color:var(--mist);cursor:pointer;transition:all .22s cubic-bezier(.4,0,.2,1);font-weight:300;user-select:none;}
+.tag:hover{border-color:var(--gold);color:var(--gold-light);}
+.tag.sel{background:rgba(203,170,118,.14);border-color:var(--gold);color:var(--gold-light);}
+.tag.sel::before{content:'✓ ';font-size:10px;}
+.btn-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+.btn-p{display:inline-flex;align-items:center;gap:7px;background:var(--gold);color:var(--ink);border:none;padding:12px 24px;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;letter-spacing:.04em;font-family:'Inter',sans-serif;transition:all .2s cubic-bezier(.4,0,.2,1);}
+.btn-p:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-p:active{transform:translateY(0) scale(.98);}
+.btn-g{display:inline-flex;align-items:center;gap:5px;background:transparent;color:var(--mist);border:.5px solid rgba(143,179,206,.28);padding:10px 18px;border-radius:9px;font-size:12px;cursor:pointer;letter-spacing:.04em;font-family:'Inter',sans-serif;font-weight:300;transition:all .2s cubic-bezier(.4,0,.2,1);}
+.btn-g:hover{border-color:var(--mist);color:var(--pale);}
+.btn-g:active{transform:scale(.98);}
+.weight-hint{font-size:11px;color:rgba(143,179,206,.55);font-weight:300;margin-top:-6px;margin-bottom:20px;line-height:1.6;font-style:italic;}
+.custom-input-row{display:flex;gap:8px;margin-top:12px;margin-bottom:4px;}
+.custom-input{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(143,179,206,.2);border-radius:8px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:12px;color:var(--white);outline:none;transition:border-color .25s;font-weight:300;}
+.custom-input::placeholder{color:rgba(143,179,206,.35);}
+.custom-input:focus{border-color:rgba(203,170,118,.45);}
+.custom-add-btn{background:rgba(203,170,118,.12);border:.5px solid rgba(203,170,118,.35);color:var(--gold-light);border-radius:8px;padding:9px 16px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap;}
+.custom-add-btn:hover{background:rgba(203,170,118,.2);}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+.cat{border:.5px solid rgba(143,179,206,.18);border-radius:11px;padding:18px 14px;cursor:pointer;transition:all .28s cubic-bezier(.4,0,.2,1);text-align:center;background:rgba(255,255,255,.02);}
+.cat:hover{border-color:rgba(203,170,118,.4);background:rgba(203,170,118,.05);}
+.cat.sel{border-color:var(--gold);background:rgba(203,170,118,.09);}
+.cat-icon{font-size:22px;margin-bottom:6px;}
+.cat-name{font-size:12px;color:var(--pale);font-weight:400;letter-spacing:.03em;}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.pill{padding:7px 16px;border-radius:20px;font-size:13px;border:.5px solid rgba(143,179,206,.22);color:var(--pale);cursor:pointer;transition:all .22s cubic-bezier(.4,0,.2,1);font-weight:300;background:rgba(255,255,255,.02);}
+.pill:hover{border-color:var(--gold);color:var(--gold-light);}
+.pill.sel{border-color:var(--gold);background:rgba(203,170,118,.1);color:var(--gold-light);}
+.img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px;}
+.img-card{border:.5px solid rgba(143,179,206,.18);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .28s cubic-bezier(.4,0,.2,1);}
+.img-card:hover{border-color:rgba(203,170,118,.45);}
+.img-card.sel{border:1.5px solid var(--gold);}
+.img-face{height:90px;display:flex;align-items:center;justify-content:center;background:rgba(34,64,92,.6);font-size:30px;}
+.img-name{font-size:10px;color:var(--mist);text-align:center;padding:8px;letter-spacing:.06em;text-transform:uppercase;font-weight:400;border-top:.5px solid rgba(143,179,206,.12);}
+.section-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:11px;font-weight:400;}
+.s4-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;}
+@media(max-width:600px){.s4-layout{grid-template-columns:1fr;}}
+.canvas-wrap{position:relative;width:100%;height:360px;border-radius:13px;overflow:hidden;border:.5px solid rgba(143,179,206,.2);margin-bottom:14px;background:#101d2b;cursor:grab;}
+.canvas-wrap:active{cursor:grabbing;}
+canvas#c3d{display:block;width:100%;height:100%;}
+.canvas-hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(143,179,206,.55);letter-spacing:.08em;text-transform:uppercase;pointer-events:none;white-space:nowrap;background:rgba(16,29,43,.7);padding:4px 12px;border-radius:20px;}
+.view-tabs{display:flex;gap:0;margin-bottom:14px;border:.5px solid rgba(143,179,206,.2);border-radius:9px;overflow:hidden;}
+.view-tab{flex:1;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--mist);padding:9px;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;transition:all .2s;font-weight:400;}
+.view-tab.on{color:var(--gold);background:rgba(203,170,118,.08);}
+.map-rows{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;}
+.map-row{display:flex;flex-direction:column;gap:5px;}
+.map-row-top{display:flex;align-items:center;gap:9px;}
+.part-badge{font-size:11px;color:var(--gold);border:.5px solid rgba(203,170,118,.38);border-radius:5px;padding:4px 10px;white-space:nowrap;min-width:82px;text-align:center;font-weight:400;letter-spacing:.04em;}
+.arr{color:rgba(143,179,206,.4);font-size:13px;}
+.map-hint{font-size:11px;color:rgba(143,179,206,.55);font-weight:300;padding-left:91px;line-height:1.5;}
+.map-inp{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(143,179,206,.18);border-radius:7px;padding:8px 11px;font-family:'Inter',sans-serif;font-size:13px;color:var(--white);outline:none;transition:border-color .25s;font-weight:300;}
+.map-inp::placeholder{color:rgba(143,179,206,.35);}
+.map-inp:focus{border-color:rgba(203,170,118,.45);}
+.phrase-box{background:rgba(255,255,255,.045);border:.5px solid rgba(203,170,118,.28);border-radius:10px;padding:15px 17px;margin-bottom:20px;}
+.phrase-lbl{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;font-weight:500;}
+.phrase-txt{font-family:'Playfair Display',serif;font-size:15px;color:var(--white);line-height:1.75;font-style:italic;}
+.wm{font-size:9px;color:rgba(143,179,206,.22);letter-spacing:.12em;text-transform:uppercase;text-align:right;padding:0 36px 18px;font-weight:300;}
+.clicked-flash{animation:flash .4s ease;}
+@keyframes flash{0%{border-color:var(--gold);}50%{border-color:var(--gold-light);}100%{border-color:rgba(203,170,118,.45);}}
+
+/* ============================================================
+   SCREEN 0 — Introduction
+   ============================================================ */
+.intro-wrap{padding:4px 0 8px;}
+.intro-line{opacity:0;transform:translateY(8px);animation:wIn .7s cubic-bezier(.4,0,.2,1) forwards;}
+.intro-line:nth-child(1){animation-delay:.1s;}
+.intro-line:nth-child(2){animation-delay:.5s;}
+.intro-line:nth-child(3){animation-delay:.9s;}
+.intro-line:nth-child(4){animation-delay:1.3s;}
+.intro-line:nth-child(5){animation-delay:1.7s;}
+@keyframes wIn{to{opacity:1;transform:translateY(0);}}
+.intro-wordmark{font-family:'Playfair Display',serif;font-size:44px;color:var(--gold);font-style:italic;letter-spacing:.06em;margin-bottom:4px;line-height:1.1;}
+.intro-tagline{font-size:14px;color:var(--pale);font-weight:300;line-height:1.8;margin-bottom:26px;}
+.intro-research{font-size:12px;color:rgba(143,179,206,.72);line-height:1.8;font-weight:300;margin-bottom:26px;padding:16px 18px;background:rgba(255,255,255,.03);border-radius:10px;border:.5px solid rgba(143,179,206,.12);border-left:2px solid rgba(203,170,118,.45);}
+.intro-research strong{color:var(--gold-light);font-weight:500;}
+.intro-meta{font-size:11px;color:rgba(143,179,206,.45);letter-spacing:.05em;margin-bottom:22px;display:flex;align-items:center;gap:8px;}
+.intro-meta-dot{width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:.6;}
+
+/* ============================================================
+   INTRO MODAL
+   ============================================================ */
+.modal-overlay{position:fixed;inset:0;background:rgba(6,14,24,.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:1000;}
+.modal-overlay.hidden{display:none;}
+.modal-box{background:var(--navy-mid);border:.5px solid rgba(203,170,118,.3);border-radius:16px;padding:34px 30px 28px;max-width:400px;width:90%;position:relative;animation:mBoxIn .38s cubic-bezier(.4,0,.2,1);}
+@keyframes mBoxIn{from{opacity:0;transform:translateY(16px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.modal-title{font-family:'Playfair Display',serif;font-size:21px;color:var(--white);margin-bottom:5px;font-weight:400;}
+.modal-sub{font-size:12px;color:var(--mist);margin-bottom:26px;font-weight:300;line-height:1.6;}
+.modal-steps{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
+.modal-step{display:flex;align-items:flex-start;gap:14px;opacity:0;transform:translateY(6px);animation:wIn .55s cubic-bezier(.4,0,.2,1) forwards;}
+.modal-step:nth-child(1){animation-delay:.08s;}
+.modal-step:nth-child(2){animation-delay:.28s;}
+.modal-step:nth-child(3){animation-delay:.48s;}
+.modal-step:nth-child(4){animation-delay:.68s;}
+.modal-step-num{width:26px;height:26px;border-radius:50%;border:.5px solid rgba(203,170,118,.5);color:var(--gold);font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Playfair Display',serif;font-style:italic;margin-top:1px;}
+.modal-step-text{font-size:13px;color:var(--pale);font-weight:300;line-height:1.55;}
+.modal-disclaimer{font-size:11px;color:rgba(143,179,206,.5);line-height:1.65;font-weight:300;font-style:italic;margin-bottom:22px;padding-left:40px;border-left:.5px solid rgba(143,179,206,.15);margin-left:0;}
+.modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--mist);font-size:20px;cursor:pointer;opacity:.5;transition:opacity .2s;line-height:1;}
+.modal-close:hover{opacity:1;}
+
+/* ============================================================
+   SCREEN 1 — Body Sensation Meditation
+   ============================================================ */
+.medit-start{text-align:center;padding:28px 0 8px;}
+.medit-start-eyebrow{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-weight:500;}
+.medit-start-title{font-family:'Playfair Display',serif;font-size:24px;color:var(--white);margin-bottom:10px;font-weight:400;line-height:1.35;}
+.medit-start-sub{font-size:13px;color:var(--mist);font-weight:300;margin-bottom:28px;line-height:1.75;}
+.medit-canvas-wrap{position:relative;border-radius:14px;overflow:hidden;background:var(--deep);border:.5px solid rgba(143,179,206,.12);}
+canvas#cMedit{display:block;width:100%;height:420px;}
+.medit-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 28px 30px;pointer-events:none;}
+.medit-pips{display:flex;gap:6px;justify-content:center;margin-bottom:16px;}
+.medit-pip{width:5px;height:5px;border-radius:50%;background:rgba(143,179,206,.2);transition:all .5s;}
+.medit-pip.done{background:rgba(203,170,118,.5);}
+.medit-pip.active{background:var(--mist);transform:scale(1.3);}
+.medit-breath-text{font-family:'Playfair Display',serif;font-size:15px;color:rgba(199,220,234,.88);font-style:italic;font-weight:400;text-align:center;line-height:1.7;max-width:300px;min-height:48px;transition:opacity .7s ease;}
+.medit-done-row{text-align:center;padding:20px 0 4px;}
+
+/* ============================================================
+   SCREEN 2 — Emotion Expression
+   ============================================================ */
+.research-note{margin-top:22px;padding:13px 16px 14px;background:rgba(6,14,24,.35);border-radius:10px;border:.5px solid rgba(143,179,206,.1);}
+.research-note-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(143,179,206,.4);margin-bottom:6px;font-weight:400;}
+.research-note-text{font-size:11.5px;color:rgba(143,179,206,.58);line-height:1.72;font-weight:300;font-style:italic;}
+
+/* Empty state card */
+.empty-card-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:800;}
+.empty-card-overlay.hidden{display:none;}
+.empty-card{background:rgba(22,42,62,.95);backdrop-filter:blur(10px);border:.5px solid rgba(143,179,206,.25);border-radius:14px;padding:26px 28px;max-width:310px;width:88%;text-align:center;animation:mBoxIn .3s cubic-bezier(.4,0,.2,1);}
+.empty-card-text{font-family:'Playfair Display',serif;font-size:16px;color:var(--white);line-height:1.6;font-style:italic;margin-bottom:10px;}
+.empty-card-sub{font-size:12px;color:var(--mist);font-weight:300;line-height:1.6;margin-bottom:16px;}
+.empty-card-dismiss{font-size:11px;color:rgba(143,179,206,.38);letter-spacing:.06em;}
+
+/* ============================================================
+   RITUAL BOX
+   ============================================================ */
+.ritual-box{background:rgba(255,255,255,.03);border:.5px solid rgba(203,170,118,.22);border-radius:12px;padding:22px 20px;margin-bottom:22px;}
+.ritual-step{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start;}
+.ritual-step:last-child{margin-bottom:0;}
+.ritual-num{font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:18px;min-width:24px;}
+.ritual-text{font-size:13px;color:var(--pale);line-height:1.7;font-weight:300;}
+.ritual-text strong{color:var(--gold-light);font-weight:500;}
+
+.body-model-note{
+  margin-top:10px;
+  font-size:11px;
+  color:rgba(143,179,206,.58);
+  line-height:1.55;
+  font-style:italic;
+}
+.body-model-note strong{color:var(--gold-light);font-weight:500;}
+.model-status-line{
+  position:absolute;
+  left:12px;
+  top:12px;
+  z-index:2;
+  max-width:calc(100% - 24px);
+  border:.5px solid rgba(203,170,118,.26);
+  background:rgba(6,14,24,.62);
+  backdrop-filter:blur(8px);
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:10px;
+  color:rgba(199,220,234,.8);
+  letter-spacing:.04em;
+  pointer-events:none;
+}
+
+
+
+/* ============================================================
+   GLASS 3D STYLE INTEGRATION — artimal x organ viewer
+   ============================================================ */
+html,body{
+  min-height:100vh;
+  height:100%;
+  padding:18px;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(255,107,138,.18), transparent 32%),
+    radial-gradient(circle at 82% 18%, rgba(139,124,255,.18), transparent 34%),
+    radial-gradient(circle at 52% 100%, rgba(70,220,190,.12), transparent 38%),
+    #07080d;
+}
+.app{
+  width:min(1180px, calc(100vw - 36px));
+  max-width:1180px;
+  height:calc(100vh - 36px);
+  max-height:860px;
+  min-height:720px;
+  background:rgba(18,20,31,.78);
+  backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:26px;
+  box-shadow:0 28px 90px rgba(0,0,0,.46);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.hdr{
+  flex:0 0 auto;
+  padding:28px 58px 0;
+}
+.body{
+  flex:1 1 auto;
+  padding:34px 58px 42px;
+  overflow:auto;
+  min-height:0;
+}
+.screen.on{
+  min-height:100%;
+}
+.logo,.intro-wordmark{color:#E9D9B8;text-shadow:0 0 24px rgba(203,170,118,.12);}
+.ai-lbl{font-size:12px;color:#E9D9B8;letter-spacing:.18em;}
+.headline{font-size:48px;line-height:1.16;letter-spacing:-.035em;}
+.sub{font-size:20px;color:#a5a8b8;max-width:940px;}
+.p-label,.section-lbl,.tags-lbl,.word-group-label{color:#E9D9B8;}
+.p-input,.custom-input,.map-inp,.prompt-output{
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;
+  color:#FAFBFA;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+}
+.p-input:focus,.custom-input:focus,.map-inp:focus,.prompt-output:focus{
+  border-color:rgba(255,107,138,.55);
+  background:rgba(255,255,255,.08);
+}
+.tag,.pill,.cat,.img-card,.btn-g,.view-tabs,.phrase-box,.ritual-box,.research-note,.intro-research,.modal-box{
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(18px);
+}
+.cat,.img-card{border-radius:22px;}
+.cat.sel,.img-card.sel,.pill.sel,.tag.sel{
+  border-color:rgba(255,107,138,.72);
+  background:linear-gradient(135deg,rgba(255,107,138,.24),rgba(139,124,255,.16));
+  box-shadow:0 0 28px rgba(255,107,138,.14);
+}
+.btn-p{
+  border-radius:16px;
+  padding:15px 28px;
+  background:linear-gradient(135deg,#ff6b8a,#8b7cff);
+  color:#fff;
+  box-shadow:0 14px 34px rgba(255,107,138,.18);
+}
+.btn-g{
+  border-radius:16px;
+  padding:14px 24px;
+}
+.wm{display:none;}
+.intro-wordmark{font-size:60px;}
+.intro-tagline{font-size:20px;}
+.intro-research{font-size:15px;}
+.cat-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+.cat{min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.cat-icon{font-size:34px;}
+.cat-name{font-size:18px;}
+.pill,.tag{font-size:18px;padding:10px 20px;border-radius:999px;}
+.img-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+.img-face{height:140px;background:rgba(255,255,255,.035);}
+.img-name{font-size:13px;}
+.prompt-row{gap:22px;margin-bottom:18px;}
+.p-label{min-width:110px;font-size:12px;padding-top:18px;}
+#s2 .p-input{font-size:19px;min-height:88px;}
+
+#s5{height:100%;}
+#s5 .headline{font-size:46px;margin-bottom:10px;}
+#s5 .sub{display:none;}
+.s5-stage{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);
+  gap:32px;
+  align-items:stretch;
+  height:calc(100% - 142px);
+  min-height:520px;
+}
+.s5-model-zone{
+  position:relative;
+  min-height:520px;
+  display:flex;
+  flex-direction:column;
+}
+.compact-tabs{
+  max-width:430px;
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:8px;
+  background:rgba(255,255,255,.055);
+}
+.open-canvas{
+  position:relative;
+  flex:1;
+  height:auto;
+  min-height:500px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  overflow:visible!important;
+  margin:0!important;
+  cursor:grab;
+}
+.open-canvas:active{cursor:grabbing;}
+canvas#c3d{width:100%;height:100%;display:block;}
+.open-canvas .model-status-line{
+  top:14px;
+  left:14px;
+  border-color:rgba(255,107,138,.35);
+  background:rgba(15,16,25,.54);
+}
+.canvas-hint{display:none!important;}
+.marker-layer{position:absolute;inset:0;pointer-events:none;z-index:5;}
+.model-marker{
+  position:absolute;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fff, #ff6b8a 42%, #8b7cff 100%);
+  box-shadow:0 0 18px rgba(255,107,138,.9),0 0 42px rgba(139,124,255,.48);
+  transform:translate(-50%,-50%);
+}
+.model-marker::after{
+  content:attr(data-label);
+  position:absolute;
+  left:24px;
+  top:50%;
+  transform:translateY(-50%);
+  max-width:180px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  color:#fff;
+  background:rgba(15,16,25,.76);
+  border:1px solid rgba(255,255,255,.12);
+}
+.imagination-panel,.direction-card{
+  background:rgba(18,20,31,.62);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  padding:24px;
+  backdrop-filter:blur(24px);
+  box-shadow:0 22px 60px rgba(0,0,0,.22);
+}
+.panel-title{font-family:'Playfair Display',serif;font-size:28px;line-height:1.25;color:#FAFBFA;margin-bottom:10px;}
+.panel-copy{font-size:14px;line-height:1.65;color:#a5a8b8;margin-bottom:16px;}
+.small-note{font-size:12px;margin-top:18px;}
+.mini-label{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E9D9B8;margin-bottom:8px;}
+.imagination-summary{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px;}
+.imagination-chip{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.055);
+  color:#c7dcea;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:13px;
+  cursor:pointer;
+  transition:all .18s;
+}
+.imagination-chip:hover,.imagination-chip.on{border-color:rgba(255,107,138,.62);color:#fff;background:rgba(255,107,138,.15);}
+.imagination-input{font-size:16px!important;min-height:94px!important;margin-bottom:14px!important;}
+.imagination-actions{margin-top:12px;}
+.placement-list{margin:16px 0 20px;display:flex;flex-direction:column;gap:10px;}
+.empty-placement,.placement-item{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);
+  border-radius:14px;
+  padding:12px 14px;
+  color:#a5a8b8;
+  font-size:13px;
+  line-height:1.5;
+}
+.placement-item strong{color:#E9D9B8;}
+.final-actions{margin-top:18px;}
+#generateImageBtn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5);}
+.direction-layout{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:start;margin:28px 0 24px;}
+.prompt-output{width:100%;font-family:'Inter',sans-serif;font-size:14px;line-height:1.65;padding:18px;resize:vertical;outline:none;}
+.soft-card .btn-p{margin-top:12px;}
+@media(max-width:900px){
+  html,body{overflow:auto;padding:10px;}
+  .app{height:auto;min-height:100vh;width:100%;}
+  .hdr,.body{padding-left:24px;padding-right:24px;}
+  .headline{font-size:38px;}
+  .s5-stage,.direction-layout{grid-template-columns:1fr;height:auto;}
+  .open-canvas{min-height:460px;}
+}
+
+
+/* ============================================================
+   IMAGINATION FLOW · ENGLISH GENERATION
+   ============================================================ */
+.live-generate-layout{grid-template-columns:1.05fr .95fr!important;}
+.api-panel{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+}
+.api-key-input{width:100%;margin-bottom:12px;}
+.api-grid{display:grid;grid-template-columns:1.15fr .9fr .95fr;gap:10px;margin-bottom:14px;}
+.live-result-card{min-height:560px;display:flex;flex-direction:column;gap:16px;}
+.hidden{display:none!important;}
+.waiting-panel,.result-panel,.error-panel,.refine-box{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);
+  border-radius:20px;
+  padding:20px;
+}
+.waiting-panel{
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.waiting-panel::before{
+  content:'';
+  position:absolute;
+  inset:-40%;
+  background:
+    radial-gradient(circle at 40% 38%, rgba(255,107,138,.18), transparent 23%),
+    radial-gradient(circle at 62% 50%, rgba(139,124,255,.18), transparent 28%),
+    radial-gradient(circle at 50% 75%, rgba(70,220,190,.12), transparent 28%);
+  animation:slowTurn 10s linear infinite;
+}
+@keyframes slowTurn{to{transform:rotate(360deg);}}
+.orb-loader{
+  width:86px;height:86px;border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 28%, #fff, transparent 12%),
+    radial-gradient(circle at 50% 50%, rgba(255,107,138,.9), rgba(139,124,255,.7) 52%, rgba(70,220,190,.22) 100%);
+  box-shadow:0 0 52px rgba(255,107,138,.35),0 0 80px rgba(139,124,255,.25);
+  margin-bottom:22px;
+  animation:pulseOrb 1.6s ease-in-out infinite;
+  position:relative;
+  z-index:1;
+}
+@keyframes pulseOrb{0%,100%{transform:scale(.96);filter:brightness(.92);}50%{transform:scale(1.08);filter:brightness(1.14);}}
+.wait-title{font-family:'Playfair Display',serif;font-size:28px;color:#FAFBFA;margin:8px 0 8px;position:relative;z-index:1;}
+.wait-copy{font-size:14px;line-height:1.7;color:#a5a8b8;max-width:420px;position:relative;z-index:1;}
+.wait-steps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px;position:relative;z-index:1;}
+.wait-step{font-size:11px;color:#8FB3CE;border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:7px 10px;background:rgba(6,14,24,.38);}
+.wait-step.on{color:#E9D9B8;border-color:rgba(203,170,118,.45);background:rgba(203,170,118,.1);}
+.generated-image{
+  width:100%;
+  border-radius:20px;
+  display:block;
+  background:rgba(0,0,0,.2);
+  box-shadow:0 18px 70px rgba(0,0,0,.35);
+  margin:12px 0 16px;
+}
+.error-text{font-size:13px;line-height:1.7;color:#ffb7c8;white-space:pre-wrap;}
+.refine-box{margin-top:auto;}
+@media(max-width:900px){
+  .api-grid,.live-generate-layout{grid-template-columns:1fr!important;}
+}
+
+
+/* ============================================================
+   IMAGINATION FLOW · ENGLISH FIXES
+   ============================================================ */
+.api-setup-card{
+  margin:24px 0 22px;
+  padding:20px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  background:rgba(255,255,255,.055);
+  backdrop-filter:blur(20px);
+  max-width:760px;
+}
+.api-setup-card .custom-input{font-size:15px!important;padding:14px 16px!important;margin-top:8px;width:100%;}
+.api-status{font-size:12px;color:#a5a8b8;margin-top:10px;line-height:1.5;}
+.api-status.ok{color:#E9D9B8;}
+.reflection-card{
+  margin:8px 0 18px 132px;
+  padding:15px 18px;
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,107,138,.16),rgba(139,124,255,.12));
+  border:1px solid rgba(255,255,255,.14);
+  color:#E9D9B8;
+  font-size:15px;
+  line-height:1.7;
+  box-shadow:0 18px 48px rgba(0,0,0,.16);
+}
+.reflection-card strong{color:#fff;font-weight:500;}
+#s2 .subtle-hint{font-size:13px;color:#a5a8b8;margin-top:6px;}
+/* remove the meditation robot/avatar visual; keep the breathing guidance */
+.medit-canvas-wrap.minimal-medit{
+  min-height:420px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255,107,138,.12), transparent 30%),
+    radial-gradient(circle at 54% 62%, rgba(139,124,255,.12), transparent 34%),
+    rgba(6,14,24,.48);
+  border:1px solid rgba(255,255,255,.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.medit-canvas-wrap.minimal-medit canvas{display:none!important;}
+.medit-canvas-wrap.minimal-medit .medit-overlay{
+  position:relative;
+  inset:auto;
+  justify-content:center;
+  padding:34px;
+}
+.reference-layout{display:grid;grid-template-columns:1fr .85fr;gap:28px;align-items:start;margin-top:28px;}
+.reference-card,.deepen-card{
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  background:rgba(18,20,31,.62);
+  backdrop-filter:blur(24px);
+  padding:24px;
+  box-shadow:0 22px 60px rgba(0,0,0,.22);
+}
+.reference-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;}
+.reference-option{
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  overflow:hidden;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.reference-option:hover,.reference-option.sel{border-color:rgba(255,107,138,.72);box-shadow:0 0 26px rgba(255,107,138,.18);transform:translateY(-1px);}
+.reference-option img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:rgba(255,255,255,.04);}
+.reference-name{font-size:12px;color:#c7dcea;padding:10px;text-align:center;line-height:1.4;}
+.reference-placeholder{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;color:#E9D9B8;font-size:13px;line-height:1.55;background:radial-gradient(circle at 35% 35%,rgba(255,107,138,.18),transparent 38%),radial-gradient(circle at 70% 70%,rgba(139,124,255,.18),transparent 42%),rgba(255,255,255,.04);}
+.guiding-questions{display:flex;flex-direction:column;gap:10px;margin:12px 0 18px;}
+.guiding-question{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);color:#c7dcea;font-size:14px;line-height:1.55;}
+.required-note{font-size:12px;color:#ffb7c8;margin-top:8px;display:none;}
+.required-note.on{display:block;}
+.ai-prep-loading{padding:24px;border-radius:20px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);color:#a5a8b8;line-height:1.7;}
+.tiny-loader{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#ff6b8a,#8b7cff);box-shadow:0 0 28px rgba(255,107,138,.35);animation:pulseOrb 1.4s ease-in-out infinite;margin-bottom:14px;}
+/* Click-through/placement fixes for 3D map */
+#modelDropZone{pointer-events:auto!important;}
+#modelMarkerLayer{pointer-events:none!important;}
+.open-canvas{overflow:visible!important;}
+.open-canvas .model-status-line{pointer-events:none!important;}
+canvas#c3d{position:absolute;inset:0;width:100%!important;height:100%!important;z-index:1;}
+.marker-layer{z-index:8!important;}
+/* keep the 3D body centered in the left stage */
+.s5-model-zone{justify-content:center;}
+.open-canvas{min-height:520px;}
+#s6 .api-panel{display:none!important;}
+#s6 .sub{max-width:760px;}
+@media(max-width:900px){
+  .reference-layout{grid-template-columns:1fr;}
+  .reference-grid{grid-template-columns:1fr;}
+  .reflection-card{margin-left:0;}
+}
+
+
+/* ============================================================
+   PDF REQUESTED CHANGES
+   ============================================================ */
+.cat-detail-card{
+  margin:20px 0 8px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.045);
+  border-radius:24px;
+  backdrop-filter:blur(18px);
+}
+.cat-detail-card.hidden{display:none!important;}
+.cat-detail-card .panel-copy{margin-bottom:14px;}
+#traitPillsInline{margin-bottom:16px;}
+.img-card.text-only{
+  min-height:92px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px 14px;
+  background:rgba(255,255,255,.045);
+}
+.img-card.text-only .img-name{
+  border-top:0;
+  font-size:17px;
+  text-transform:none;
+  letter-spacing:.02em;
+  color:#FAFBFA;
+  line-height:1.35;
+  padding:0;
+}
+.reference-choice-card{
+  position:fixed;
+  inset:0;
+  z-index:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(6,8,13,.76);
+  backdrop-filter:blur(10px);
+}
+.reference-choice-card.hidden{display:none!important;}
+.reference-choice-inner{
+  width:min(560px,92vw);
+  border:1px solid rgba(203,170,118,.35);
+  border-radius:24px;
+  background:rgba(24,26,40,.96);
+  box-shadow:0 28px 90px rgba(0,0,0,.46);
+  padding:30px;
+}
+.reference-choice-title{
+  font-family:'Playfair Display',serif;
+  font-size:30px;
+  color:#FAFBFA;
+  margin-bottom:12px;
+  line-height:1.2;
+}
+.reference-choice-copy{
+  color:#a5a8b8;
+  font-size:15px;
+  line-height:1.75;
+  margin-bottom:20px;
+}
+.reference-grid.hidden,.reference-note.hidden{display:none!important;}
+.reference-note{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);
+  border-radius:16px;
+  padding:14px 16px;
+  color:#a5a8b8;
+  line-height:1.6;
+  font-size:13px;
+  margin-bottom:16px;
+}
+.ai-assist-modal .modal-box{
+  max-width:560px;
+}
+.ai-assist-modal .modal-title{
+  font-size:30px;
+}
+.ai-choice-warning{
+  font-size:14px;
+  line-height:1.85;
+  color:#c7dcea;
+  margin:18px 0 24px;
+  padding:18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.1);
+}
+#s6 .sub{display:none!important;}
+#finalGenerateCard.hidden{display:none!important;}
+.reflection-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  align-items:stretch;
+  margin-top:22px;
+}
+.reflection-card{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(18,20,31,.62);
+  border-radius:24px;
+  padding:24px;
+  backdrop-filter:blur(24px);
+  min-height:540px;
+}
+.upload-zone{
+  border:1px dashed rgba(203,170,118,.38);
+  background:rgba(255,255,255,.035);
+  border-radius:20px;
+  min-height:360px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:22px;
+  overflow:hidden;
+}
+.upload-zone img{
+  width:100%;
+  max-height:440px;
+  object-fit:contain;
+  border-radius:16px;
+  box-shadow:0 18px 70px rgba(0,0,0,.28);
+}
+.upload-placeholder{
+  color:#a5a8b8;
+  line-height:1.75;
+  font-size:15px;
+}
+.reflection-question{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);
+  border-radius:16px;
+  padding:14px 16px;
+  color:#c7dcea;
+  font-size:14px;
+  line-height:1.65;
+  margin-bottom:10px;
+}
+.reflection-output{
+  border:1px solid rgba(203,170,118,.24);
+  background:rgba(203,170,118,.065);
+  border-radius:18px;
+  padding:16px;
+  color:#E9D9B8;
+  line-height:1.75;
+  font-size:14px;
+  margin-top:16px;
+}
+@media(max-width:900px){
+  .reflection-layout{grid-template-columns:1fr;}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="logo">artimal <span style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:.14em;font-style:normal;color:rgba(233,217,184,.55);margin-left:8px;">IMAGINATION FLOW · ENGLISH</span></div>
+    <div class="dots" id="dotsWrap">
+      <div class="dot" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
+      <div class="dot" id="d4"></div>
+      <div class="dot" id="d5"></div>
+      <div class="dot" id="d6"></div>
+      <div class="dot" id="d7"></div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- S0: Introduction -->
+    <div class="screen on" id="s0">
+      <div class="intro-wrap">
+        <div class="intro-wordmark intro-line">artimal</div>
+        <div class="intro-tagline intro-line">
+          A way to slow down, notice what you're feeling,<br>
+          and turn it into something you can see.<br>
+          <span style="color:rgba(143,179,206,.6);font-size:12.5px;">No drawing experience needed.</span>
+        </div>
+        <div class="intro-research intro-line">
+          <strong>Grounded in research.</strong> The system is built on a quantitative study of
+          <strong>848 adolescents (ages 13–17)</strong> participating in art therapy.
+          Every step was designed around what the research actually found helps people
+          across all artistic skill levels.
+        </div>
+        <div class="intro-meta intro-line">
+          <span class="intro-meta-dot"></span>
+          About 5–8 minutes
+          <span class="intro-meta-dot"></span>
+          No drawing skill required
+        </div>
+        <div class="api-setup-card intro-line">
+          <div class="section-lbl">Local API setup</div>
+          <div class="panel-copy">Paste your OpenAI API key once before the experience. artimal will use a lighter model for the neutral reference images and a stronger model for the final artwork.</div>
+          <input id="apiKeySetupInput" class="custom-input" type="password" placeholder="OpenAI API key · sk-..." autocomplete="off" oninput="saveApiKeyFromSetup()"/>
+          <div id="apiSetupStatus" class="api-status">Your key stays in this browser session and is sent only through the local server on this computer.</div>
+        </div>
+        <div class="btn-row intro-line">
+          <button class="btn-p" onclick="startExperience()">Begin artimal &nbsp;&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intro Modal -->
+    <div class="modal-overlay hidden" id="introModal" onclick="handleModalBg(event)">
+      <div class="modal-box" id="introModalBox">
+        <button class="modal-close" onclick="closeIntroModal()">&times;</button>
+        <div class="modal-title">Here's how it works</div>
+        <div class="modal-sub">A guided sequence, in about 5–8 minutes.</div>
+        <div class="modal-steps">
+          <div class="modal-step">
+            <span class="modal-step-num">1</span>
+            <span class="modal-step-text">Put your words to a feeling</span>
+          </div>
+          <div class="modal-step">
+            <span class="modal-step-num">2</span>
+            <span class="modal-step-text">Link your words with imagination</span>
+          </div>
+          <div class="modal-step">
+            <span class="modal-step-num">3</span>
+            <span class="modal-step-text">Go deeper with your image</span>
+          </div>
+          <div class="modal-step">
+            <span class="modal-step-num">4</span>
+            <span class="modal-step-text">Map it into the body, then begin creating</span>
+          </div>
+        </div>
+        <div class="modal-disclaimer">
+          This isn't a replacement for professional mental health support — but based on our findings,
+          a good therapeutic art-making outcome doesn't depend on artistic skill level.
+        </div>
+        <div class="btn-row" style="margin-bottom:0;">
+          <button class="btn-p" onclick="closeIntroModal();go(1)">Let's begin &nbsp;&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S1: Body Sensation Meditation -->
+    <div class="screen" id="s1">
+      <div id="meditStart" class="medit-start">
+        <div class="medit-start-eyebrow">Before we begin</div>
+        <div class="medit-start-title">A short body<br>awareness moment</div>
+        <div class="medit-start-sub">
+          Find a comfortable place. Headphones make this better.<br>
+          When you're ready, press start — it takes about a minute.
+        </div>
+        <div class="btn-row" style="justify-content:center;margin-bottom:0;">
+          <button class="btn-p" onclick="startMeditation()">Start &nbsp;&rarr;</button>
+          <button class="btn-g" onclick="go(2)">Skip</button>
+        </div>
+      </div>
+      <div id="meditSession" style="display:none;">
+        <div class="medit-canvas-wrap minimal-medit">
+          <canvas id="cMedit"></canvas>
+          <div class="medit-overlay">
+            <div class="medit-pips" id="meditPips"></div>
+            <div class="medit-breath-text" id="meditText">Find a comfortable position. Gently close your eyes.</div>
+          </div>
+        </div>
+        <div class="medit-done-row">
+          <button class="btn-p" id="meditDoneBtn" style="display:none;" onclick="go(2)">I'm ready &nbsp;&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: Emotion Expression -->
+    <div class="screen" id="s2">
+      <div class="ai-lbl">Begin here</div>
+      <div class="headline">Where are you<br>right <em>now?</em></div>
+      <div class="sub">Take a breath. This space is yours.</div>
+
+      <div class="prompt-row">
+        <span class="p-label">Body</span>
+        <textarea class="p-input" rows="2" placeholder="Where in your body do you feel something uncomfortable right now? (head, brain, stomach, heart... anything is fine)" id="bodyInput"></textarea>
+      </div>
+      <div class="prompt-row">
+        <span class="p-label">Texture</span>
+        <textarea class="p-input" rows="2" placeholder="What does it feel like — heavy, sharp, hollow, warm..." id="textureInput"></textarea>
+      </div>
+
+      <div id="reflectionCard" class="reflection-card hidden">
+        <div id="reflectionText">I’m hearing you.</div>
+        <div class="subtle-hint">We’ll use these words as seeds for the drawing.</div>
+      </div>
+
+      <div class="weight-hint">Writing freely and choosing words below both shape what comes next — your own words carry a little more weight.</div>
+
+      <div class="divider"></div>
+      <div class="tags-lbl">Or start with a word — choose as many as resonate</div>
+
+      <div class="word-group">
+        <div class="word-group-label">Heavy / weighed down</div>
+        <div class="tags">
+          <div class="tag" onclick="tog(this)">heavy</div>
+          <div class="tag" onclick="tog(this)">tangled</div>
+          <div class="tag" onclick="tog(this)">unmoored</div>
+          <div class="tag" onclick="tog(this)">sinking</div>
+        </div>
+      </div>
+      <div class="word-group">
+        <div class="word-group-label">Hollow / empty</div>
+        <div class="tags">
+          <div class="tag" onclick="tog(this)">hollow</div>
+          <div class="tag" onclick="tog(this)">numb</div>
+          <div class="tag" onclick="tog(this)">adrift</div>
+          <div class="tag" onclick="tog(this)">distant</div>
+        </div>
+      </div>
+      <div class="word-group">
+        <div class="word-group-label">Restless / on edge</div>
+        <div class="tags">
+          <div class="tag" onclick="tog(this)">restless</div>
+          <div class="tag" onclick="tog(this)">sharp</div>
+          <div class="tag" onclick="tog(this)">fragile</div>
+          <div class="tag" onclick="tog(this)">overwhelmed</div>
+        </div>
+      </div>
+      <div class="word-group">
+        <div class="word-group-label">Warm / reaching</div>
+        <div class="tags">
+          <div class="tag" onclick="tog(this)">tender</div>
+          <div class="tag" onclick="tog(this)">yearning</div>
+          <div class="tag" onclick="tog(this)">quiet grief</div>
+          <div class="tag" onclick="tog(this)">hopeful</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-p" onclick="tryProceed()">Let this feeling become something &nbsp;&rarr;</button>
+        <button class="btn-g" onclick="go(1)">&larr; Back</button>
+      </div>
+
+      <div class="research-note">
+        <div class="research-note-lbl">Research basis</div>
+        <div class="research-note-text">Neuroscience research finds that when we describe our body sensations in words, the brain shifts from "reaction" mode to "awareness" mode — saying it out loud is itself a form of self-care.</div>
+      </div>
+    </div>
+
+    <!-- Empty state card -->
+    <div class="empty-card-overlay hidden" id="emptyOverlay" onclick="dismissEmptyCard()">
+      <div class="empty-card" onclick="event.stopPropagation()">
+        <div class="empty-card-text">"That's okay — let's start with your heartbeat."</div>
+        <div class="empty-card-sub">Place your hand on your chest.<br>Is it tight, or loose?</div>
+        <div class="empty-card-dismiss">tap anywhere to dismiss</div>
+      </div>
+    </div>
+
+    <!-- S3: Category -->
+    <div class="screen" id="s3">
+      <div class="ai-lbl">artimal asks</div>
+      <div class="headline">If this feeling could<br><em>become</em> something —</div>
+      <div class="sub" id="becomeSub">Before we explain it, let’s see what it resembles. Choose one, or several.</div>
+
+      <div class="cat-grid">
+        <div class="cat" onclick="selCat(this,'animal')"><div class="cat-icon">🦋</div><div class="cat-name">Animal</div></div>
+        <div class="cat" onclick="selCat(this,'plant')"><div class="cat-icon">🌿</div><div class="cat-name">Plant</div></div>
+        <div class="cat" onclick="selCat(this,'water')"><div class="cat-icon">🌊</div><div class="cat-name">Water</div></div>
+        <div class="cat" onclick="selCat(this,'sky')"><div class="cat-icon">☁️</div><div class="cat-name">Sky</div></div>
+        <div class="cat" onclick="selCat(this,'earth')"><div class="cat-icon">🪨</div><div class="cat-name">Earth</div></div>
+        <div class="cat" onclick="selCat(this,'cosmos')"><div class="cat-icon">🌌</div><div class="cat-name">Cosmos</div></div>
+        <div class="cat" onclick="selCat(this,'food')"><div class="cat-icon">🫐</div><div class="cat-name">Food</div></div>
+        <div class="cat" onclick="selCat(this,'object')"><div class="cat-icon">🪞</div><div class="cat-name">Object</div></div>
+        <div class="cat" onclick="selCat(this,'structure')"><div class="cat-icon">🏛️</div><div class="cat-name">Structure</div></div>
+      </div>
+
+      <div class="custom-input-row">
+        <input class="custom-input" id="customCatInput" placeholder="Or type your own — e.g. 'a closed door', 'a soaring eagle', 'a quiet stone'"/>
+        <button class="custom-add-btn" onclick="useCustomCategory()">Use this</button>
+      </div>
+
+
+      <div id="catDetailSection" class="cat-detail-card hidden">
+        <div class="section-lbl">Choose a more specific image</div>
+        <div class="panel-title" id="catDetailTitle" style="font-size:26px;margin-bottom:8px;">What quality feels closest?</div>
+        <p class="panel-copy">After choosing a category, choose a quality and then a more specific image. These are metaphor images, not body organs.</p>
+        <div class="pills" id="traitPillsInline"></div>
+
+        <div id="imgSectionInline" style="display:none;">
+          <div class="section-lbl">Suggested images</div>
+          <div class="img-grid" id="imgGridInline"></div>
+          <div class="custom-input-row" style="margin-bottom:6px;">
+            <input class="custom-input" id="customImageInputInline" placeholder="None of these feel right? Type your own image — e.g. 'happy dolphin', 'stormy wave'"/>
+            <button class="custom-add-btn" onclick="useCustomImageInline()">Use this</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:18px;">
+        <button class="btn-p" onclick="continueFromCategory()">Let’s imagine it more deeply &nbsp;&rarr;</button>
+        <button class="btn-g" onclick="go(2)">&larr; Back</button>
+      </div>
+    </div>
+
+    <!-- S4: Neutral visual anchor + deepen imagination -->
+    <div class="screen" id="s4">
+      <div class="ai-lbl">Deepen imagination</div>
+      <div class="headline">Let’s stay with<br><em>this image</em> a little longer.</div>
+      <div class="sub" id="deepSub">Before we add emotion, choose a neutral visual anchor and describe what it means to you.</div>
+
+
+      <div id="referenceChoiceCard" class="reference-choice-card hidden">
+        <div class="reference-choice-inner">
+          <div class="section-lbl">Before the visual reference</div>
+          <div class="reference-choice-title">Would you like an image reference for <em id="referenceChoiceTerm">this image</em>?</div>
+          <div class="reference-choice-copy">
+            AI-generated references may sometimes limit human imagination. But if you do not have drawing experience, or if the blank page feels intimidating, a gentle reference can help you begin.
+            <br><br>
+            Either choice is okay. The next guided reflection questions will still appear.
+          </div>
+          <div class="btn-row">
+            <button class="btn-p" onclick="requestReferenceImages()">Yes, show me references</button>
+            <button class="btn-g" onclick="skipReferenceImages()">No, I’ll imagine it myself</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="aiPrepLoading" class="ai-prep-loading hidden">
+        <div class="tiny-loader"></div>
+        artimal is extracting the image itself, preparing gentle questions, and making three neutral references...
+      </div>
+
+      <div class="reference-layout" id="referenceContent">
+        <div class="reference-card">
+          <div class="section-lbl">Neutral visual anchor</div>
+          <div class="panel-title" id="neutralSubjectTitle">The image itself</div>
+          <p class="panel-copy">If you chose to use AI reference images, choose the version that feels closest to what you imagined. If not, continue with your own inner image.</p>
+          <div id="referenceNoteNoImage" class="reference-note hidden">You chose not to use AI visual references. Keep your own inner image — the guided questions on the right will still help you describe it.</div>
+          <div class="reference-grid" id="referenceGrid"></div>
+          <div id="referenceRequired" class="required-note">Please choose one reference image before continuing.</div>
+        </div>
+
+        <div class="deepen-card">
+          <div class="section-lbl">Guided questions</div>
+          <div class="panel-title">Explore this image with me.</div>
+          <div class="guiding-questions" id="guidingQuestionsList"></div>
+
+          <label class="mini-label" for="imaginationDescriptionInput">Your description · required</label>
+          <textarea id="imaginationDescriptionInput" class="p-input imagination-input" rows="6" placeholder="Describe this image in your own words. What does it look like? What part of it feels connected to your body or emotion?"></textarea>
+          <div id="descriptionRequired" class="required-note">Please write a few words before continuing. Your description helps shape the final image.</div>
+
+          <div class="btn-row" style="margin-top:18px;">
+            <button class="btn-p" onclick="continueAfterDeepening()">Place this image in the body &nbsp;&rarr;</button>
+            <button class="btn-g" onclick="go(3)">&larr; Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5: 3D Imagination Mapping -->
+    <div class="screen" id="s5">
+      <div class="ai-lbl">Embodied imagination</div>
+      <div class="headline">Now let’s bring your<br><em>images and imagination</em> together.</div>
+      <div class="sub">The 3D model comes from the Body words you wrote first. Drag to rotate, scroll to zoom, then place points where the image should live.</div>
+
+      <div class="s5-stage">
+        <div class="s5-model-zone">
+          <div class="view-tabs compact-tabs">
+            <button class="view-tab on" onclick="setView(this,0)">Front</button>
+            <button class="view-tab" onclick="setView(this,1)">Side</button>
+            <button class="view-tab" onclick="setView(this,2)">Above</button>
+          </div>
+          <div class="canvas-wrap open-canvas" id="modelDropZone">
+            <canvas id="c3d"></canvas>
+            <div id="modelMarkerLayer" class="marker-layer"></div>
+            <div class="model-status-line" id="bodyModelStatus">Matching body input...</div>
+          </div>
+        </div>
+
+        <div class="imagination-panel">
+          <div class="section-lbl">Map my imagination inside</div>
+          <div class="panel-title">Place the image you just deepened into the body.</div>
+          <p class="panel-copy">Press the map button, then click directly on the 3D organ to place a glowing point.</p>
+
+          <div class="imagination-summary" id="imaginationSummary"></div>
+
+          <label class="mini-label" for="imaginationInput">Image / feeling to place</label>
+          <textarea id="imaginationInput" class="p-input imagination-input" rows="3" placeholder="The image I want to place inside the body..."></textarea>
+
+          <div class="btn-row imagination-actions">
+            <button class="btn-p" id="mapInsideBtn" onclick="startImaginationPlacement()">Map my imagination inside</button>
+            <button class="btn-g" onclick="clearImaginationMarkers()">Clear points</button>
+          </div>
+
+          <div class="placement-list" id="placementList">
+            <div class="empty-placement">No points yet — press “Map my imagination inside”, then click the 3D body.</div>
+          </div>
+
+          <div class="btn-row final-actions">
+            <button class="btn-p" id="generateImageBtn" onclick="prepareImageDirection();go(6)" disabled>Generate final artwork &nbsp;&rarr;</button>
+            <button class="btn-g" onclick="go(4)">&larr; Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6: Live image generation -->
+    <div class="screen" id="s6">
+      <div class="ai-lbl">Live image generation</div>
+      <div class="headline">Let the image<br><em>appear.</em></div>
+      <div class="sub"></div>
+
+
+      <div class="modal-overlay hidden ai-assist-modal" id="aiAssistModal" onclick="handleAIAssistBg(event)">
+        <div class="modal-box">
+          <button class="modal-close" onclick="closeAIAssistModal()">&times;</button>
+          <div class="modal-title">Before using AI assistance</div>
+          <div class="modal-sub">A gentle reminder from the art-making process.</div>
+          <div class="ai-choice-warning">
+            In art therapy, we deeply support imaginative creation that comes from you. If you create the drawing yourself, it may lead to unexpected and meaningful effects.
+            <br><br>
+            Note: AI-generated images may influence your creative experience. Your drawing never needs to be perfect — the point is to express yourself.
+          </div>
+          <div class="btn-row" style="margin-bottom:0;">
+            <button class="btn-p" onclick="chooseAIAssist(true)">Use AI assistance</button>
+            <button class="btn-g" onclick="chooseAIAssist(false)">No, I’ll create it myself</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="direction-layout live-generate-layout">
+        <div class="direction-card">
+          <div class="section-lbl">Generated instruction</div>
+          <textarea id="imagePromptOut" class="prompt-output" rows="13"></textarea>
+
+          <div class="api-panel">
+            <div class="section-lbl">Local API settings</div>
+            <label class="mini-label" for="apiKeyInput">OpenAI API key</label>
+            <input id="apiKeyInput" class="custom-input api-key-input" type="password" placeholder="sk-..." autocomplete="off"/>
+
+            <div class="api-grid">
+              <div>
+                <label class="mini-label" for="imageModelSelect">Model</label>
+                <select id="imageModelSelect" class="custom-input">
+                  <option value="gpt-image-1-mini">gpt-image-1-mini · faster demo</option>
+                  <option value="gpt-image-2">gpt-image-2 · highest quality</option>
+                </select>
+              </div>
+              <div>
+                <label class="mini-label" for="imageQualitySelect">Quality</label>
+                <select id="imageQualitySelect" class="custom-input">
+                  <option value="low">low · faster</option>
+                  <option value="medium">medium</option>
+                  <option value="high">high · slower</option>
+                </select>
+              </div>
+              <div>
+                <label class="mini-label" for="imageSizeSelect">Size</label>
+                <select id="imageSizeSelect" class="custom-input">
+                  <option value="1024x1024">1024 × 1024</option>
+                  <option value="1024x1536">1024 × 1536 portrait</option>
+                  <option value="1536x1024">1536 × 1024 landscape</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn-p" id="hiddenLiveGenerateBtn" onclick="generateLiveImage()">Generate final artwork</button>
+              <button class="btn-g" onclick="copyImagePrompt()">Copy prompt</button>
+            </div>
+            <p class="panel-copy small-note">For local testing only. Do not share this folder with your API key saved in the browser.</p>
+          </div>
+        </div>
+
+        <div class="direction-card live-result-card">
+
+          <div class="final-generate-card hidden" id="finalGenerateCard">
+            <div class="section-lbl">Final artwork</div>
+            <div class="panel-title" style="font-size:26px;margin-bottom:8px;">Ready to generate your final image.</div>
+            <p class="panel-copy">The API key from the beginning will be used here. This step uses the higher-quality final image model.</p>
+            <div class="btn-row">
+              <button class="btn-p" id="liveGenerateBtn" onclick="generateLiveImage()">Generate final artwork &nbsp;&rarr;</button>
+              <button class="btn-g" onclick="copyImagePrompt()">Copy prompt</button>
+            </div>
+          </div>
+
+          <div id="waitingPanel" class="waiting-panel hidden">
+            <div class="orb-loader"></div>
+            <div class="section-lbl">Generating</div>
+            <div class="wait-title" id="waitTitle">Listening to the body...</div>
+            <div class="wait-copy" id="waitCopy">artimal is translating your body words, metaphor path, and mapped points into an image.</div>
+            <div class="wait-steps">
+              <div class="wait-step on" id="ws0">Gathering emotional materials</div>
+              <div class="wait-step" id="ws1">Shaping the inner landscape</div>
+              <div class="wait-step" id="ws2">Rendering the final image</div>
+            </div>
+          </div>
+
+          <div id="resultPanel" class="result-panel hidden">
+            <div class="section-lbl">Generated image</div>
+            <img id="generatedImage" class="generated-image" alt="Generated artimal image"/>
+            <div class="btn-row">
+              <button class="btn-p" onclick="go(7)">Continue to drawing reflection &nbsp;&rarr;</button>
+              <button class="btn-g" onclick="downloadGeneratedImage()">Download image</button>
+              <button class="btn-g" onclick="generateLiveImage()">Regenerate</button>
+            </div>
+          </div>
+
+          <div id="errorPanel" class="error-panel hidden">
+            <div class="section-lbl">Generation issue</div>
+            <div id="errorText" class="error-text"></div>
+          </div>
+
+          <div class="refine-box">
+            <div class="section-lbl">Refine before generating</div>
+            <label class="mini-label" for="refineInput">What should change?</label>
+            <textarea id="refineInput" class="p-input" rows="5" placeholder="e.g. make it softer, less medical, more organic, more like watercolor..."></textarea>
+            <button class="btn-g" onclick="refineImagePrompt()">Apply refinement to prompt</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-g" onclick="go(5)">&larr; Back to mapping</button>
+      </div>
+    </div>
+
+
+    <!-- S7: Drawing reflection -->
+    <div class="screen" id="s7">
+      <div class="ai-lbl">Reflect on your drawing</div>
+      <div class="headline">Look back at what<br><em>you created.</em></div>
+      <div class="sub">Upload your drawing, or use the AI-assisted image if you generated one. artimal will offer open, neutral questions from an art-therapy perspective.</div>
+
+      <div class="reflection-layout">
+        <div class="reflection-card">
+          <div class="section-lbl">Your drawing</div>
+          <div class="upload-zone" id="drawingUploadZone">
+            <div class="upload-placeholder" id="drawingUploadPlaceholder">
+              Choose an image of your drawing.<br>
+              It can be unfinished, messy, simple, or abstract.
+            </div>
+            <img id="drawingPreview" class="hidden" alt="uploaded drawing preview"/>
+          </div>
+          <div class="btn-row" style="margin-top:18px;">
+            <label class="btn-p" style="cursor:pointer;">
+              Upload drawing
+              <input id="drawingUploadInput" type="file" accept="image/*" style="display:none;" onchange="handleDrawingUpload(this)"/>
+            </label>
+            <button class="btn-g" onclick="useGeneratedAsDrawing()">Use AI image</button>
+          </div>
+          <p class="panel-copy small-note">This reflection is not a diagnosis. It simply helps you notice color, form, movement, space, and meaning.</p>
+        </div>
+
+        <div class="reflection-card">
+          <div class="section-lbl">Open reflection</div>
+          <div class="panel-title">Questions to sit with gently.</div>
+          <div id="drawingReflectionQuestions">
+            <div class="reflection-question">What part of this drawing first pulls your attention?</div>
+            <div class="reflection-question">Where do you notice movement, stillness, pressure, or softness?</div>
+            <div class="reflection-question">If this image could speak gently, what might it want you to notice?</div>
+            <div class="reflection-question">Is there one small detail you would like to keep, change, soften, or protect?</div>
+          </div>
+          <div id="drawingReflectionOutput" class="reflection-output hidden"></div>
+          <div class="btn-row" style="margin-top:18px;">
+            <button class="btn-p" onclick="reflectOnDrawing()">Generate reflection questions</button>
+            <button class="btn-g" onclick="go(6)">&larr; Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="wm">artimal</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+var SITE_LANG = 'en';
+var curScreen = 0;
+var chosenCat = 'animal';
+var chosenImage = 'creature';
+var chosenTrait = '';
+var selectedCats = [];
+var guidanceDepth = 'standard';
+var selectedBodyModelId = 'heart';
+var lastBodyMatch = null;
+var imaginationPlacements = [];
+var placingImagination = false;
+var activeImaginationText = '';
+var generatedImagePrompt = '';
+var customIntentionText = '';
+var neutralSubject = '';
+var guidingQuestions = [];
+var referenceImages = [];
+var selectedReferenceImage = '';
+var imaginationDescription = '';
+var apiKeyFromSetup = '';
+var serverHasApiKey = false;
+var selectedImageryTerm = '';
+var wantsReferenceImage = null;
+var finalChoiceMade = false;
+var uploadedDrawingData = '';
+
+/* ============================================================
+   INTRO MODAL
+   ============================================================ */
+function openIntroModal(){
+  var m = document.getElementById('introModal');
+  m.classList.remove('hidden');
+  // re-trigger step animations
+  var steps = m.querySelectorAll('.modal-step');
+  steps.forEach(function(s){
+    s.style.animation = 'none';
+    s.offsetHeight;
+    s.style.animation = '';
+  });
+}
+function closeIntroModal(){
+  document.getElementById('introModal').classList.add('hidden');
+}
+function handleModalBg(e){
+  if(e.target === document.getElementById('introModal')) closeIntroModal();
+}
+
+
+/* ============================================================
+   API SETUP + BODY REFLECTION
+   ============================================================ */
+function saveApiKeyFromSetup(){
+  var input=document.getElementById('apiKeySetupInput');
+  var status=document.getElementById('apiSetupStatus');
+  var key=(input&&input.value||'').trim();
+  apiKeyFromSetup=key;
+  try{ sessionStorage.setItem('artimal_openai_key',key); }catch(e){}
+  if(status){
+    if(key){ status.textContent='API key saved for this local session.'; status.classList.add('ok'); }
+    else { status.textContent='Your key stays in this browser session and is sent only through the local server on this computer.'; status.classList.remove('ok'); }
+  }
+}
+function getStoredApiKey(){
+  if(apiKeyFromSetup) return apiKeyFromSetup;
+  try{ apiKeyFromSetup=sessionStorage.getItem('artimal_openai_key')||''; }catch(e){}
+  return apiKeyFromSetup;
+}
+function ensureApiKey(){
+  var key=getStoredApiKey();
+  if(!key && !serverHasApiKey){
+    alert('Please enter your OpenAI API key on the first page before starting the demo.');
+    if(curScreen!==0) go(0);
+    var input=document.getElementById('apiKeySetupInput');
+    if(input) input.focus();
+    return false;
+  }
+  return true;
+}
+function startExperience(){
+  if(!ensureApiKey()) return;
+  openIntroModal();
+}
+function getSelectedTags(){
+  var arr=[];
+  document.querySelectorAll('#s2 .tag.sel').forEach(function(t){
+    var txt=(t.textContent||'').replace('✓','').trim();
+    if(txt) arr.push(txt);
+  });
+  return arr;
+}
+function updateReflectionCard(){
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var texture=(document.getElementById('textureInput')||{}).value||'';
+  var tags=getSelectedTags();
+  var textureWords=[];
+  if(texture.trim()) textureWords.push(texture.trim());
+  textureWords=textureWords.concat(tags);
+  var card=document.getElementById('reflectionCard');
+  var text=document.getElementById('reflectionText');
+  if(!card||!text) return;
+  if(!body.trim() && !textureWords.length){ card.classList.add('hidden'); return; }
+  var b=body.trim() || 'your body';
+  var tw=textureWords.length?textureWords.join(', '):'something hard to name yet';
+  text.innerHTML='I’m hearing that your <strong>'+escapeHtml(b)+'</strong> feels <strong>'+escapeHtml(tw)+'</strong>.';
+  card.classList.remove('hidden');
+}
+function updateBecomeSubtitle(){
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var texture=(document.getElementById('textureInput')||{}).value||'';
+  var tags=getSelectedTags();
+  var parts=[];
+  if(texture.trim()) parts.push(texture.trim());
+  parts=parts.concat(tags);
+  var sub=document.getElementById('becomeSub');
+  if(sub){
+    var b=body.trim()||'your body';
+    var t=parts.length?parts.join(', '):'this feeling';
+    sub.innerHTML='Your '+escapeHtml(b)+' feels '+escapeHtml(t)+'. Before we explain it, let’s see what it resembles.';
+  }
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function tog(el){ el.classList.toggle('sel'); updateReflectionCard(); }
+
+function go(n){
+  document.getElementById('s'+curScreen).classList.remove('on');
+  document.getElementById('s'+n).classList.add('on');
+  for(var i=0;i<8;i++){
+    var d=document.getElementById('d'+i);
+    if(!d) continue;
+    d.style.cssText='width:6px;border-radius:50%;background:#4A7196;';
+  }
+  if(n<=7){
+    var ad=document.getElementById('d'+n);
+    if(ad) ad.style.cssText='width:18px;border-radius:3px;background:#CBAA76;';
+  }
+  curScreen=n;
+  if(n===1) { /* no robot/avatar scene */ }
+  if(n===2){ computeGuidanceDepth(); updateReflectionCard(); }
+  if(n===3){ updateBecomeSubtitle(); }
+  if(n===5){ initThree(); updateBodyModelFromInput(); updateImaginationSummary(); }
+  if(n===6){ prepareImageDirection(); showAIAssistChoice(); }
+  if(n===7){ initDrawingReflection(); }
+}
+
+/* ============================================================
+   SCREEN 2: empty state
+   ============================================================ */
+function tryProceed(){
+  if(!ensureApiKey()) return;
+  var body = (document.getElementById('bodyInput').value||'').trim();
+  var tex  = (document.getElementById('textureInput').value||'').trim();
+  var tags = document.querySelectorAll('#s2 .tag.sel').length;
+  if(!body && !tex && !tags){
+    document.getElementById('emptyOverlay').classList.remove('hidden');
+    return;
+  }
+  updateReflectionCard();
+  lastBodyMatch = detectBodyModel(body);
+  selectedBodyModelId = lastBodyMatch.id;
+  go(3);
+}
+function dismissEmptyCard(){
+  document.getElementById('emptyOverlay').classList.add('hidden');
+}
+
+/* ============================================================
+   MEDITATION SCENE — Three.js cosmic human figure
+   ============================================================ */
+var M = {
+  renderer:null, scene:null, camera:null,
+  humanGroup:null, particles:null, stars:null,
+  clock:0, breathTimer:null, phaseIdx:0
+};
+
+var PHASES = [
+  {text:'Find a comfortable position.\nGently close your eyes.', ms:8000},
+  {text:'Breathe in slowly...', ms:5000, dir:'in'},
+  {text:'Breathe out... let the body soften.', ms:5000, dir:'out'},
+  {text:'Breathe in slowly...', ms:5000, dir:'in'},
+  {text:'Breathe out... let the body soften.', ms:5000, dir:'out'},
+  {text:'Breathe in slowly...', ms:5000, dir:'in'},
+  {text:'Breathe out... let the body soften.', ms:5000, dir:'out'},
+  {text:'Breathe in slowly...', ms:5000, dir:'in'},
+  {text:'Breathe out... notice where you feel something.', ms:6000, dir:'out'}
+];
+
+function initMeditScene(){
+  if(M.renderer) return;
+  var canvas = document.getElementById('cMedit');
+  var W = canvas.parentElement.clientWidth || 600, H = 420;
+  canvas.width = W; canvas.height = H;
+
+  M.renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:false});
+  M.renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  M.renderer.setSize(W, H);
+  M.renderer.setClearColor(0x060e18, 1);
+
+  M.scene = new THREE.Scene();
+  M.camera = new THREE.PerspectiveCamera(44, W/H, 0.1, 200);
+  M.camera.position.set(0, 0.3, 7.2);
+
+  M.scene.add(new THREE.AmbientLight(0x1A3A5A, 1.0));
+  var key = new THREE.DirectionalLight(0x7ECFEF, 1.5);
+  key.position.set(2, 4, 5); M.scene.add(key);
+  var rim = new THREE.DirectionalLight(0xCBAA76, 0.55);
+  rim.position.set(-3, 0, -4); M.scene.add(rim);
+  var fill = new THREE.PointLight(0x4A9FBF, 1.4, 14);
+  fill.position.set(0, 1.5, 3); M.scene.add(fill);
+  var under = new THREE.PointLight(0xCBAA76, 0.4, 8);
+  under.position.set(0, -2, 1); M.scene.add(under);
+
+  buildStars();
+  buildHuman();
+  buildParticles();
+  renderMedit();
+}
+
+function buildStars(){
+  var n=1400, pos=new Float32Array(n*3);
+  for(var i=0;i<n*3;i++) pos[i]=(Math.random()-0.5)*140;
+  var g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  M.stars=new THREE.Points(g,new THREE.PointsMaterial({color:0x8FB3CE,size:0.16,transparent:true,opacity:0.5}));
+  M.scene.add(M.stars);
+}
+
+function buildHuman(){
+  var g=new THREE.Group();
+
+  var bMat=new THREE.MeshPhongMaterial({color:0x2A6085,emissive:0x0A2535,specular:0x8FCFEF,shininess:75,transparent:true,opacity:0.9});
+  var gMat=new THREE.MeshPhongMaterial({color:0x4AAFCF,emissive:0x103A50,specular:0xC7DCEA,shininess:95,transparent:true,opacity:0.85});
+  var aMat=new THREE.MeshPhongMaterial({color:0xCBAA76,emissive:0x5A4020,shininess:120,transparent:true,opacity:0.95});
+
+  function mk(geo,mat,x,y,z,rx,rz){
+    var m=new THREE.Mesh(geo,mat);
+    m.position.set(x||0,y||0,z||0);
+    if(rx) m.rotation.x=rx;
+    if(rz) m.rotation.z=rz;
+    g.add(m); return m;
+  }
+
+  // Head
+  mk(new THREE.SphereGeometry(0.38,32,32),gMat,0,2.85,0);
+  // Face highlight
+  var fh=new THREE.Mesh(new THREE.SphereGeometry(0.23,16,16),aMat);
+  fh.position.set(0,2.9,0.28); fh.scale.set(1.0,0.65,0.38); g.add(fh);
+  // Neck
+  mk(new THREE.CylinderGeometry(0.11,0.145,0.34,16),bMat,0,2.4,0);
+
+  // Torso upper
+  var tu=mk(new THREE.CylinderGeometry(0.46,0.38,0.98,20),bMat,0,1.82,0);
+  // Torso lower
+  mk(new THREE.CylinderGeometry(0.38,0.34,0.58,20),bMat,0,1.16,0);
+
+  // Clavicle bar
+  var cl=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,0.96,8),gMat);
+  cl.rotation.z=Math.PI/2; cl.position.set(0,2.26,0.1); g.add(cl);
+
+  // Shoulders
+  mk(new THREE.SphereGeometry(0.185,20,20),gMat,-0.63,2.22,0);
+  mk(new THREE.SphereGeometry(0.185,20,20),gMat,0.63,2.22,0);
+
+  // Upper arms (slightly open — relaxed meditation pose)
+  mk(new THREE.CylinderGeometry(0.095,0.08,0.76,14),bMat,-0.9,1.83,0,0,0,0.44);
+  mk(new THREE.CylinderGeometry(0.095,0.08,0.76,14),bMat,0.9,1.83,0,0,0,-0.44);
+
+  // Elbows
+  mk(new THREE.SphereGeometry(0.095,14,14),gMat,-1.16,1.5,0);
+  mk(new THREE.SphereGeometry(0.095,14,14),gMat,1.16,1.5,0);
+
+  // Lower arms (angling down toward resting position)
+  mk(new THREE.CylinderGeometry(0.075,0.062,0.72,12),bMat,-1.32,1.13,0,0,0,0.64);
+  mk(new THREE.CylinderGeometry(0.075,0.062,0.72,12),bMat,1.32,1.13,0,0,0,-0.64);
+
+  // Wrists
+  mk(new THREE.SphereGeometry(0.075,12,12),gMat,-1.42,0.8,0);
+  mk(new THREE.SphereGeometry(0.075,12,12),gMat,1.42,0.8,0);
+
+  // Hands (palms open — mudra)
+  mk(new THREE.SphereGeometry(0.1,16,16),aMat,-1.48,0.63,0.1);
+  mk(new THREE.SphereGeometry(0.1,16,16),aMat,1.48,0.63,0.1);
+
+  // Pelvis
+  mk(new THREE.CylinderGeometry(0.36,0.32,0.44,18),bMat,0,0.72,0);
+
+  // Hip joints
+  mk(new THREE.SphereGeometry(0.155,16,16),gMat,-0.4,0.56,0);
+  mk(new THREE.SphereGeometry(0.155,16,16),gMat,0.4,0.56,0);
+
+  // Upper legs
+  mk(new THREE.CylinderGeometry(0.13,0.11,0.9,14),bMat,-0.4,0.02,0);
+  mk(new THREE.CylinderGeometry(0.13,0.11,0.9,14),bMat,0.4,0.02,0);
+
+  // Knees
+  mk(new THREE.SphereGeometry(0.125,14,14),gMat,-0.4,-0.48,0);
+  mk(new THREE.SphereGeometry(0.125,14,14),gMat,0.4,-0.48,0);
+
+  // Lower legs
+  mk(new THREE.CylinderGeometry(0.095,0.08,0.94,12),bMat,-0.4,-0.98,0);
+  mk(new THREE.CylinderGeometry(0.095,0.08,0.94,12),bMat,0.4,-0.98,0);
+
+  // Ankles
+  mk(new THREE.SphereGeometry(0.09,12,12),gMat,-0.4,-1.5,0);
+  mk(new THREE.SphereGeometry(0.09,12,12),gMat,0.4,-1.5,0);
+
+  // Feet
+  var fGeo=new THREE.BoxGeometry(0.2,0.1,0.38);
+  mk(fGeo,bMat,-0.4,-1.62,0.1);
+  mk(fGeo,bMat,0.4,-1.62,0.1);
+
+  // Spine accent nodes
+  for(var i=0;i<8;i++){
+    var sn=new THREE.Mesh(new THREE.SphereGeometry(0.042,8,8),aMat);
+    sn.position.set(0,2.08-i*0.28,-0.13);
+    g.add(sn);
+  }
+
+  g.position.y=0.5;
+  M.humanGroup=g;
+  M.scene.add(g);
+}
+
+function buildParticles(){
+  var n=200, pos=new Float32Array(n*3), ph=new Float32Array(n);
+  for(var i=0;i<n;i++){
+    var t=Math.random()*Math.PI*2, r=0.7+Math.random()*1.6;
+    pos[i*3]=Math.cos(t)*r;
+    pos[i*3+1]=(Math.random()-0.35)*5.5;
+    pos[i*3+2]=Math.sin(t)*r;
+    ph[i]=Math.random()*Math.PI*2;
+  }
+  var g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.setAttribute('phase',new THREE.BufferAttribute(ph,1));
+  M.particles=new THREE.Points(g,new THREE.PointsMaterial({color:0xCBAA76,size:0.058,transparent:true,opacity:0.7}));
+  M.particles.position.y=0.5;
+  M.scene.add(M.particles);
+}
+
+function renderMedit(){
+  requestAnimationFrame(renderMedit);
+  M.clock+=0.016;
+
+  if(M.humanGroup){
+    M.humanGroup.rotation.y=Math.sin(M.clock*0.15)*0.07;
+    var s=1+Math.sin(M.clock*0.7)*0.022;
+    M.humanGroup.scale.x=s; M.humanGroup.scale.z=s;
+    M.humanGroup.position.y=0.5+Math.sin(M.clock*0.2)*0.04;
+  }
+
+  if(M.particles){
+    var pos=M.particles.geometry.attributes.position.array;
+    var ph=M.particles.geometry.attributes.phase.array;
+    for(var i=0;i<200;i++){
+      pos[i*3+1]+=0.0045;
+      if(pos[i*3+1]>3.8) pos[i*3+1]=-2.8;
+      pos[i*3]+=Math.sin(M.clock*0.28+ph[i])*0.0012;
+    }
+    M.particles.geometry.attributes.position.needsUpdate=true;
+    M.particles.rotation.y+=0.0016;
+  }
+
+  if(M.stars) M.stars.rotation.y+=0.00025;
+  M.renderer.render(M.scene,M.camera);
+}
+
+/* ============================================================
+   BREATHING SEQUENCE
+   ============================================================ */
+function startMeditation(){
+  document.getElementById('meditStart').style.display='none';
+  document.getElementById('meditSession').style.display='block';
+
+  // No avatar/robot visual in this version; keep the breathing text only.
+  // if(!M.renderer) initMeditScene();
+
+  var pips=document.getElementById('meditPips');
+  pips.innerHTML='';
+  PHASES.forEach(function(_,i){
+    var p=document.createElement('div');
+    p.className='medit-pip'+(i===0?' active':'');
+    p.id='pip'+i;
+    pips.appendChild(p);
+  });
+
+  M.phaseIdx=0;
+  runPhase();
+}
+
+function runPhase(){
+  if(M.phaseIdx>=PHASES.length){
+    document.getElementById('meditDoneBtn').style.display='inline-flex';
+    return;
+  }
+  var phase=PHASES[M.phaseIdx];
+  var el=document.getElementById('meditText');
+  el.style.opacity='0';
+  setTimeout(function(){
+    el.textContent=phase.text.replace('\n',' ');
+    el.style.opacity='1';
+  },350);
+
+  for(var i=0;i<PHASES.length;i++){
+    var pip=document.getElementById('pip'+i);
+    if(!pip) continue;
+    pip.className='medit-pip'+(i<M.phaseIdx?' done':i===M.phaseIdx?' active':'');
+  }
+
+  M.breathTimer=setTimeout(function(){
+    M.phaseIdx++;
+    runPhase();
+  }, phase.ms);
+}
+
+/* ============================================================
+   GUIDANCE DEPTH
+   ============================================================ */
+function computeGuidanceDepth(){
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var tex=(document.getElementById('textureInput')||{}).value||'';
+  var tags=document.querySelectorAll('#s2 .tag.sel').length;
+  var r=body.length+tex.length+tags*8;
+  guidanceDepth=r<15?'light':r>60?'deep':'standard';
+}
+
+/* ============================================================
+   STEP 3: category
+   ============================================================ */
+function selCat(el,cat){
+  el.classList.toggle('sel');
+  if(el.classList.contains('sel')){
+    if(selectedCats.indexOf(cat)===-1) selectedCats.push(cat);
+  } else {
+    selectedCats=selectedCats.filter(function(c){return c!==cat;});
+  }
+  chosenCat=selectedCats.length?selectedCats[selectedCats.length-1]:cat;
+  customIntentionText=getCustomIntention();
+  renderCategoryDetails();
+}
+
+function useCustomCategory(){
+  var val=(document.getElementById('customCatInput')||{}).value.trim();
+  if(!val) return;
+  customIntentionText=val;
+  chosenImage=val;
+  selectedImageryTerm=val;
+  renderCategoryDetails();
+  var input=document.getElementById('customCatInput');
+  if(input) input.classList.add('clicked-flash');
+}
+
+
+function renderCategoryDetails(){
+  var section=document.getElementById('catDetailSection');
+  var title=document.getElementById('catDetailTitle');
+  if(!section) return;
+
+  var typed=getCustomIntention();
+  if(!selectedCats.length && !typed){
+    section.classList.add('hidden');
+    return;
+  }
+  section.classList.remove('hidden');
+
+  if(title){
+    title.textContent = typed ? 'You named your own image: “'+typed+'”' : 'What about '+chosenCat+' feels closest?';
+  }
+
+  var traitWrap=document.getElementById('traitPillsInline');
+  if(traitWrap){
+    traitWrap.innerHTML='';
+    var list=catTraits[chosenCat] || [];
+    list.slice(0,10).forEach(function(tr){
+      var p=document.createElement('div');
+      p.className='pill';
+      p.textContent=tr;
+      p.onclick=function(){ selTraitInline(p,tr); };
+      traitWrap.appendChild(p);
+    });
+  }
+
+  if(typed){
+    chosenImage=typed;
+    selectedImageryTerm=typed;
+    renderImageOptions([typed]);
+  }else if(!chosenTrait){
+    var sec=document.getElementById('imgSectionInline');
+    if(sec) sec.style.display='none';
+  }
+}
+
+function selTraitInline(el,trait){
+  chosenTrait=trait;
+  document.querySelectorAll('#traitPillsInline .pill').forEach(function(p){p.classList.remove('sel');});
+  el.classList.add('sel');
+  renderImageOptions(getImages(chosenCat,trait));
+}
+
+function useCustomImageInline(){
+  var val=(document.getElementById('customImageInputInline')||{}).value.trim();
+  if(!val) return;
+  document.querySelectorAll('.img-card').forEach(function(c){c.classList.remove('sel');});
+  chosenImage=val;
+  selectedImageryTerm=val;
+  customIntentionText=val;
+  renderImageOptions([val]);
+}
+
+function continueFromCategory(){
+  var typed=getCustomIntention();
+  if(typed){
+    customIntentionText=typed;
+    chosenImage=typed;
+    selectedImageryTerm=typed;
+  }
+  if(!selectedCats.length && !customIntentionText){
+    alert('Please choose one category or type your own image before continuing.');
+    return;
+  }
+  if(!selectedImageryTerm && !chosenImage && !customIntentionText){
+    alert('Please choose a specific image below, or type your own image.');
+    return;
+  }
+  beginImaginationDeepening();
+}
+
+function prepareStep4(){
+  // Old trait-card page removed. This is intentionally kept as a no-op for compatibility.
+}
+
+/* ============================================================
+   STEP 4: traits + images
+   ============================================================ */
+function selTrait(el,trait){
+  chosenTrait = trait;
+  document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});
+  el.classList.add('sel');
+  renderImageOptions(getImages(chosenCat,trait));
+}
+
+function useCustomTrait(){
+  var val=document.getElementById('customTraitInput').value.trim();
+  if(!val) return;
+  chosenTrait = val;
+  document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});
+  renderImageOptions(getImages(chosenCat,val));
+}
+
+function renderImageOptions(imgs){
+  var grid=document.getElementById('imgGridInline') || document.getElementById('imgGrid');
+  if(!grid) return;
+  grid.innerHTML='';
+  imgs.forEach(function(name){
+    var card=document.createElement('div');
+    card.className='img-card text-only';
+    card.innerHTML='<div class="img-name">'+escapeHtml(name)+'</div>';
+    card.onclick=function(){
+      document.querySelectorAll('.img-card').forEach(function(c){c.classList.remove('sel');});
+      card.classList.add('sel');
+      chosenImage=name;
+      selectedImageryTerm=name;
+      customIntentionText=getCustomIntention();
+      applyPartsForChosenImage();
+    };
+    grid.appendChild(card);
+  });
+  var sec=document.getElementById('imgSectionInline') || document.getElementById('imgSection');
+  if(sec) sec.style.display='block';
+}
+
+function useCustomImage(){
+  var val=document.getElementById('customImageInput').value.trim();
+  if(!val) return;
+  document.querySelectorAll('.img-card').forEach(function(c){c.classList.remove('sel');});
+  chosenImage=val;
+  applyPartsForChosenImage();
+}
+
+function applyPartsForChosenImage(){
+  var parts=getPartsForImage(chosenImage);
+  for(var i=0;i<3;i++){
+    var b=document.getElementById('badge'+i);
+    if(b) b.textContent=parts[i]||'part '+(i+1);
+    var h=document.getElementById('hint'+i);
+    if(h) h.textContent=hintsByPart[parts[i]]||'What does this part hold for you?';
+  }
+  /* The S4 image is now metaphor-only. The S5 3D model is controlled by S2 Body input. */
+}
+
+/* ============================================================
+   STEP 5: Body-input-driven GLB 3D model
+   The 3D model is selected from S2 Body input, not S3/S4 image.
+   ============================================================ */
+var renderer,scene,camera,mesh,animId;
+var isDragging=false,prevMouse={x:0,y:0},rotX=0.15,rotY=0.45;
+var modelLoader=null;
+var modelCache={};
+
+var BODY_MODELS={
+  brain:{
+    id:'brain', zh:'大脑', en:'Brain', url:'../assets/brain.glb',
+    keywords:['大脑','脑子','脑袋','脑','头部','头','头脑','额头','后脑','brain','head','mind','skull','thoughts','thinking'],
+    badges:['thought','center','signal'],
+    hints:['What does this image do to your thoughts?','Where does it sit in your mind?','What signal does it carry?']
+  },
+  stomach:{
+    id:'stomach', zh:'胃', en:'Stomach', url:'../assets/stomach.glb',
+    keywords:['胃','胃部','肚子','腹部','小腹','腹','消化','恶心','stomach','belly','abdomen','gut','nausea'],
+    badges:['gut','center','holding'],
+    hints:['What is your stomach holding right now?','Does this image feel tight, open, or turning?','What does your gut want to tell you?']
+  },
+  heart:{
+    id:'heart', zh:'心脏', en:'Heart', url:'../assets/heart.glb',
+    keywords:['心脏','心口','心跳','心','胸口','胸腔','胸','heart','cardiac','heartbeat','chest'],
+    badges:['pulse','center','vessels'],
+    hints:['What does your heartbeat seem to be saying?','What sits at the center of this feeling?','Where does this feeling want to move or flow?']
+  },
+  lungs:{
+    id:'lungs', zh:'肺部', en:'Lungs', url:'../assets/lungs.glb',
+    keywords:['肺部','肺','呼吸','气管','喘','窒息','breath','breathing','breathe','lungs','lung','respiration'],
+    badges:['breath','chest','release'],
+    hints:['What does your breath feel like right now?','What is being held in your chest?','What wants to be released or exhaled?']
+  },
+  eye:{id:'eye', zh:'眼睛', en:'Eye', url:'../assets/face.glb', keywords:['眼睛','眼','眼眶','眼泪','视线','看','eye','eyes','sight','vision','tears'], badges:['eyes','gaze','tears'], hints:['What are your eyes holding or avoiding?','Where does your attention want to look?','What emotion feels close to the surface?']},
+  ear:{id:'ear', zh:'耳朵', en:'Ear', url:'../assets/face.glb', keywords:['耳朵','耳','听','声音','耳鸣','ear','ears','hearing','sound','listen'], badges:['ears','sound','listening'], hints:['What sound, memory, or sentence is lingering here?','What are you hearing too much of?','What do you wish someone could hear from you?']},
+  mouth:{id:'mouth', zh:'嘴巴', en:'Mouth', url:'../assets/face.glb', keywords:['嘴巴','嘴','口','嘴唇','舌头','牙','喉咙','说不出','mouth','lips','tongue','teeth','jaw','throat','voice'], badges:['mouth','voice','silence'], hints:['What feels stuck in your mouth or throat?','What wants to be spoken?','What are you keeping quiet?']},
+  nose:{id:'nose', zh:'鼻子', en:'Nose', url:'../assets/face.glb', keywords:['鼻子','鼻','鼻腔','闻','呼吸不畅','nose','nostril','smell'], badges:['nose','air','scent'], hints:['How does air enter your body right now?','What feels blocked or open?','What memory or atmosphere is attached to this feeling?']},
+  limbs:{id:'limbs', zh:'肢体（手臂、脚...）', en:'Limbs', url:'../assets/limbs.glb', keywords:['肢体','手臂','胳膊','手','手掌','手指','腿','大腿','小腿','膝盖','脚','脚掌','脚趾','arm','arms','hand','hands','finger','fingers','leg','legs','foot','feet','limb','limbs'], badges:['hands','legs','reach'], hints:['What do your hands want to hold or let go of?','Where do your legs want to move, stop, or run?','What are you reaching toward, or away from?']}
+};
+
+function getSelectedTagsText(){
+  var tags=[];
+  document.querySelectorAll('#s2 .tag.sel').forEach(function(t){tags.push(t.textContent||'');});
+  return tags.join(' ');
+}
+
+function detectBodyModel(text){
+  var raw=(text||'').trim();
+  var lower=raw.toLowerCase();
+  var best={id:'heart',score:-1,index:99999,key:'',source:raw};
+
+  Object.keys(BODY_MODELS).forEach(function(id){
+    var item=BODY_MODELS[id];
+    item.keywords.forEach(function(key){
+      var k=key.toLowerCase();
+      var idx=lower.indexOf(k);
+      if(idx>=0){
+        var score=10000-idx+(k.length*25);
+        if(score>best.score){
+          best={id:id,score:score,index:idx,key:key,source:raw};
+        }
+      }
+    });
+  });
+
+  // Very light English typo support: compare typed words to English keywords.
+  if(best.score<0 && lower){
+    var words=lower.split(/[^a-z]+/).filter(function(w){return w.length>=3;});
+    words.forEach(function(w){
+      Object.keys(BODY_MODELS).forEach(function(id){
+        BODY_MODELS[id].keywords.forEach(function(key){
+          if(!/^[a-z]+$/.test(key)) return;
+          var dist=levenshtein(w,key);
+          if(dist<=2){
+            var score=600-dist*100+key.length;
+            if(score>best.score){
+              best={id:id,score:score,index:0,key:key,source:raw};
+            }
+          }
+        });
+      });
+    });
+  }
+
+  if(best.score<0){
+    best={id:'heart',score:0,index:0,key:'default heartbeat',source:raw};
+  }
+  return best;
+}
+
+function levenshtein(a,b){
+  var m=[],i,j;
+  for(i=0;i<=b.length;i++) m[i]=[i];
+  for(j=0;j<=a.length;j++) m[0][j]=j;
+  for(i=1;i<=b.length;i++){
+    for(j=1;j<=a.length;j++){
+      m[i][j]=b.charAt(i-1)===a.charAt(j-1)
+        ? m[i-1][j-1]
+        : Math.min(m[i-1][j-1]+1, m[i][j-1]+1, m[i-1][j]+1);
+    }
+  }
+  return m[b.length][a.length];
+}
+
+function updateBodyModelFromInput(){
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  lastBodyMatch=detectBodyModel(body);
+  selectedBodyModelId=lastBodyMatch.id;
+  updateBodyModelText();
+  if(renderer) loadBodyModel(selectedBodyModelId);
+}
+
+function updateBodyModelText(){
+  var cfg=BODY_MODELS[selectedBodyModelId]||BODY_MODELS.heart;
+  var status=document.getElementById('bodyModelStatus');
+  if(status){
+    status.textContent='Body match: '+cfg.zh+' / '+cfg.en;
+  }
+  updateImaginationSummary();
+}
+
+function escapeHtml(str){
+  return String(str||'').replace(/[&<>"']/g,function(s){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s];
+  });
+}
+
+function initThree(){
+  var canvas=document.getElementById('c3d');
+  if(!canvas) return;
+
+  if(!renderer){
+    var wrap=canvas.parentElement;
+    var W=wrap.clientWidth||640, H=360;
+    renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setSize(W,H,false);
+    renderer.setClearColor(0x000000,0);
+
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(42,W/H,0.1,100);
+    camera.position.set(0,0.25,4.8);
+
+    scene.add(new THREE.AmbientLight(0x8FB3CE,0.9));
+    var dl=new THREE.DirectionalLight(0xE3EFF6,1.25); dl.position.set(2,3,4); scene.add(dl);
+    var fl=new THREE.DirectionalLight(0xCBAA76,0.55); fl.position.set(-3,-1,-2); scene.add(fl);
+    var rl=new THREE.DirectionalLight(0x4A7196,0.65); rl.position.set(0,0,-4); scene.add(rl);
+
+    if(THREE.GLTFLoader) modelLoader=new THREE.GLTFLoader();
+
+    function onDown(x,y){isDragging=true;prevMouse={x:x,y:y};}
+    function onMove(x,y){
+      if(!isDragging)return;
+      rotY+=(x-prevMouse.x)*0.009;
+      rotX+=(y-prevMouse.y)*0.009;
+      rotX=Math.max(-1.3,Math.min(1.3,rotX));
+      prevMouse={x:x,y:y};
+    }
+
+    canvas.addEventListener('mousedown',function(e){onDown(e.clientX,e.clientY);});
+    canvas.addEventListener('touchstart',function(e){onDown(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+    window.addEventListener('mouseup',function(){isDragging=false;});
+    window.addEventListener('touchend',function(){isDragging=false;});
+    canvas.addEventListener('mousemove',function(e){onMove(e.clientX,e.clientY);});
+    canvas.addEventListener('touchmove',function(e){onMove(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+
+    canvas.addEventListener('wheel',function(e){
+      e.preventDefault();
+      camera.position.z+=e.deltaY*0.003;
+      camera.position.z=Math.max(1.8,Math.min(10,camera.position.z));
+    },{passive:false});
+
+    var drop=document.getElementById('modelDropZone');
+    var clickTarget=drop||canvas;
+    clickTarget.addEventListener('click',function(e){
+      if(!placingImagination) return;
+      placeImaginationPoint(e);
+    });
+
+    window.addEventListener('resize',resizeThreeCanvas);
+    animateBodyModel();
+  }
+
+  updateBodyModelText();
+}
+
+function resizeThreeCanvas(){
+  if(!renderer||!camera) return;
+  var canvas=document.getElementById('c3d');
+  var wrap=canvas.parentElement;
+  var W=wrap.clientWidth||640, H=360;
+  renderer.setSize(W,H,false);
+  camera.aspect=W/H;
+  camera.updateProjectionMatrix();
+}
+
+function clearCurrentModel(){
+  if(mesh){
+    scene.remove(mesh);
+    mesh=null;
+  }
+}
+
+function fitGLBToView(obj){
+  // Preserve the original GLB proportions: use only uniform scaling, never stretch x/y/z separately.
+  obj.updateMatrixWorld(true);
+  var box=new THREE.Box3().setFromObject(obj);
+  var size=new THREE.Vector3();
+  var center=new THREE.Vector3();
+  box.getSize(size);
+  box.getCenter(center);
+
+  obj.position.sub(center);
+  var maxDim=Math.max(size.x,size.y,size.z)||1;
+  var scale=2.95/maxDim;
+  obj.scale.multiplyScalar(scale);
+
+  // Re-center after scaling so the model sits in the middle of the left stage.
+  obj.updateMatrixWorld(true);
+  box=new THREE.Box3().setFromObject(obj);
+  box.getCenter(center);
+  obj.position.sub(center);
+  obj.updateMatrixWorld(true);
+}
+
+function loadBodyModel(id){
+  var cfg=BODY_MODELS[id]||BODY_MODELS.heart;
+  updateBodyModelText();
+
+  var status=document.getElementById('bodyModelStatus');
+  if(status) status.textContent='Loading '+cfg.zh+' / '+cfg.en+'...';
+
+  if(!modelLoader){
+    if(status) status.textContent='GLTFLoader failed: please check internet/CDN access';
+    return;
+  }
+
+  clearCurrentModel();
+
+  function place(source){
+    var obj=source.clone(true);
+    fitGLBToView(obj);
+    mesh=obj;
+    scene.add(mesh);
+    if(status) status.textContent='Body match: '+cfg.zh+' / '+cfg.en;
+    rotX=0.15; rotY=0.45;
+  }
+
+  if(modelCache[cfg.url]){
+    place(modelCache[cfg.url]);
+    return;
+  }
+
+  modelLoader.load(
+    cfg.url,
+    function(gltf){
+      modelCache[cfg.url]=gltf.scene;
+      place(gltf.scene);
+    },
+    function(xhr){
+      if(status && xhr.total){
+        var pct=Math.round(xhr.loaded/xhr.total*100);
+        status.textContent='Loading '+cfg.zh+' / '+cfg.en+' '+pct+'%';
+      }
+    },
+    function(err){
+      console.error(err);
+      if(status) status.textContent='Model failed: make sure the matching .glb file exists in web/assets/ and open the site through the local server.';
+    }
+  );
+}
+
+function animateBodyModel(){
+  requestAnimationFrame(animateBodyModel);
+  if(mesh){
+    mesh.rotation.x+=(rotX-mesh.rotation.x)*0.08;
+    mesh.rotation.y+=(rotY-mesh.rotation.y)*0.08;
+    if(!isDragging) rotY+=0.0035;
+  }
+  if(renderer&&scene&&camera) renderer.render(scene,camera);
+}
+
+function setView(btn,idx){
+  document.querySelectorAll('.view-tab').forEach(function(t){t.classList.remove('on');});
+  btn.classList.add('on');
+  var t=[[0.15,0.45],[0.0,1.57],[1.25,0]];
+  rotX=t[idx][0]; rotY=t[idx][1];
+}
+
+
+/* ============================================================
+   AI-ASSISTED NEUTRAL IMAGE + DEEPENING QUESTIONS
+   ============================================================ */
+function getCustomIntention(){
+  var v=(document.getElementById('customCatInput')||{}).value||'';
+  return v.trim();
+}
+function beginImaginationDeepening(){
+  if(!ensureApiKey()) return;
+  customIntentionText=getCustomIntention();
+  if(customIntentionText){
+    chosenImage=customIntentionText;
+    selectedImageryTerm=customIntentionText;
+  }
+  selectedImageryTerm = selectedImageryTerm || chosenImage || customIntentionText || chosenCat;
+  if(!selectedCats.length && !customIntentionText){
+    alert('Please choose one category or type your own image before continuing.');
+    return;
+  }
+  wantsReferenceImage=null;
+  go(4);
+  prepareNeutralReferenceWithAI();
+}
+function fallbackSubject(){
+  if(customIntentionText) return customIntentionText;
+  var map={animal:'animal',plant:'plant',water:'water',sky:'cloud',earth:'stone',cosmos:'star',food:'fruit',object:'vessel',structure:'doorway'};
+  return map[chosenCat] || chosenCat || 'image';
+}
+function fallbackQuestions(subject){
+  return [
+    'What part of this '+subject+' first catches your attention?',
+    'Does it feel closer to movement, stillness, protection, distance, or release?',
+    'If this image could carry one small part of your feeling, what would it carry?',
+    'Where in your body does this image seem to land?'
+  ];
+}
+function setReferenceLoading(on){
+  var loading=document.getElementById('aiPrepLoading');
+  var content=document.getElementById('referenceContent');
+  if(loading) loading.classList.toggle('hidden',!on);
+  if(content) content.classList.toggle('hidden',on);
+}
+function prepareNeutralReferenceWithAI(){
+  setReferenceLoading(true);
+  neutralSubject=''; guidingQuestions=[]; referenceImages=[]; selectedReferenceImage=''; imaginationDescription='';
+  wantsReferenceImage=null;
+  var desc=document.getElementById('imaginationDescriptionInput'); if(desc) desc.value='';
+  var req1=document.getElementById('referenceRequired'); if(req1) req1.classList.remove('on');
+  var req2=document.getElementById('descriptionRequired'); if(req2) req2.classList.remove('on');
+  var note=document.getElementById('referenceNoteNoImage'); if(note) note.classList.add('hidden');
+  var grid=document.getElementById('referenceGrid'); if(grid) grid.classList.add('hidden');
+
+  var selectedTerm=selectedImageryTerm || chosenImage || customIntentionText || chosenCat;
+  var payload={
+    api_key:getStoredApiKey(),
+    language:SITE_LANG,
+    body:(document.getElementById('bodyInput')||{}).value||'',
+    texture:(document.getElementById('textureInput')||{}).value||'',
+    tags:getSelectedTags(),
+    selected_categories:selectedCats.slice(),
+    chosen_category:chosenCat,
+    chosen_trait:chosenTrait,
+    selected_image:selectedTerm,
+    custom_intention:customIntentionText,
+    generate_references:false
+  };
+
+  fetch('/prepare-imagination',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){return r.json().then(function(d){ if(!r.ok || d.error){throw new Error(d.error||('Request failed '+r.status));} return d;});})
+    .then(function(data){
+      neutralSubject=data.neutral_subject || selectedTerm || fallbackSubject();
+      chosenImage = selectedTerm || data.raw_intention || neutralSubject;
+      selectedImageryTerm=chosenImage;
+      guidingQuestions = data.guiding_questions && data.guiding_questions.length ? data.guiding_questions : fallbackQuestions(neutralSubject);
+      referenceImages = [];
+      renderNeutralReference();
+      setReferenceLoading(false);
+      showReferenceChoice();
+    })
+    .catch(function(err){
+      console.error(err);
+      neutralSubject=selectedTerm || fallbackSubject();
+      chosenImage=selectedTerm || neutralSubject;
+      selectedImageryTerm=chosenImage;
+      guidingQuestions=fallbackQuestions(neutralSubject);
+      referenceImages=[];
+      renderNeutralReference('AI preparation could not finish. You can still continue with text-based reflection.');
+      setReferenceLoading(false);
+      showReferenceChoice();
+    });
+}
+function renderNeutralReference(note){
+  var title=document.getElementById('neutralSubjectTitle');
+  if(title) title.textContent=selectedImageryTerm || neutralSubject || 'The image itself';
+  var sub=document.getElementById('deepSub');
+  if(sub){
+    var body=(document.getElementById('bodyInput')||{}).value||'your body';
+    sub.textContent='Before we add emotion, stay with “'+(selectedImageryTerm||neutralSubject||'this image')+'”, then describe how it connects to '+body+'.';
+  }
+  var grid=document.getElementById('referenceGrid');
+  var noNote=document.getElementById('referenceNoteNoImage');
+  if(grid){
+    grid.innerHTML='';
+    if(wantsReferenceImage===true){
+      grid.classList.remove('hidden');
+      if(noNote) noNote.classList.add('hidden');
+    }else if(wantsReferenceImage===false){
+      grid.classList.add('hidden');
+      if(noNote) noNote.classList.remove('hidden');
+    }else{
+      grid.classList.add('hidden');
+      if(noNote) noNote.classList.add('hidden');
+    }
+    var labels=['Natural view','Symbolic view','Simple silhouette'];
+    for(var i=0;i<3;i++){
+      var src=referenceImages[i]||'';
+      var card=document.createElement('div');
+      card.className='reference-option';
+      card.setAttribute('data-index',i);
+      if(src){
+        card.innerHTML='<img src="'+src+'" alt="'+escapeHtml(selectedImageryTerm||neutralSubject)+' reference '+(i+1)+'"><div class="reference-name">'+labels[i]+'</div>';
+      }else{
+        card.innerHTML='<div class="reference-placeholder">'+escapeHtml(labels[i])+'<br>'+escapeHtml(selectedImageryTerm||neutralSubject||'image')+'</div><div class="reference-name">'+labels[i]+'</div>';
+      }
+      card.onclick=function(){
+        document.querySelectorAll('.reference-option').forEach(function(c){c.classList.remove('sel');});
+        this.classList.add('sel');
+        var idx=Number(this.getAttribute('data-index'));
+        selectedReferenceImage=referenceImages[idx] || labels[idx]+' of '+(selectedImageryTerm||neutralSubject||'image');
+        var req=document.getElementById('referenceRequired'); if(req) req.classList.remove('on');
+      };
+      grid.appendChild(card);
+    }
+  }
+  var qs=document.getElementById('guidingQuestionsList');
+  if(qs){
+    qs.innerHTML='';
+    guidingQuestions.slice(0,4).forEach(function(q){
+      var div=document.createElement('div'); div.className='guiding-question'; div.textContent=q; qs.appendChild(div);
+    });
+  }
+  if(note){
+    var qs2=document.getElementById('guidingQuestionsList');
+    if(qs2){ var n=document.createElement('div'); n.className='guiding-question'; n.style.color='#ffb7c8'; n.textContent=note; qs2.prepend(n); }
+  }
+}
+
+function showReferenceChoice(){
+  var card=document.getElementById('referenceChoiceCard');
+  var term=document.getElementById('referenceChoiceTerm');
+  if(term) term.textContent=selectedImageryTerm || neutralSubject || 'this image';
+  if(card) card.classList.remove('hidden');
+}
+
+function hideReferenceChoice(){
+  var card=document.getElementById('referenceChoiceCard');
+  if(card) card.classList.add('hidden');
+}
+
+function requestReferenceImages(){
+  if(!ensureApiKey()) return;
+  hideReferenceChoice();
+  wantsReferenceImage=true;
+  setReferenceLoading(true);
+  var selectedTerm=selectedImageryTerm || chosenImage || customIntentionText || neutralSubject || chosenCat;
+  fetch('/generate-references',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      api_key:getStoredApiKey(),
+      language:SITE_LANG,
+      subject:selectedTerm,
+      body:(document.getElementById('bodyInput')||{}).value||'',
+      texture:(document.getElementById('textureInput')||{}).value||''
+    })
+  })
+  .then(function(r){return r.json().then(function(d){ if(!r.ok || d.error){throw new Error(d.error||('Request failed '+r.status));} return d;});})
+  .then(function(data){
+    referenceImages=data.reference_images || [];
+    selectedReferenceImage='';
+    renderNeutralReference();
+    setReferenceLoading(false);
+  })
+  .catch(function(err){
+    console.error(err);
+    referenceImages=[];
+    renderNeutralReference('Reference images could not be generated. You can still continue using your own imagination.');
+    setReferenceLoading(false);
+  });
+}
+
+function skipReferenceImages(){
+  hideReferenceChoice();
+  wantsReferenceImage=false;
+  selectedReferenceImage='No AI reference image; user chose to keep their own inner image.';
+  referenceImages=[];
+  renderNeutralReference();
+}
+
+function continueAfterDeepening(){
+  var req1=document.getElementById('referenceRequired');
+  var req2=document.getElementById('descriptionRequired');
+  if(wantsReferenceImage===true && !selectedReferenceImage){ if(req1) req1.classList.add('on'); return; }
+  if(wantsReferenceImage===null){
+    showReferenceChoice();
+    return;
+  }
+  var desc=(document.getElementById('imaginationDescriptionInput')||{}).value||'';
+  if(!desc.trim()){ if(req2) req2.classList.add('on'); return; }
+  imaginationDescription=desc.trim();
+  var input=document.getElementById('imaginationInput');
+  var label=(selectedImageryTerm||neutralSubject||chosenImage||customIntentionText||'imagination')+' — '+imaginationDescription;
+  if(input) input.value=label;
+  activeImaginationText=label;
+  go(5);
+}
+
+function collectImaginationMaterials(){
+  var materials=[];
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var texture=(document.getElementById('textureInput')||{}).value||'';
+  if(body.trim()) materials.push({label:'body: '+body.trim(), value:body.trim()});
+  if(texture.trim()) materials.push({label:'texture: '+texture.trim(), value:texture.trim()});
+  document.querySelectorAll('#s2 .tag.sel').forEach(function(t){
+    var txt=(t.textContent||'').replace('✓','').trim();
+    if(txt) materials.push({label:txt, value:txt});
+  });
+  if(chosenCat) materials.push({label:'metaphor: '+chosenCat, value:chosenCat});
+  if(chosenTrait) materials.push({label:chosenTrait, value:chosenTrait});
+  if(customIntentionText) materials.push({label:'typed image: '+customIntentionText, value:customIntentionText});
+  if(neutralSubject) materials.push({label:'visual anchor: '+neutralSubject, value:neutralSubject});
+  if(chosenImage && chosenImage!=='creature') materials.push({label:chosenImage, value:chosenImage});
+  if(imaginationDescription) materials.push({label:'description: '+imaginationDescription, value:imaginationDescription});
+  return materials;
+}
+
+function updateImaginationSummary(){
+  var box=document.getElementById('imaginationSummary');
+  if(!box) return;
+  var materials=collectImaginationMaterials();
+  box.innerHTML='';
+  if(!materials.length){
+    box.innerHTML='<span class="imagination-chip">quiet sensation</span>';
+    return;
+  }
+  materials.slice(0,10).forEach(function(m,idx){
+    var chip=document.createElement('span');
+    chip.className='imagination-chip';
+    chip.textContent=m.label;
+    chip.onclick=function(){
+      document.querySelectorAll('.imagination-chip').forEach(function(c){c.classList.remove('on');});
+      chip.classList.add('on');
+      document.getElementById('imaginationInput').value=m.value;
+      activeImaginationText=m.value;
+    };
+    box.appendChild(chip);
+    if(idx===0 && !document.getElementById('imaginationInput').value){
+      document.getElementById('imaginationInput').value=m.value;
+      activeImaginationText=m.value;
+    }
+  });
+}
+
+function startImaginationPlacement(){
+  var input=document.getElementById('imaginationInput');
+  var val=(input?input.value:'').trim();
+  if(!val){
+    val='quiet sensation';
+    if(input) input.value=val;
+  }
+  activeImaginationText=val;
+  placingImagination=true;
+  var btn=document.getElementById('mapInsideBtn');
+  if(btn) btn.textContent='Now click the 3D body to place it';
+  var status=document.getElementById('bodyModelStatus');
+  if(status) status.textContent='Placement mode: click the 3D body';
+}
+
+function placeImaginationPoint(e){
+  var canvas=document.getElementById('c3d');
+  var zone=document.getElementById('modelDropZone') || canvas;
+  var layer=document.getElementById('modelMarkerLayer');
+  if(!zone||!layer) return;
+  var rect=zone.getBoundingClientRect();
+  var x=((e.clientX-rect.left)/rect.width)*100;
+  var y=((e.clientY-rect.top)/rect.height)*100;
+  if(x<0||x>100||y<0||y>100) return;
+
+  var label=activeImaginationText || (document.getElementById('imaginationInput')||{}).value || 'imagination';
+  var marker=document.createElement('div');
+  marker.className='model-marker';
+  marker.style.left=x+'%';
+  marker.style.top=y+'%';
+  marker.setAttribute('data-label',label);
+  layer.appendChild(marker);
+
+  imaginationPlacements.push({text:label,x:Math.round(x),y:Math.round(y),bodyModel:selectedBodyModelId});
+  placingImagination=false;
+  var btn=document.getElementById('mapInsideBtn');
+  if(btn) btn.textContent='Map another imagination point';
+  updatePlacementList();
+}
+
+function updatePlacementList(){
+  var list=document.getElementById('placementList');
+  if(!list) return;
+  if(!imaginationPlacements.length){
+    list.innerHTML='<div class="empty-placement">No points yet — press “Map my imagination inside”, then click the 3D body.</div>';
+  } else {
+    list.innerHTML=imaginationPlacements.map(function(p,i){
+      return '<div class="placement-item"><strong>Point '+(i+1)+'</strong> · '+escapeHtml(p.text)+' <span style="opacity:.55">('+p.x+'%, '+p.y+'%)</span></div>';
+    }).join('');
+  }
+  var gen=document.getElementById('generateImageBtn');
+  if(gen) gen.disabled=!imaginationPlacements.length;
+}
+
+function clearImaginationMarkers(){
+  imaginationPlacements=[];
+  placingImagination=false;
+  var layer=document.getElementById('modelMarkerLayer');
+  if(layer) layer.innerHTML='';
+  updatePlacementList();
+  var btn=document.getElementById('mapInsideBtn');
+  if(btn) btn.textContent='Map my imagination inside';
+}
+
+function prepareImageDirection(){
+  var cfg=BODY_MODELS[selectedBodyModelId]||BODY_MODELS.heart;
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var texture=(document.getElementById('textureInput')||{}).value||'';
+  var materials=collectImaginationMaterials().map(function(m){return m.value;}).join(', ');
+  var placements=imaginationPlacements.map(function(p,i){return 'Point '+(i+1)+' at '+p.x+'% from left and '+p.y+'% from top: '+p.text;}).join('\n');
+  generatedImagePrompt='Create a therapeutic visual artwork based on an embodied 3D mapping.\n\n'+
+    'Body area / 3D organ: '+cfg.zh+' / '+cfg.en+'.\n'+
+    'Original body words: '+(body||'not specified')+'.\n'+
+    'Texture words: '+(texture||'not specified')+'.\n'+
+    'Metaphor path: '+(selectedCats.join(', ')||chosenCat||'not specified')+'; selected image/metaphor: '+(selectedImageryTerm||chosenImage||'not specified')+'; neutral visual anchor: '+(neutralSubject||'not specified')+'; typed/custom image: '+(customIntentionText||'not specified')+'.\n'+
+    'User imagination description: '+(imaginationDescription||'not specified')+'.\n'+
+    'AI reference choice: '+(wantsReferenceImage===true?'used AI reference':(wantsReferenceImage===false?'kept own imagination':'not specified'))+'.\n'+
+    'Imagination materials: '+(materials||'quiet sensation')+'.\n\n'+
+    'Mapped points inside the 3D body:\n'+(placements||'No mapped point')+'\n\n'+
+    'Generate an emotionally resonant image where these imagination elements live inside or around the selected body part. Keep the feeling intimate, organic, poetic, and art-therapy oriented. Avoid a clinical diagram. Use soft cinematic lighting, translucent layers, subtle glow, and a sense of inner emotional landscape. The final image should feel like an inner world becoming visible. Do not include labels, UI text, medical annotations, captions, or diagrams. Make it suitable as a final reflective artwork for a gentle art-therapy interface.';
+  var out=document.getElementById('imagePromptOut');
+  if(out) out.value=generatedImagePrompt;
+}
+
+
+function showAIAssistChoice(){
+  var card=document.getElementById('finalGenerateCard');
+  if(card && !finalChoiceMade) card.classList.add('hidden');
+  if(!finalChoiceMade){
+    var modal=document.getElementById('aiAssistModal');
+    if(modal) setTimeout(function(){ modal.classList.remove('hidden'); },80);
+  }
+}
+function closeAIAssistModal(){
+  var modal=document.getElementById('aiAssistModal');
+  if(modal) modal.classList.add('hidden');
+}
+function handleAIAssistBg(e){
+  if(e.target===document.getElementById('aiAssistModal')) closeAIAssistModal();
+}
+function chooseAIAssist(useAI){
+  finalChoiceMade=true;
+  closeAIAssistModal();
+  if(useAI){
+    var card=document.getElementById('finalGenerateCard');
+    if(card) card.classList.remove('hidden');
+  }else{
+    go(7);
+  }
+}
+
+function initDrawingReflection(){
+  renderDefaultDrawingReflection();
+}
+function renderDefaultDrawingReflection(){
+  var list=document.getElementById('drawingReflectionQuestions');
+  if(!list) return;
+  if(list.getAttribute('data-custom')==='yes') return;
+  list.innerHTML='';
+  [
+    'What part of this drawing first pulls your attention?',
+    'Where do you notice movement, stillness, pressure, or softness?',
+    'If this image could speak gently, what might it want you to notice?',
+    'Is there one small detail you would like to keep, change, soften, or protect?'
+  ].forEach(function(q){
+    var div=document.createElement('div');
+    div.className='reflection-question';
+    div.textContent=q;
+    list.appendChild(div);
+  });
+}
+function handleDrawingUpload(input){
+  var file=input.files && input.files[0];
+  if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    uploadedDrawingData=e.target.result;
+    var img=document.getElementById('drawingPreview');
+    var ph=document.getElementById('drawingUploadPlaceholder');
+    if(img){ img.src=uploadedDrawingData; img.classList.remove('hidden'); }
+    if(ph) ph.classList.add('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+function useGeneratedAsDrawing(){
+  var gen=document.getElementById('generatedImage');
+  if(!gen || !gen.src){
+    alert('No generated image is available yet. You can upload your own drawing instead.');
+    return;
+  }
+  uploadedDrawingData=gen.src;
+  var img=document.getElementById('drawingPreview');
+  var ph=document.getElementById('drawingUploadPlaceholder');
+  if(img){ img.src=uploadedDrawingData; img.classList.remove('hidden'); }
+  if(ph) ph.classList.add('hidden');
+}
+function reflectOnDrawing(){
+  var apiKey=getStoredApiKey();
+  var list=document.getElementById('drawingReflectionQuestions');
+  var out=document.getElementById('drawingReflectionOutput');
+  if(list){
+    list.setAttribute('data-custom','yes');
+    list.innerHTML='<div class="reflection-question">Preparing gentle reflection questions...</div>';
+  }
+  if(out){ out.classList.add('hidden'); out.textContent=''; }
+
+  var payload={
+    api_key:apiKey,
+    language:SITE_LANG,
+    image_data:uploadedDrawingData,
+    body:(document.getElementById('bodyInput')||{}).value||'',
+    texture:(document.getElementById('textureInput')||{}).value||'',
+    selected_image:selectedImageryTerm||chosenImage||neutralSubject||'',
+    imagination_description:imaginationDescription||''
+  };
+
+  if(!apiKey){
+    renderDrawingReflectionFallback('No API key found. Here are gentle non-AI reflection prompts.');
+    return;
+  }
+
+  fetch('/reflect-drawing',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){return r.json().then(function(d){ if(!r.ok || d.error){throw new Error(d.error||('Request failed '+r.status));} return d;});})
+    .then(function(data){
+      if(list){
+        list.innerHTML='';
+        (data.questions||[]).slice(0,5).forEach(function(q){
+          var div=document.createElement('div');
+          div.className='reflection-question';
+          div.textContent=q;
+          list.appendChild(div);
+        });
+      }
+      if(out && data.reflection){
+        out.textContent=data.reflection;
+        out.classList.remove('hidden');
+      }
+    })
+    .catch(function(err){
+      console.error(err);
+      renderDrawingReflectionFallback('AI reflection could not finish. Here are gentle prompts you can still use.');
+    });
+}
+function renderDrawingReflectionFallback(note){
+  var list=document.getElementById('drawingReflectionQuestions');
+  if(list){
+    list.setAttribute('data-custom','yes');
+    list.innerHTML='';
+    [
+      'What visual detail feels most alive to you right now?',
+      'Where does the image feel open, held, softened, or protected?',
+      'If one part of the drawing could change slightly, what would you gently adjust?',
+      'What does this drawing help you express without needing perfect words?'
+    ].forEach(function(q){
+      var div=document.createElement('div');
+      div.className='reflection-question';
+      div.textContent=q;
+      list.appendChild(div);
+    });
+  }
+  var out=document.getElementById('drawingReflectionOutput');
+  if(out){ out.textContent=note; out.classList.remove('hidden'); }
+}
+
+function copyImagePrompt(){
+  var out=document.getElementById('imagePromptOut');
+  if(!out) return;
+  out.select();
+  document.execCommand('copy');
+  alert('Prompt copied.');
+}
+
+function refineImagePrompt(){
+  var refine=(document.getElementById('refineInput')||{}).value||'';
+  var out=document.getElementById('imagePromptOut');
+  if(!out) return;
+  if(refine.trim()){
+    out.value=out.value+'\n\nRefinement request: '+refine.trim();
+    generatedImagePrompt=out.value;
+  }
+}
+
+function setGenerationState(state,msg){
+  var wait=document.getElementById('waitingPanel');
+  var result=document.getElementById('resultPanel');
+  var err=document.getElementById('errorPanel');
+  var errorText=document.getElementById('errorText');
+  var btn=document.getElementById('liveGenerateBtn');
+
+  if(wait) wait.classList.toggle('hidden',state!=='waiting');
+  if(result) result.classList.toggle('hidden',state!=='result');
+  if(err) err.classList.toggle('hidden',state!=='error');
+
+  if(btn){
+    btn.disabled=(state==='waiting');
+    if(state==='waiting') btn.innerHTML='Generating...';
+    else if(state==='result') btn.innerHTML='Regenerate final artwork &nbsp;↻';
+    else btn.innerHTML='Generate final artwork &nbsp;→';
+  }
+
+  if(state==='error' && errorText) errorText.textContent=msg||'Unknown error.';
+}
+
+function updateWaitStep(i){
+  for(var k=0;k<3;k++){
+    var el=document.getElementById('ws'+k);
+    if(el) el.classList.toggle('on',k===i);
+  }
+  var title=document.getElementById('waitTitle');
+  var copy=document.getElementById('waitCopy');
+  var titles=[
+    'Listening to the body...',
+    'Shaping the inner landscape...',
+    'Rendering the final image...'
+  ];
+  var copies=[
+    'Gathering body words, texture, metaphor, and mapped points.',
+    'Turning your imagination into a visual direction.',
+    'Calling the image model. This may take a little while.'
+  ];
+  if(title) title.textContent=titles[i]||titles[0];
+  if(copy) copy.textContent=copies[i]||copies[0];
+}
+
+async function generateLiveImage(){
+  var out=document.getElementById('imagePromptOut');
+  if(!out || !out.value.trim()){
+    prepareImageDirection();
+  }
+  var prompt=((document.getElementById('imagePromptOut')||{}).value||generatedImagePrompt||'').trim();
+  var apiKey=getStoredApiKey();
+  var model='gpt-image-2';
+  var quality='high';
+  var size='1024x1024';
+
+  if(!apiKey){
+    setGenerationState('error','Please enter your OpenAI API key on the first page first. You can go back to the beginning, paste the key, then return here; the final page no longer asks for it.');
+    return;
+  }
+  if(!prompt){
+    setGenerationState('error','No prompt found. Please go back and map at least one imagination point.');
+    return;
+  }
+
+  try{
+    sessionStorage.setItem('artimal_openai_key',apiKey);
+  }catch(e){}
+
+  setGenerationState('waiting');
+  updateWaitStep(0);
+  setTimeout(function(){updateWaitStep(1);},1400);
+  setTimeout(function(){updateWaitStep(2);},3200);
+
+  try{
+    var response=await fetch('/generate-image',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        api_key:apiKey,
+        prompt:prompt,
+        model:model,
+        quality:quality,
+        size:size
+      })
+    });
+
+    var data=await response.json().catch(function(){return {};});
+    if(!response.ok || data.error){
+      throw new Error(data.error || ('Request failed with status '+response.status));
+    }
+    if(!data.image){
+      throw new Error('The API returned no image data.');
+    }
+
+    var img=document.getElementById('generatedImage');
+    if(img) img.src=data.image;
+    setGenerationState('result');
+  }catch(err){
+    console.error(err);
+    setGenerationState('error',
+      'Image generation failed.\\n\\n'+
+      (err && err.message ? err.message : String(err))+
+      '\\n\\nIf this says 401, check your API key. If it says model access or organization verification, try another model or check your OpenAI API account.'
+    );
+  }
+}
+
+function downloadGeneratedImage(){
+  var img=document.getElementById('generatedImage');
+  if(!img || !img.src) return;
+  var a=document.createElement('a');
+  a.href=img.src;
+  a.download='artimal-generated-image.png';
+  a.click();
+}
+
+function sendGeneratedPrompt(){
+  generateLiveImage();
+}
+
+function updatePhrase(){
+  // Kept for compatibility with older inputs. New flow uses mapped imagination points.
+  prepareImageDirection();
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  fetch('/config').then(function(r){return r.json();}).then(function(config){
+    serverHasApiKey=Boolean(config.server_api_key_configured);
+    if(serverHasApiKey){
+      var status=document.getElementById('apiSetupStatus');
+      if(status){ status.textContent='The local server already has an API key configured.'; status.classList.add('ok'); }
+    }
+  }).catch(function(){});
+  try{
+    var saved=sessionStorage.getItem('artimal_openai_key');
+    if(saved && document.getElementById('apiKeyInput')) document.getElementById('apiKeyInput').value=saved;
+  }catch(e){}
+});
+
+
+
+/* ============================================================
+   DATA
+   ============================================================ */
+var catTraits={
+  animal:['silent strength','fluid movement','resilience','solitude','ancient knowing','depth','transformation','untamed','invisibility','instinct'],
+  plant:['slow growth','rootedness','reaching upward','seasonal shedding','tenacity','hidden networks','quiet renewal','patience','flowering','fragility'],
+  water:['constant motion','depth','reflection','dissolving','carrying','erosion','transparency','stillness','rushing','cleansing'],
+  sky:['vastness','impermanence','clarity','holding everything','openness','storm','shifting light','witnessing','unreachable','breath'],
+  earth:['steadiness','weight','ancient layers','fertile darkness','holding','cracked surface','groundedness','buried','mineral','structural'],
+  cosmos:['infinite distance','silence','burning','timeless','expansion','orbit','collapse','luminous','scattered','cold vastness'],
+  food:['nourishment','sweetness','bitterness','comfort','ritual warmth','decay','abundance','preservation','texture','sharing'],
+  object:['reflection','worn with time','hollow','transparent','weighted','broken','singular','forgotten','familiar','precise'],
+  structure:['endurance','enclosure','threshold','ruin','foundation','shelter','boundary','echo','labyrinthine','solidity']
+};
+
+var catImages={
+  animal:{'silent strength':['Whale','Elephant','Bear','Tortoise'],'fluid movement':['Octopus','Eel','Manta ray','Otter'],'resilience':['Tortoise','Crow','Salamander','Cockroach'],'solitude':['Snow leopard','Lone wolf','Deep-sea fish','Arctic fox'],'ancient knowing':['Crocodile','Owl','Horseshoe crab','Tortoise'],'depth':['Anglerfish','Giant squid','Whale shark','Sea turtle'],'transformation':['Butterfly','Moth','Axolotl','Hermit crab'],'untamed':['Wild horse','Lynx','Peregrine falcon','Wolverine'],'invisibility':['Cuttlefish','Chameleon','Ghost octopus','Stick insect'],'instinct':['Migratory bird','Salmon','Wolf','Spider']},
+  plant:{'slow growth':['Ancient oak','Bristlecone pine','Giant sequoia','Lichen'],'rootedness':['Banyan tree','Mangrove','Baobab','Bamboo grove'],'reaching upward':['Sunflower','Bamboo','Morning glory','Climbing ivy'],'seasonal shedding':['Maple in autumn','Ginkgo','Weeping willow','Birch'],'tenacity':['Dandelion','Desert moss','Lichen on rock','Cactus'],'hidden networks':['Mycelium','Aspen grove','Seagrass','Root system'],'quiet renewal':['Fern unfurling','Lotus','Cherry blossom','New shoot'],'patience':['Cactus','Bonsai','Stone plant','Aloe'],'flowering':['Wisteria','Night-blooming cereus','Magnolia','Orchid'],'fragility':['Lily of the valley','Poppy','Spider orchid','Dandelion seed']},
+  water:{'constant motion':['River current','Tidal wave','Mountain stream','Whirlpool'],'depth':['Deep ocean trench','Still lake','Dark fjord','Abyss'],'reflection':['Mirror-still lake','Morning tide pool','Rain puddle','Glass sea'],'dissolving':['Sea foam','Melting ice','Mist over water','Vapor'],'carrying':['River delta','Floodplain','Ocean current','Tide'],'erosion':['Sea-carved cliff','Canyon river','Coastal rock','Tide pool'],'transparency':['Clear spring','Shallow reef','Ice melt','Glacial water'],'stillness':['Frozen lake','Swamp at dusk','Caldera lake','Still pond'],'rushing':['Waterfall','Flash flood','Rapid','Cascade'],'cleansing':['Rain shower','Hot spring','Ocean wave','Spring rain']},
+  sky:{'vastness':['Open horizon','Arctic sky','Desert at night','Endless plain sky'],'impermanence':['Passing cloud','Sunset','Morning fog','Falling star'],'clarity':['High altitude','After rain','Winter sky','Clear dawn'],'holding everything':['Storm system','Cloud sea','Atmosphere','Overcast vault'],'openness':['Empty sky','Dawn light','Zenith','Open field sky'],'storm':['Thunderhead','Lightning field','Cyclone','Gathering clouds'],'shifting light':['Golden hour','Dusk gradient','Crepuscular rays','Aurora'],'witnessing':['Full moon','Star field','Solar eclipse','Northern lights'],'unreachable':['Stratosphere','Distant horizon','High cirrus','Mountain peak sky'],'breath':['Wind','Morning mist','Exhaled fog','Breeze']},
+  earth:{'steadiness':['Granite boulder','Plateau','Bedrock','Mountain base'],'weight':['Clay earth','River stone','Basalt','Iron ore'],'ancient layers':['Sediment cliff','Canyon wall','Fossil bed','Rock strata'],'fertile darkness':['Rich soil','Forest floor','Peat bog','Loam'],'holding':['Valley','Basin','Cave','Hollow'],'cracked surface':['Dried mud','Desert pavement','Cracked clay','Drought earth'],'groundedness':['Flat plain','Meadow','Tundra','Open field'],'buried':['Underground cave','Root system','Buried seed','Mineral vein'],'mineral':['Crystal formation','Geode','Obsidian','Quartz'],'structural':['Rock arch','Cliff face','Stone column','Natural pillar']},
+  cosmos:{'infinite distance':['Deep field','Void','Dark matter','Edge of space'],'silence':['Nebula','Interstellar space','Cold planet','Empty orbit'],'burning':['Supernova','Solar flare','Star core','Ignition'],'timeless':['Pulsar','Ancient light','Red giant','Old star'],'expansion':['Galaxy cluster','Cosmic web','Inflation','Spreading nebula'],'orbit':['Binary star','Planetary ring','Moon system','Satellite path'],'collapse':['Black hole','Neutron star','Implosion','Gravitational well'],'luminous':['Aurora','Bioluminescent nebula','Quasar','Glowing cloud'],'scattered':['Asteroid field','Star nursery','Comet trail','Debris field'],'cold vastness':['Kuiper belt','Oort cloud','Void between galaxies','Deep space']},
+  food:{'nourishment':['Root vegetables','Bone broth','Whole grain','Fresh bread'],'sweetness':['Ripe fig','Wild honey','Persimmon','Date'],'bitterness':['Dark chocolate','Bitter melon','Espresso','Bitter greens'],'comfort':['Warm porridge','Bread','Stew','Soup'],'ritual warmth':['Tea ceremony','Shared bowl','Slow-cooked dish','Hearth meal'],'decay':['Fermented jar','Overripe fruit','Blue cheese','Aged vinegar'],'abundance':['Harvest table','Ripe pomegranate','Market pile','Orchard'],'preservation':['Pickled jar','Salt-cured','Dried herb','Jarred preserve'],'texture':['Rough crust','Silken tofu','Coarse salt','Crumbling cheese'],'sharing':['Communal bread','Broken apart','Passed bowl','Shared plate']},
+  object:{'reflection':['Old mirror','Still water in a cup','Polished stone','Window glass'],'worn with time':['Eroded key','Cracked leather','Faded photograph','Worn coin'],'hollow':['Empty vessel','Dried gourd','Bone flute','Hollow shell'],'transparent':['Glass bottle','Thin ice','Membrane','Window pane'],'weighted':['Anchor','Lead weight','Old bell','Stone paperweight'],'broken':['Cracked bowl','Split stone','Torn cloth','Shattered glass'],'singular':['One match','Solitary candle','Single seed','Lone key'],'forgotten':['Dusty corner','Abandoned tool','Rusted lock','Old letter'],'familiar':['Worn handle','Smooth stone','Old spoon','Childhood toy'],'precise':['Compass needle','Tuning fork','Calibrated scale','Clock gear']},
+  structure:{'endurance':['Roman aqueduct','Standing stone','Ancient wall','Old bridge'],'enclosure':['Inner courtyard','Walled garden','Stone circle','Cloister'],'threshold':['Doorway','Arch','Passage','Gate'],'ruin':['Collapsed column','Overgrown ruin','Crumbling tower','Forgotten temple'],'foundation':['Underground base','Root cellar','Cornerstone','Bedrock floor'],'shelter':['Low arch','Cave entrance','Thick wall','Stone hut'],'boundary':['Long wall','Fence line','Border stone','Hedge row'],'echo':['Empty hall','Curved dome','Underground chamber','Bell tower'],'labyrinthine':['Winding corridor','Maze wall','Nested room','Spiral stair'],'solidity':['Monolith','Solid column','Thick stone','Bedrock mass']}
+};
+
+var partsByImage={
+  'Whale':['head','body','tail fin'],'Elephant':['head','torso','legs'],'Bear':['head','chest','paws'],
+  'Octopus':['head','mantle','tentacles'],'Eel':['head','body','tail'],'Manta ray':['head','wings','tail'],
+  'Tortoise':['head','shell','limbs'],'Crow':['head','wings','talons'],'Salamander':['head','body','tail'],
+  'Snow leopard':['head','chest','haunches'],'Lone wolf':['head','spine','haunches'],'Deep-sea fish':['head','body','fins'],
+  'Anglerfish':['head','body','lure'],'Giant squid':['head','mantle','tentacles'],'Whale shark':['head','body','tail'],
+  'Butterfly':['head','wings','body'],'Moth':['head','wings','antennae'],'Axolotl':['head','gills','body'],
+  'Ancient oak':['crown','trunk','roots'],'Bristlecone pine':['crown','trunk','roots'],'Giant sequoia':['crown','bark','roots'],
+  'Banyan tree':['canopy','trunk','aerial roots'],'Mangrove':['canopy','trunk','roots'],'Baobab':['crown','trunk','roots'],
+  'Deep ocean trench':['surface','depth','floor'],'Still lake':['surface','middle depth','bed'],'Frozen lake':['surface','beneath','bed']
+};
+
+var hintsByPart={
+  head:'What feeling or thought lives in this part for you?',
+  crown:'What sits at the very top — your hopes, your worries?',
+  body:'What does the main of you carry here?',
+  torso:'What does the main of you carry here?',
+  trunk:'What runs through the center, holding everything up?',
+  center:'What sits at your core right now?',
+  mantle:'What softness or protection surrounds your core?',
+  tentacles:'What are you reaching for, or being pulled by?',
+  reach:'What are you extending toward, or away from?',
+  roots:'What keeps you grounded, even unseen?',
+  tail:'What trails behind you — memory, regret, momentum?',
+  wings:'What helps you rise, or carries you away?',
+  legs:'What helps you stand, or move forward?',
+  fins:'What helps you navigate the world around you?',
+  surface:'What shows on the outside, for others to see?',
+  depth:'What lies beneath, that few people know?',
+  floor:'What has settled, finally, at the bottom?'
+};
+
+function getPartsForImage(name){return partsByImage[name]||['head','center','reach'];}
+function getImages(cat,trait){
+  if(catImages[cat]&&catImages[cat][trait]) return catImages[cat][trait];
+  var def={animal:['Whale','Octopus','Snow leopard'],plant:['Ancient oak','Fern unfurling','Lotus'],water:['Deep ocean trench','Still lake','Waterfall'],sky:['Open horizon','Storm system','Star field'],earth:['Granite boulder','Ancient layers','Crystal formation'],cosmos:['Nebula','Black hole','Aurora'],food:['Ripe fig','Warm porridge','Fermented jar'],object:['Old mirror','Empty vessel','Worn stone'],structure:['Stone arch','Ancient wall','Threshold']};
+  return def[cat]||['Form A','Form B','Form C'];
+}
+
+var faceEmoji={animal:'🦑',plant:'🌿',water:'🌊',sky:'☁️',earth:'🪨',cosmos:'🌌',food:'🫐',object:'🪞',structure:'🏛️'};
+
+
+
+document.addEventListener('DOMContentLoaded',function(){
+  try{
+    var saved=sessionStorage.getItem('artimal_openai_key')||'';
+    apiKeyFromSetup=saved;
+    var setup=document.getElementById('apiKeySetupInput');
+    if(setup && saved){ setup.value=saved; }
+    saveApiKeyFromSetup();
+  }catch(e){}
+  var b=document.getElementById('bodyInput');
+  var t=document.getElementById('textureInput');
+  if(b) b.addEventListener('input',updateReflectionCard);
+  if(t) t.addEventListener('input',updateReflectionCard);
+});
+</script>
+</body>
+</html>

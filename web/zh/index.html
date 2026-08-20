@@ -1,0 +1,3382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>artimal · 中文版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#1A2E44;--navy-mid:#22405C;--navy-light:#2E5274;
+  --ink:#15212F;--steel:#4A7196;--mist:#8FB3CE;
+  --pale:#C7DCEA;--fog:#E3EFF6;
+  --gold:#CBAA76;--gold-light:#E9D9B8;--white:#FAFBFA;
+  --deep:#060e18;
+}
+html,body{min-height:100vh;background:var(--navy);display:flex;align-items:flex-start;justify-content:center;padding:32px 16px 48px;}
+.app{width:100%;max-width:680px;background:var(--navy);border-radius:20px;border:0.5px solid rgba(143,179,206,.15);overflow:visible;font-family:'Inter',sans-serif;color:var(--fog);}
+.hdr{padding:26px 36px 0;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Playfair Display',serif;font-size:16px;letter-spacing:.12em;color:var(--gold);font-style:italic;}
+.dots{display:flex;gap:7px;align-items:center;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--steel);transition:all .4s cubic-bezier(.4,0,.2,1);}
+.dot.on{background:var(--gold);width:18px;border-radius:3px;}
+.body{padding:28px 36px 36px;}
+.screen{display:none;}
+.screen.on{display:block;animation:fIn .45s cubic-bezier(.4,0,.2,1);}
+@keyframes fIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.ai-lbl{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.ai-lbl::after{content:'';flex:1;height:.5px;background:rgba(203,170,118,.2);}
+.headline{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:var(--white);line-height:1.35;margin-bottom:5px;}
+.headline em{color:var(--gold);font-style:italic;}
+.sub{font-size:13px;color:var(--mist);font-weight:300;margin-bottom:26px;line-height:1.6;}
+.prompt-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:13px;}
+.p-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);min-width:76px;padding-top:13px;font-weight:500;}
+.p-input{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(143,179,206,.22);border-radius:9px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--white);outline:none;resize:none;transition:border-color .25s,background .25s;line-height:1.55;font-weight:300;}
+.p-input::placeholder{color:rgba(143,179,206,.4);}
+.p-input:focus{border-color:rgba(203,170,118,.5);background:rgba(255,255,255,.06);}
+.divider{height:.5px;background:rgba(143,179,206,.12);margin:8px 0 20px;}
+.tags-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:10px;font-weight:400;}
+.word-group{margin-bottom:16px;}
+.word-group-label{font-size:10px;color:rgba(143,179,206,.6);margin-bottom:8px;font-weight:400;letter-spacing:.03em;}
+.tags{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{padding:6px 14px;border-radius:20px;font-size:12px;border:.5px solid rgba(143,179,206,.28);color:var(--mist);cursor:pointer;transition:all .22s cubic-bezier(.4,0,.2,1);font-weight:300;user-select:none;}
+.tag:hover{border-color:var(--gold);color:var(--gold-light);}
+.tag.sel{background:rgba(203,170,118,.14);border-color:var(--gold);color:var(--gold-light);}
+.tag.sel::before{content:'✓ ';font-size:10px;}
+.btn-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+.btn-p{display:inline-flex;align-items:center;gap:7px;background:var(--gold);color:var(--ink);border:none;padding:12px 24px;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;letter-spacing:.04em;font-family:'Inter',sans-serif;transition:all .2s cubic-bezier(.4,0,.2,1);}
+.btn-p:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-p:active{transform:translateY(0) scale(.98);}
+.btn-g{display:inline-flex;align-items:center;gap:5px;background:transparent;color:var(--mist);border:.5px solid rgba(143,179,206,.28);padding:10px 18px;border-radius:9px;font-size:12px;cursor:pointer;letter-spacing:.04em;font-family:'Inter',sans-serif;font-weight:300;transition:all .2s cubic-bezier(.4,0,.2,1);}
+.btn-g:hover{border-color:var(--mist);color:var(--pale);}
+.btn-g:active{transform:scale(.98);}
+.weight-hint{font-size:11px;color:rgba(143,179,206,.55);font-weight:300;margin-top:-6px;margin-bottom:20px;line-height:1.6;font-style:italic;}
+.custom-input-row{display:flex;gap:8px;margin-top:12px;margin-bottom:4px;}
+.custom-input{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(143,179,206,.2);border-radius:8px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:12px;color:var(--white);outline:none;transition:border-color .25s;font-weight:300;}
+.custom-input::placeholder{color:rgba(143,179,206,.35);}
+.custom-input:focus{border-color:rgba(203,170,118,.45);}
+.custom-add-btn{background:rgba(203,170,118,.12);border:.5px solid rgba(203,170,118,.35);color:var(--gold-light);border-radius:8px;padding:9px 16px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap;}
+.custom-add-btn:hover{background:rgba(203,170,118,.2);}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+.cat{border:.5px solid rgba(143,179,206,.18);border-radius:11px;padding:18px 14px;cursor:pointer;transition:all .28s cubic-bezier(.4,0,.2,1);text-align:center;background:rgba(255,255,255,.02);}
+.cat:hover{border-color:rgba(203,170,118,.4);background:rgba(203,170,118,.05);}
+.cat.sel{border-color:var(--gold);background:rgba(203,170,118,.09);}
+.cat-icon{font-size:22px;margin-bottom:6px;}
+.cat-name{font-size:12px;color:var(--pale);font-weight:400;letter-spacing:.03em;}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.pill{padding:7px 16px;border-radius:20px;font-size:13px;border:.5px solid rgba(143,179,206,.22);color:var(--pale);cursor:pointer;transition:all .22s cubic-bezier(.4,0,.2,1);font-weight:300;background:rgba(255,255,255,.02);}
+.pill:hover{border-color:var(--gold);color:var(--gold-light);}
+.pill.sel{border-color:var(--gold);background:rgba(203,170,118,.1);color:var(--gold-light);}
+.img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px;}
+.img-card{border:.5px solid rgba(143,179,206,.18);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .28s cubic-bezier(.4,0,.2,1);}
+.img-card:hover{border-color:rgba(203,170,118,.45);}
+.img-card.sel{border:1.5px solid var(--gold);}
+.img-face{height:90px;display:flex;align-items:center;justify-content:center;background:rgba(34,64,92,.6);font-size:30px;}
+.img-name{font-size:10px;color:var(--mist);text-align:center;padding:8px;letter-spacing:.06em;text-transform:uppercase;font-weight:400;border-top:.5px solid rgba(143,179,206,.12);}
+.section-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:11px;font-weight:400;}
+.s4-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;}
+@media(max-width:600px){.s4-layout{grid-template-columns:1fr;}}
+.canvas-wrap{position:relative;width:100%;height:360px;border-radius:13px;overflow:hidden;border:.5px solid rgba(143,179,206,.2);margin-bottom:14px;background:#101d2b;cursor:grab;}
+.canvas-wrap:active{cursor:grabbing;}
+canvas#c3d{display:block;width:100%;height:100%;}
+.canvas-hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(143,179,206,.55);letter-spacing:.08em;text-transform:uppercase;pointer-events:none;white-space:nowrap;background:rgba(16,29,43,.7);padding:4px 12px;border-radius:20px;}
+.view-tabs{display:flex;gap:0;margin-bottom:14px;border:.5px solid rgba(143,179,206,.2);border-radius:9px;overflow:hidden;}
+.view-tab{flex:1;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--mist);padding:9px;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;transition:all .2s;font-weight:400;}
+.view-tab.on{color:var(--gold);background:rgba(203,170,118,.08);}
+.map-rows{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;}
+.map-row{display:flex;flex-direction:column;gap:5px;}
+.map-row-top{display:flex;align-items:center;gap:9px;}
+.part-badge{font-size:11px;color:var(--gold);border:.5px solid rgba(203,170,118,.38);border-radius:5px;padding:4px 10px;white-space:nowrap;min-width:82px;text-align:center;font-weight:400;letter-spacing:.04em;}
+.arr{color:rgba(143,179,206,.4);font-size:13px;}
+.map-hint{font-size:11px;color:rgba(143,179,206,.55);font-weight:300;padding-left:91px;line-height:1.5;}
+.map-inp{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(143,179,206,.18);border-radius:7px;padding:8px 11px;font-family:'Inter',sans-serif;font-size:13px;color:var(--white);outline:none;transition:border-color .25s;font-weight:300;}
+.map-inp::placeholder{color:rgba(143,179,206,.35);}
+.map-inp:focus{border-color:rgba(203,170,118,.45);}
+.phrase-box{background:rgba(255,255,255,.045);border:.5px solid rgba(203,170,118,.28);border-radius:10px;padding:15px 17px;margin-bottom:20px;}
+.phrase-lbl{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;font-weight:500;}
+.phrase-txt{font-family:'Playfair Display',serif;font-size:15px;color:var(--white);line-height:1.75;font-style:italic;}
+.wm{font-size:9px;color:rgba(143,179,206,.22);letter-spacing:.12em;text-transform:uppercase;text-align:right;padding:0 36px 18px;font-weight:300;}
+.clicked-flash{animation:flash .4s ease;}
+@keyframes flash{0%{border-color:var(--gold);}50%{border-color:var(--gold-light);}100%{border-color:rgba(203,170,118,.45);}}
+
+/* ============================================================
+   SCREEN 0 — Introduction
+   ============================================================ */
+.intro-wrap{padding:4px 0 8px;}
+.intro-line{opacity:0;transform:translateY(8px);animation:wIn .7s cubic-bezier(.4,0,.2,1) forwards;}
+.intro-line:nth-child(1){animation-delay:.1s;}
+.intro-line:nth-child(2){animation-delay:.5s;}
+.intro-line:nth-child(3){animation-delay:.9s;}
+.intro-line:nth-child(4){animation-delay:1.3s;}
+.intro-line:nth-child(5){animation-delay:1.7s;}
+@keyframes wIn{to{opacity:1;transform:translateY(0);}}
+.intro-wordmark{font-family:'Playfair Display',serif;font-size:44px;color:var(--gold);font-style:italic;letter-spacing:.06em;margin-bottom:4px;line-height:1.1;}
+.intro-tagline{font-size:14px;color:var(--pale);font-weight:300;line-height:1.8;margin-bottom:26px;}
+.intro-research{font-size:12px;color:rgba(143,179,206,.72);line-height:1.8;font-weight:300;margin-bottom:26px;padding:16px 18px;background:rgba(255,255,255,.03);border-radius:10px;border:.5px solid rgba(143,179,206,.12);border-left:2px solid rgba(203,170,118,.45);}
+.intro-research strong{color:var(--gold-light);font-weight:500;}
+.intro-meta{font-size:11px;color:rgba(143,179,206,.45);letter-spacing:.05em;margin-bottom:22px;display:flex;align-items:center;gap:8px;}
+.intro-meta-dot{width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:.6;}
+
+/* ============================================================
+   INTRO MODAL
+   ============================================================ */
+.modal-overlay{position:fixed;inset:0;background:rgba(6,14,24,.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:1000;}
+.modal-overlay.hidden{display:none;}
+.modal-box{background:var(--navy-mid);border:.5px solid rgba(203,170,118,.3);border-radius:16px;padding:34px 30px 28px;max-width:400px;width:90%;position:relative;animation:mBoxIn .38s cubic-bezier(.4,0,.2,1);}
+@keyframes mBoxIn{from{opacity:0;transform:translateY(16px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.modal-title{font-family:'Playfair Display',serif;font-size:21px;color:var(--white);margin-bottom:5px;font-weight:400;}
+.modal-sub{font-size:12px;color:var(--mist);margin-bottom:26px;font-weight:300;line-height:1.6;}
+.modal-steps{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
+.modal-step{display:flex;align-items:flex-start;gap:14px;opacity:0;transform:translateY(6px);animation:wIn .55s cubic-bezier(.4,0,.2,1) forwards;}
+.modal-step:nth-child(1){animation-delay:.08s;}
+.modal-step:nth-child(2){animation-delay:.28s;}
+.modal-step:nth-child(3){animation-delay:.48s;}
+.modal-step:nth-child(4){animation-delay:.68s;}
+.modal-step-num{width:26px;height:26px;border-radius:50%;border:.5px solid rgba(203,170,118,.5);color:var(--gold);font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Playfair Display',serif;font-style:italic;margin-top:1px;}
+.modal-step-text{font-size:13px;color:var(--pale);font-weight:300;line-height:1.55;}
+.modal-disclaimer{font-size:11px;color:rgba(143,179,206,.5);line-height:1.65;font-weight:300;font-style:italic;margin-bottom:22px;padding-left:40px;border-left:.5px solid rgba(143,179,206,.15);margin-left:0;}
+.modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--mist);font-size:20px;cursor:pointer;opacity:.5;transition:opacity .2s;line-height:1;}
+.modal-close:hover{opacity:1;}
+
+/* ============================================================
+   SCREEN 1 — Body Sensation Meditation
+   ============================================================ */
+.medit-start{text-align:center;padding:28px 0 8px;}
+.medit-start-eyebrow{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-weight:500;}
+.medit-start-title{font-family:'Playfair Display',serif;font-size:24px;color:var(--white);margin-bottom:10px;font-weight:400;line-height:1.35;}
+.medit-start-sub{font-size:13px;color:var(--mist);font-weight:300;margin-bottom:28px;line-height:1.75;}
+.medit-canvas-wrap{position:relative;border-radius:14px;overflow:hidden;background:var(--deep);border:.5px solid rgba(143,179,206,.12);}
+canvas#cMedit{display:block;width:100%;height:420px;}
+.medit-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 28px 30px;pointer-events:none;}
+.medit-pips{display:flex;gap:6px;justify-content:center;margin-bottom:16px;}
+.medit-pip{width:5px;height:5px;border-radius:50%;background:rgba(143,179,206,.2);transition:all .5s;}
+.medit-pip.done{background:rgba(203,170,118,.5);}
+.medit-pip.active{background:var(--mist);transform:scale(1.3);}
+.medit-breath-text{font-family:'Playfair Display',serif;font-size:15px;color:rgba(199,220,234,.88);font-style:italic;font-weight:400;text-align:center;line-height:1.7;max-width:300px;min-height:48px;transition:opacity .7s ease;}
+.medit-done-row{text-align:center;padding:20px 0 4px;}
+
+/* ============================================================
+   SCREEN 2 — Emotion Expression
+   ============================================================ */
+.research-note{margin-top:22px;padding:13px 16px 14px;background:rgba(6,14,24,.35);border-radius:10px;border:.5px solid rgba(143,179,206,.1);}
+.research-note-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(143,179,206,.4);margin-bottom:6px;font-weight:400;}
+.research-note-text{font-size:11.5px;color:rgba(143,179,206,.58);line-height:1.72;font-weight:300;font-style:italic;}
+
+/* Empty state card */
+.empty-card-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:800;}
+.empty-card-overlay.hidden{display:none;}
+.empty-card{background:rgba(22,42,62,.95);backdrop-filter:blur(10px);border:.5px solid rgba(143,179,206,.25);border-radius:14px;padding:26px 28px;max-width:310px;width:88%;text-align:center;animation:mBoxIn .3s cubic-bezier(.4,0,.2,1);}
+.empty-card-text{font-family:'Playfair Display',serif;font-size:16px;color:var(--white);line-height:1.6;font-style:italic;margin-bottom:10px;}
+.empty-card-sub{font-size:12px;color:var(--mist);font-weight:300;line-height:1.6;margin-bottom:16px;}
+.empty-card-dismiss{font-size:11px;color:rgba(143,179,206,.38);letter-spacing:.06em;}
+
+/* ============================================================
+   RITUAL BOX
+   ============================================================ */
+.ritual-box{background:rgba(255,255,255,.03);border:.5px solid rgba(203,170,118,.22);border-radius:12px;padding:22px 20px;margin-bottom:22px;}
+.ritual-step{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start;}
+.ritual-step:last-child{margin-bottom:0;}
+.ritual-num{font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:18px;min-width:24px;}
+.ritual-text{font-size:13px;color:var(--pale);line-height:1.7;font-weight:300;}
+.ritual-text strong{color:var(--gold-light);font-weight:500;}
+
+.body-model-note{
+  margin-top:10px;
+  font-size:11px;
+  color:rgba(143,179,206,.58);
+  line-height:1.55;
+  font-style:italic;
+}
+.body-model-note strong{color:var(--gold-light);font-weight:500;}
+.model-status-line{
+  position:absolute;
+  left:12px;
+  top:12px;
+  z-index:2;
+  max-width:calc(100% - 24px);
+  border:.5px solid rgba(203,170,118,.26);
+  background:rgba(6,14,24,.62);
+  backdrop-filter:blur(8px);
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:10px;
+  color:rgba(199,220,234,.8);
+  letter-spacing:.04em;
+  pointer-events:none;
+}
+
+
+
+/* ============================================================
+   GLASS 3D STYLE INTEGRATION — artimal x organ viewer
+   ============================================================ */
+html,body{
+  min-height:100vh;
+  height:100%;
+  padding:18px;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(255,107,138,.18), transparent 32%),
+    radial-gradient(circle at 82% 18%, rgba(139,124,255,.18), transparent 34%),
+    radial-gradient(circle at 52% 100%, rgba(70,220,190,.12), transparent 38%),
+    #07080d;
+}
+.app{
+  width:min(1180px, calc(100vw - 36px));
+  max-width:1180px;
+  height:calc(100vh - 36px);
+  max-height:860px;
+  min-height:720px;
+  background:rgba(18,20,31,.78);
+  backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:26px;
+  box-shadow:0 28px 90px rgba(0,0,0,.46);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.hdr{
+  flex:0 0 auto;
+  padding:28px 58px 0;
+}
+.body{
+  flex:1 1 auto;
+  padding:34px 58px 42px;
+  overflow:auto;
+  min-height:0;
+}
+.screen.on{
+  min-height:100%;
+}
+.logo,.intro-wordmark{color:#E9D9B8;text-shadow:0 0 24px rgba(203,170,118,.12);}
+.ai-lbl{font-size:12px;color:#E9D9B8;letter-spacing:.18em;}
+.headline{font-size:48px;line-height:1.16;letter-spacing:-.035em;}
+.sub{font-size:20px;color:#a5a8b8;max-width:940px;}
+.p-label,.section-lbl,.tags-lbl,.word-group-label{color:#E9D9B8;}
+.p-input,.custom-input,.map-inp,.prompt-output{
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;
+  color:#FAFBFA;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+}
+.p-input:focus,.custom-input:focus,.map-inp:focus,.prompt-output:focus{
+  border-color:rgba(255,107,138,.55);
+  background:rgba(255,255,255,.08);
+}
+.tag,.pill,.cat,.img-card,.btn-g,.view-tabs,.phrase-box,.ritual-box,.research-note,.intro-research,.modal-box{
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(18px);
+}
+.cat,.img-card{border-radius:22px;}
+.cat.sel,.img-card.sel,.pill.sel,.tag.sel{
+  border-color:rgba(255,107,138,.72);
+  background:linear-gradient(135deg,rgba(255,107,138,.24),rgba(139,124,255,.16));
+  box-shadow:0 0 28px rgba(255,107,138,.14);
+}
+.btn-p{
+  border-radius:16px;
+  padding:15px 28px;
+  background:linear-gradient(135deg,#ff6b8a,#8b7cff);
+  color:#fff;
+  box-shadow:0 14px 34px rgba(255,107,138,.18);
+}
+.btn-g{
+  border-radius:16px;
+  padding:14px 24px;
+}
+.wm{display:none;}
+.intro-wordmark{font-size:60px;}
+.intro-tagline{font-size:20px;}
+.intro-research{font-size:15px;}
+.cat-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+.cat{min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.cat-icon{font-size:34px;}
+.cat-name{font-size:18px;}
+.pill,.tag{font-size:18px;padding:10px 20px;border-radius:999px;}
+.img-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+.img-face{height:140px;background:rgba(255,255,255,.035);}
+.img-name{font-size:13px;}
+.prompt-row{gap:22px;margin-bottom:18px;}
+.p-label{min-width:110px;font-size:12px;padding-top:18px;}
+#s2 .p-input{font-size:19px;min-height:88px;}
+
+#s5{height:100%;}
+#s5 .headline{font-size:46px;margin-bottom:10px;}
+#s5 .sub{display:none;}
+.s5-stage{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);
+  gap:32px;
+  align-items:stretch;
+  height:calc(100% - 142px);
+  min-height:520px;
+}
+.s5-model-zone{
+  position:relative;
+  min-height:520px;
+  display:flex;
+  flex-direction:column;
+}
+.compact-tabs{
+  max-width:430px;
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:8px;
+  background:rgba(255,255,255,.055);
+}
+.open-canvas{
+  position:relative;
+  flex:1;
+  height:auto;
+  min-height:500px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  overflow:visible!important;
+  margin:0!important;
+  cursor:grab;
+}
+.open-canvas:active{cursor:grabbing;}
+canvas#c3d{width:100%;height:100%;display:block;}
+.open-canvas .model-status-line{
+  top:14px;
+  left:14px;
+  border-color:rgba(255,107,138,.35);
+  background:rgba(15,16,25,.54);
+}
+.canvas-hint{display:none!important;}
+.marker-layer{position:absolute;inset:0;pointer-events:none;z-index:5;}
+.model-marker{
+  position:absolute;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fff, #ff6b8a 42%, #8b7cff 100%);
+  box-shadow:0 0 18px rgba(255,107,138,.9),0 0 42px rgba(139,124,255,.48);
+  transform:translate(-50%,-50%);
+}
+.model-marker::after{
+  content:attr(data-label);
+  position:absolute;
+  left:24px;
+  top:50%;
+  transform:translateY(-50%);
+  max-width:180px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  color:#fff;
+  background:rgba(15,16,25,.76);
+  border:1px solid rgba(255,255,255,.12);
+}
+.imagination-panel,.direction-card{
+  background:rgba(18,20,31,.62);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  padding:24px;
+  backdrop-filter:blur(24px);
+  box-shadow:0 22px 60px rgba(0,0,0,.22);
+}
+.panel-title{font-family:'Playfair Display',serif;font-size:28px;line-height:1.25;color:#FAFBFA;margin-bottom:10px;}
+.panel-copy{font-size:14px;line-height:1.65;color:#a5a8b8;margin-bottom:16px;}
+.small-note{font-size:12px;margin-top:18px;}
+.mini-label{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E9D9B8;margin-bottom:8px;}
+.imagination-summary{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px;}
+.imagination-chip{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.055);
+  color:#c7dcea;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:13px;
+  cursor:pointer;
+  transition:all .18s;
+}
+.imagination-chip:hover,.imagination-chip.on{border-color:rgba(255,107,138,.62);color:#fff;background:rgba(255,107,138,.15);}
+.imagination-input{font-size:16px!important;min-height:94px!important;margin-bottom:14px!important;}
+.imagination-actions{margin-top:12px;}
+.placement-list{margin:16px 0 20px;display:flex;flex-direction:column;gap:10px;}
+.empty-placement,.placement-item{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);
+  border-radius:14px;
+  padding:12px 14px;
+  color:#a5a8b8;
+  font-size:13px;
+  line-height:1.5;
+}
+.placement-item strong{color:#E9D9B8;}
+.final-actions{margin-top:18px;}
+#generateImageBtn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5);}
+.direction-layout{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:start;margin:28px 0 24px;}
+.prompt-output{width:100%;font-family:'Inter',sans-serif;font-size:14px;line-height:1.65;padding:18px;resize:vertical;outline:none;}
+.soft-card .btn-p{margin-top:12px;}
+@media(max-width:900px){
+  html,body{overflow:auto;padding:10px;}
+  .app{height:auto;min-height:100vh;width:100%;}
+  .hdr,.body{padding-left:24px;padding-right:24px;}
+  .headline{font-size:38px;}
+  .s5-stage,.direction-layout{grid-template-columns:1fr;height:auto;}
+  .open-canvas{min-height:460px;}
+}
+
+
+/* ============================================================
+   想象流程 · 中文版 GENERATION
+   ============================================================ */
+.live-generate-layout{grid-template-columns:1.05fr .95fr!important;}
+.api-panel{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+}
+.api-key-input{width:100%;margin-bottom:12px;}
+.api-grid{display:grid;grid-template-columns:1.15fr .9fr .95fr;gap:10px;margin-bottom:14px;}
+.live-result-card{min-height:560px;display:flex;flex-direction:column;gap:16px;}
+.hidden{display:none!important;}
+.waiting-panel,.result-panel,.error-panel,.refine-box{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);
+  border-radius:20px;
+  padding:20px;
+}
+.waiting-panel{
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.waiting-panel::before{
+  content:'';
+  position:absolute;
+  inset:-40%;
+  background:
+    radial-gradient(circle at 40% 38%, rgba(255,107,138,.18), transparent 23%),
+    radial-gradient(circle at 62% 50%, rgba(139,124,255,.18), transparent 28%),
+    radial-gradient(circle at 50% 75%, rgba(70,220,190,.12), transparent 28%);
+  animation:slowTurn 10s linear infinite;
+}
+@keyframes slowTurn{to{transform:rotate(360deg);}}
+.orb-loader{
+  width:86px;height:86px;border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 28%, #fff, transparent 12%),
+    radial-gradient(circle at 50% 50%, rgba(255,107,138,.9), rgba(139,124,255,.7) 52%, rgba(70,220,190,.22) 100%);
+  box-shadow:0 0 52px rgba(255,107,138,.35),0 0 80px rgba(139,124,255,.25);
+  margin-bottom:22px;
+  animation:pulseOrb 1.6s ease-in-out infinite;
+  position:relative;
+  z-index:1;
+}
+@keyframes pulseOrb{0%,100%{transform:scale(.96);filter:brightness(.92);}50%{transform:scale(1.08);filter:brightness(1.14);}}
+.wait-title{font-family:'Playfair Display',serif;font-size:28px;color:#FAFBFA;margin:8px 0 8px;position:relative;z-index:1;}
+.wait-copy{font-size:14px;line-height:1.7;color:#a5a8b8;max-width:420px;position:relative;z-index:1;}
+.wait-steps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px;position:relative;z-index:1;}
+.wait-step{font-size:11px;color:#8FB3CE;border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:7px 10px;background:rgba(6,14,24,.38);}
+.wait-step.on{color:#E9D9B8;border-color:rgba(203,170,118,.45);background:rgba(203,170,118,.1);}
+.generated-image{
+  width:100%;
+  border-radius:20px;
+  display:block;
+  background:rgba(0,0,0,.2);
+  box-shadow:0 18px 70px rgba(0,0,0,.35);
+  margin:12px 0 16px;
+}
+.error-text{font-size:13px;line-height:1.7;color:#ffb7c8;white-space:pre-wrap;}
+.refine-box{margin-top:auto;}
+@media(max-width:900px){
+  .api-grid,.live-generate-layout{grid-template-columns:1fr!important;}
+}
+
+
+/* ============================================================
+   想象流程 · 中文版 FIXES
+   ============================================================ */
+.api-setup-card{
+  margin:24px 0 22px;
+  padding:20px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  background:rgba(255,255,255,.055);
+  backdrop-filter:blur(20px);
+  max-width:760px;
+}
+.api-setup-card .custom-input{font-size:15px!important;padding:14px 16px!important;margin-top:8px;width:100%;}
+.api-status{font-size:12px;color:#a5a8b8;margin-top:10px;line-height:1.5;}
+.api-status.ok{color:#E9D9B8;}
+.reflection-card{
+  margin:8px 0 18px 132px;
+  padding:15px 18px;
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,107,138,.16),rgba(139,124,255,.12));
+  border:1px solid rgba(255,255,255,.14);
+  color:#E9D9B8;
+  font-size:15px;
+  line-height:1.7;
+  box-shadow:0 18px 48px rgba(0,0,0,.16);
+}
+.reflection-card strong{color:#fff;font-weight:500;}
+#s2 .subtle-hint{font-size:13px;color:#a5a8b8;margin-top:6px;}
+/* remove the meditation robot/avatar visual; keep the breathing guidance */
+.medit-canvas-wrap.minimal-medit{
+  min-height:420px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255,107,138,.12), transparent 30%),
+    radial-gradient(circle at 54% 62%, rgba(139,124,255,.12), transparent 34%),
+    rgba(6,14,24,.48);
+  border:1px solid rgba(255,255,255,.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.medit-canvas-wrap.minimal-medit canvas{display:none!important;}
+.medit-canvas-wrap.minimal-medit .medit-overlay{
+  position:relative;
+  inset:auto;
+  justify-content:center;
+  padding:34px;
+}
+.reference-layout{display:grid;grid-template-columns:1fr .85fr;gap:28px;align-items:start;margin-top:28px;}
+.reference-card,.deepen-card{
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  background:rgba(18,20,31,.62);
+  backdrop-filter:blur(24px);
+  padding:24px;
+  box-shadow:0 22px 60px rgba(0,0,0,.22);
+}
+.reference-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;}
+.reference-option{
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  overflow:hidden;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.reference-option:hover,.reference-option.sel{border-color:rgba(255,107,138,.72);box-shadow:0 0 26px rgba(255,107,138,.18);transform:translateY(-1px);}
+.reference-option img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:rgba(255,255,255,.04);}
+.reference-name{font-size:12px;color:#c7dcea;padding:10px;text-align:center;line-height:1.4;}
+.reference-placeholder{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;color:#E9D9B8;font-size:13px;line-height:1.55;background:radial-gradient(circle at 35% 35%,rgba(255,107,138,.18),transparent 38%),radial-gradient(circle at 70% 70%,rgba(139,124,255,.18),transparent 42%),rgba(255,255,255,.04);}
+.guiding-questions{display:flex;flex-direction:column;gap:10px;margin:12px 0 18px;}
+.guiding-question{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);color:#c7dcea;font-size:14px;line-height:1.55;}
+.required-note{font-size:12px;color:#ffb7c8;margin-top:8px;display:none;}
+.required-note.on{display:block;}
+.ai-prep-loading{padding:24px;border-radius:20px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);color:#a5a8b8;line-height:1.7;}
+.tiny-loader{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#ff6b8a,#8b7cff);box-shadow:0 0 28px rgba(255,107,138,.35);animation:pulseOrb 1.4s ease-in-out infinite;margin-bottom:14px;}
+/* Click-through/placement fixes for 3D map */
+#modelDropZone{pointer-events:auto!important;}
+#modelMarkerLayer{pointer-events:none!important;}
+.open-canvas{overflow:visible!important;}
+.open-canvas .model-status-line{pointer-events:none!important;}
+canvas#c3d{position:absolute;inset:0;width:100%!important;height:100%!important;z-index:1;}
+.marker-layer{z-index:8!important;}
+/* keep the 3D body centered in the left stage */
+.s5-model-zone{justify-content:center;}
+.open-canvas{min-height:520px;}
+#s6 .api-panel{display:none!important;}
+#s6 .sub{max-width:760px;}
+@media(max-width:900px){
+  .reference-layout{grid-template-columns:1fr;}
+  .reference-grid{grid-template-columns:1fr;}
+  .reflection-card{margin-left:0;}
+}
+
+
+/* ============================================================
+   PDF REQUESTED CHANGES
+   ============================================================ */
+.cat-detail-card{
+  margin:20px 0 8px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.045);
+  border-radius:24px;
+  backdrop-filter:blur(18px);
+}
+.cat-detail-card.hidden{display:none!important;}
+.cat-detail-card .panel-copy{margin-bottom:14px;}
+#traitPillsInline{margin-bottom:16px;}
+.img-card.text-only{
+  min-height:92px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px 14px;
+  background:rgba(255,255,255,.045);
+}
+.img-card.text-only .img-name{
+  border-top:0;
+  font-size:17px;
+  text-transform:none;
+  letter-spacing:.02em;
+  color:#FAFBFA;
+  line-height:1.35;
+  padding:0;
+}
+.reference-choice-card{
+  position:fixed;
+  inset:0;
+  z-index:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(6,8,13,.76);
+  backdrop-filter:blur(10px);
+}
+.reference-choice-card.hidden{display:none!important;}
+.reference-choice-inner{
+  width:min(560px,92vw);
+  border:1px solid rgba(203,170,118,.35);
+  border-radius:24px;
+  background:rgba(24,26,40,.96);
+  box-shadow:0 28px 90px rgba(0,0,0,.46);
+  padding:30px;
+}
+.reference-choice-title{
+  font-family:'Playfair Display',serif;
+  font-size:30px;
+  color:#FAFBFA;
+  margin-bottom:12px;
+  line-height:1.2;
+}
+.reference-choice-copy{
+  color:#a5a8b8;
+  font-size:15px;
+  line-height:1.75;
+  margin-bottom:20px;
+}
+.reference-grid.hidden,.reference-note.hidden{display:none!important;}
+.reference-note{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);
+  border-radius:16px;
+  padding:14px 16px;
+  color:#a5a8b8;
+  line-height:1.6;
+  font-size:13px;
+  margin-bottom:16px;
+}
+.ai-assist-modal .modal-box{
+  max-width:560px;
+}
+.ai-assist-modal .modal-title{
+  font-size:30px;
+}
+.ai-choice-warning{
+  font-size:14px;
+  line-height:1.85;
+  color:#c7dcea;
+  margin:18px 0 24px;
+  padding:18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.1);
+}
+#s6 .sub{display:none!important;}
+#finalGenerateCard.hidden{display:none!important;}
+.reflection-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  align-items:stretch;
+  margin-top:22px;
+}
+.reflection-card{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(18,20,31,.62);
+  border-radius:24px;
+  padding:24px;
+  backdrop-filter:blur(24px);
+  min-height:540px;
+}
+.upload-zone{
+  border:1px dashed rgba(203,170,118,.38);
+  background:rgba(255,255,255,.035);
+  border-radius:20px;
+  min-height:360px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:22px;
+  overflow:hidden;
+}
+.upload-zone img{
+  width:100%;
+  max-height:440px;
+  object-fit:contain;
+  border-radius:16px;
+  box-shadow:0 18px 70px rgba(0,0,0,.28);
+}
+.upload-placeholder{
+  color:#a5a8b8;
+  line-height:1.75;
+  font-size:15px;
+}
+.reflection-question{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.045);
+  border-radius:16px;
+  padding:14px 16px;
+  color:#c7dcea;
+  font-size:14px;
+  line-height:1.65;
+  margin-bottom:10px;
+}
+.reflection-output{
+  border:1px solid rgba(203,170,118,.24);
+  background:rgba(203,170,118,.065);
+  border-radius:18px;
+  padding:16px;
+  color:#E9D9B8;
+  line-height:1.75;
+  font-size:14px;
+  margin-top:16px;
+}
+@media(max-width:900px){
+  .reflection-layout{grid-template-columns:1fr;}
+}
+
+
+.ai-prep-loading .btn-g{position:relative;z-index:2;}
+
+.participant-setup-card{
+  border:1px solid rgba(203,170,118,.28);
+  background:linear-gradient(135deg,rgba(203,170,118,.10),rgba(255,255,255,.035));
+  border-radius:22px;
+  padding:18px;
+  margin-bottom:14px;
+}
+.participant-setup-card .custom-input{margin-top:10px;}
+.required-hint{
+  font-size:12px;
+  color:#E9D9B8;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-top:8px;
+}
+.save-status{
+  margin-top:12px;
+  font-size:13px;
+  line-height:1.6;
+  color:#8FB3CE;
+  opacity:.92;
+}
+.save-status.ok{color:#B8E2C4;}
+.save-status.warn{color:#F7C4D2;}
+
+
+.lit-note{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:16px;
+  border:1px solid rgba(143,179,206,.18);
+  background:rgba(143,179,206,.055);
+  color:rgba(214,225,238,.78);
+  font-size:13px;
+  line-height:1.65;
+}
+.lit-note strong{color:#E9D9B8;font-weight:700;}
+.guidance-choice{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:12px 0 18px;
+}
+.guidance-choice .mini-choice{
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(255,255,255,.055);
+  color:#C7D8E8;
+  border-radius:999px;
+  padding:9px 13px;
+  font-size:13px;
+  cursor:default;
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="logo">artimal <span style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:.14em;font-style:normal;color:rgba(233,217,184,.55);margin-left:8px;">想象流程 · 中文版</span></div>
+    <div class="dots" id="dotsWrap">
+      <div class="dot" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
+      <div class="dot" id="d4"></div>
+      <div class="dot" id="d5"></div>
+      <div class="dot" id="d6"></div>
+      <div class="dot" id="d7"></div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- S0: Introduction -->
+    <div class="screen on" id="s0">
+      <div class="intro-wrap">
+        <div class="intro-wordmark intro-line">artimal</div>
+        <div class="intro-tagline intro-line">
+          一个从身体觉察开始，<br>
+          逐步把感受转化为意象、绘画和反思的过程。<br>
+          <span style="color:rgba(143,179,206,.6);font-size:12.5px;">不需要任何绘画经验。</span>
+        </div>
+        <div class="intro-research intro-line">
+          <strong>基于研究设计。</strong> 这个系统把身体映射、心理意象、隐喻外化和绘画后反思结合在一起：先让情绪落到身体，再把感受细化为重量、温度、质地和运动，最后通过图像与绘画保留用户自己的解释权。
+        </div>
+        <div class="intro-meta intro-line">
+          <span class="intro-meta-dot"></span>
+          大约 5–8 分钟
+          <span class="intro-meta-dot"></span>
+          不需要绘画基础
+        </div>
+        
+        <div class="participant-setup-card intro-line">
+          <div class="section-lbl">受访者编号 · 必填</div>
+          <div class="panel-copy">请输入本次测试的受访者编号。系统会把这个编号和 TA 的网站输入、上传绘画、AI 反思与最终生成图像绑定保存，方便后续分析。</div>
+          <input id="participantIdInput" class="custom-input" type="text" placeholder="例如：P001 / S03 / GroupA-01" autocomplete="off" oninput="saveParticipantId()"/>
+          <div id="participantIdStatus" class="api-status">开始前必须输入受访者编号。</div>
+        </div>
+
+        <div class="api-setup-card intro-line">
+          <div class="section-lbl">本地 API 设置</div>
+          <div class="panel-copy">在开始前输入一次 OpenAI API 密钥。整个体验中会一直使用这把密钥：前面可用于生成参考图，最后也可用于生成一张 AI 回应图辅助作品。</div>
+          <input id="apiKeySetupInput" class="custom-input" type="password" placeholder="OpenAI API 密钥 · sk-..." autocomplete="off" oninput="saveApiKeyFromSetup()"/>
+          <div id="apiSetupStatus" class="api-status">你的 key 只保存在当前浏览器会话中，并且只会通过这台电脑上的本地服务器发送。</div>
+        </div>
+        <div class="btn-row intro-line">
+          <button class="btn-p" onclick="startExperience()">开始体验 &nbsp;&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intro Modal -->
+    <div class="modal-overlay hidden" id="introModal" onclick="handleModalBg(event)">
+      <div class="modal-box" id="introModalBox">
+        <button class="modal-close" onclick="closeIntroModal()">&times;</button>
+        <div class="modal-title">这个过程会这样进行</div>
+        <div class="modal-sub">一个温和的引导流程，大约 5–8 分钟。</div>
+        <div class="modal-steps">
+          <div class="modal-step">
+            <span class="modal-step-num">1</span>
+            <span class="modal-step-text">把感受落到身体</span>
+          </div>
+          <div class="modal-step">
+            <span class="modal-step-num">2</span>
+            <span class="modal-step-text">把身体感受转成意象</span>
+          </div>
+          <div class="modal-step">
+            <span class="modal-step-num">3</span>
+            <span class="modal-step-text">观察形状、动作与距离</span>
+          </div>
+          <div class="modal-step">
+            <span class="modal-step-num">4</span>
+            <span class="modal-step-text">把意象映射回身体，再开始创作</span>
+          </div>
+        </div>
+        <div class="modal-disclaimer">
+          这不能替代专业心理健康支持。但根据我们的研究发现，好的艺术疗愈创作结果并不取决于绘画水平。
+        </div>
+        <div class="btn-row" style="margin-bottom:0;">
+          <button class="btn-p" onclick="closeIntroModal();go(1)">开始吧 &nbsp;&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S1: Body Sensation Meditation -->
+    <div class="screen" id="s1">
+      <div id="meditStart" class="medit-start">
+        <div class="medit-start-eyebrow">开始之前</div>
+        <div class="medit-start-title">一个短暂的身体<br>定位时刻</div>
+        <div class="medit-start-sub">
+          找一个舒服的位置。戴上耳机会让你更容易把注意力放回身体。<br>
+          接下来不是要立刻解释情绪，而是先温柔地找到它在身体中的入口。
+        </div>
+        <div class="btn-row" style="justify-content:center;margin-bottom:0;">
+          <button class="btn-p" onclick="startMeditation()">开始 &nbsp;&rarr;</button>
+          <button class="btn-g" onclick="go(2)">跳过</button>
+        </div>
+      </div>
+      <div id="meditSession" style="display:none;">
+        <div class="medit-canvas-wrap minimal-medit">
+          <canvas id="cMedit"></canvas>
+          <div class="medit-overlay">
+            <div class="medit-pips" id="meditPips"></div>
+            <div class="medit-breath-text" id="meditText">找一个舒服的位置。让注意力慢慢回到身体。</div>
+          </div>
+        </div>
+        <div class="medit-done-row">
+          <button class="btn-p" id="meditDoneBtn" style="display:none;" onclick="go(2)">我准备好了 &nbsp;&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: Emotion Expression -->
+    <div class="screen" id="s2">
+      <div class="ai-lbl">从这里开始</div>
+      <div class="headline">此刻，这个感觉在身体哪里<br>最<em>明显？</em></div>
+      <div class="sub">先不要急着解释它。只需要把抽象的情绪，落到一个你能感觉到的身体位置和感官质地上。</div>
+
+      <div class="prompt-row">
+        <span class="p-label">身体</span>
+        <textarea class="p-input" rows="2" placeholder="现在这个感觉在你身体的哪个位置最明显？可以是头、胸口、胃、肩膀、脸颊、手、脚，也可以是任何你感受到的地方。" id="bodyInput"></textarea>
+      </div>
+      <div class="prompt-row">
+        <span class="p-label">质地</span>
+        <textarea class="p-input" rows="2" placeholder="如果它有重量、温度、质地或运动方式，它会是什么样的？比如沉、冷、热、硬、黏、刺、旋转、下坠。" id="textureInput"></textarea>
+      </div>
+
+      <div id="reflectionCard" class="reflection-card hidden">
+        <div id="reflectionText">我听见你了。</div>
+        <div class="subtle-hint">我们会把这些身体词和感官词，作为后面想象与绘画的种子。</div>
+      </div>
+
+      <div class="weight-hint">你自由写下的词会被优先使用。下方词语只是帮助你把“说不清的不舒服”变得更可感、更可画。</div>
+      <div class="lit-note"><strong>为什么从身体开始：</strong>身体定位把抽象情绪落到具体位置；重量、温度、质地和运动会让心理意象更清晰，也更容易被画出来。</div>
+
+      <div class="divider"></div>
+      <div class="tags-lbl">也可以从情绪与身体词开始——选择所有与你有共鸣的词</div>
+
+      <div class="word-group">
+        <div class="word-group-label">沉重 / 被压住</div>
+        <div class="tags">
+          <div class="tag" onclick="tog(this)">沉重</div>
+          <div class="tag" onclick="tog(this)">缠绕</div>
+          <div class="tag" onclick="tog(this)">失去依托</div>
+          <div class="tag" onclick="tog(this)">下沉</div>
+        </div>
+      </div>
+      <div class="word-group">
+        <div class="word-group-label">空洞 / 空</div>
+        <div class="tags">
+          <div class="tag" onclick="tog(this)">空洞</div>
+          <div class="tag" onclick="tog(this)">麻木</div>
+          <div class="tag" onclick="tog(this)">漂浮</div>
+          <div class="tag" onclick="tog(this)">遥远</div>
+        </div>
+      </div>
+      <div class="word-group">
+        <div class="word-group-label">不安 / 紧绷</div>
+        <div class="tags">
+          <div class="tag" onclick="tog(this)">不安</div>
+          <div class="tag" onclick="tog(this)">尖锐</div>
+          <div class="tag" onclick="tog(this)">脆弱</div>
+          <div class="tag" onclick="tog(this)">被淹没</div>
+        </div>
+      </div>
+      <div class="word-group">
+        <div class="word-group-label">温热 / 伸向某处</div>
+        <div class="tags">
+          <div class="tag" onclick="tog(this)">柔软</div>
+          <div class="tag" onclick="tog(this)">渴望</div>
+          <div class="tag" onclick="tog(this)">安静的悲伤</div>
+          <div class="tag" onclick="tog(this)">有希望</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-p" onclick="tryProceed()">让这个身体里的感觉慢慢变成某种意象 &nbsp;&rarr;</button>
+        <button class="btn-g" onclick="go(1)">&larr; 返回</button>
+      </div>
+
+      <div class="research-note">
+        <div class="research-note-lbl">研究依据</div>
+        <div class="research-note-text">神经科学研究发现，当我们用语言描述身体感受时，大脑会从“反应”模式转向“觉察”模式。把它说出来，本身就是一种自我照顾。</div>
+      </div>
+    </div>
+
+    <!-- Empty state card -->
+    <div class="empty-card-overlay hidden" id="emptyOverlay" onclick="dismissEmptyCard()">
+      <div class="empty-card" onclick="event.stopPropagation()">
+        <div class="empty-card-text">“没关系，我们可以从你的心跳开始。”</div>
+        <div class="empty-card-sub">把手放在胸口。<br>它是紧的，还是松的？</div>
+        <div class="empty-card-dismiss">点击任意位置关闭</div>
+      </div>
+    </div>
+
+    <!-- S3: Category -->
+    <div class="screen" id="s3">
+      <div class="ai-lbl">artimal 问你</div>
+      <div class="headline">如果这个身体里的感觉<br><em>变成</em>一个外部意象——</div>
+      <div class="sub" id="becomeSub">先让它从“我身体里的感觉”稍微离开一点，变成一个可以被看见、被靠近、也可以被画下来的东西。</div>
+
+      <div class="lit-note"><strong>为什么让它变成意象：</strong>隐喻外化不是要逃离感受，而是让它暂时变成一个可以被观察、被选择、被重新组织的对象。</div>
+
+      <div class="cat-grid">
+        <div class="cat" onclick="selCat(this,'animal')"><div class="cat-icon">🦋</div><div class="cat-name">动物</div></div>
+        <div class="cat" onclick="selCat(this,'plant')"><div class="cat-icon">🌿</div><div class="cat-name">植物</div></div>
+        <div class="cat" onclick="selCat(this,'water')"><div class="cat-icon">🌊</div><div class="cat-name">水</div></div>
+        <div class="cat" onclick="selCat(this,'sky')"><div class="cat-icon">☁️</div><div class="cat-name">天空</div></div>
+        <div class="cat" onclick="selCat(this,'earth')"><div class="cat-icon">🪨</div><div class="cat-name">土地 / 石头</div></div>
+        <div class="cat" onclick="selCat(this,'cosmos')"><div class="cat-icon">🌌</div><div class="cat-name">宇宙</div></div>
+        <div class="cat" onclick="selCat(this,'food')"><div class="cat-icon">🫐</div><div class="cat-name">食物</div></div>
+        <div class="cat" onclick="selCat(this,'object')"><div class="cat-icon">🪞</div><div class="cat-name">物品</div></div>
+        <div class="cat" onclick="selCat(this,'structure')"><div class="cat-icon">🏛️</div><div class="cat-name">建筑 / 结构</div></div>
+      </div>
+
+      <div class="custom-input-row">
+        <input class="custom-input" id="customCatInput" placeholder="也可以自己输入——例如“一扇关上的门”“一只翱翔的老鹰”“一块安静的石头”。不需要合理，只要它像你的感受。"/>
+        <button class="custom-add-btn" onclick="useCustomCategory()">使用这个</button>
+      </div>
+
+
+      <div id="catDetailSection" class="cat-detail-card hidden">
+        <div class="section-lbl">选择一个更具体的意象</div>
+        <div class="panel-title" id="catDetailTitle" style="font-size:26px;margin-bottom:8px;">哪一种特质最接近？</div>
+        <p class="panel-copy">不只看它是什么，也看看它处在什么状态。先选一种最贴近的特质，下面会出现几个更具体的意象。请再选择一个，或自己输入一个。</p>
+        <div class="pills" id="traitPillsInline"></div>
+
+        <div id="imgSectionInline" style="display:none;">
+          <div class="section-lbl">这些具体意象，可以帮你把模糊感受变得更鲜明一点</div>
+          <div class="img-grid" id="imgGridInline"></div>
+          <div class="custom-input-row" style="margin-bottom:6px;">
+            <input class="custom-input" id="customImageInputInline" placeholder="这些都不太对？你可以自己输入——例如“快乐的海豚”“汹涌的海浪”"/>
+            <button class="custom-add-btn" onclick="useCustomImageInline()">使用这个</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:18px;">
+        <button class="btn-p" onclick="continueFromCategory()">让我们更深入地想象它 &nbsp;&rarr;</button>
+        <button class="btn-g" onclick="go(2)">&larr; 返回</button>
+      </div>
+    </div>
+
+    <!-- S4: 中性视觉锚点 + deepen imagination -->
+    <div class="screen" id="s4">
+      <div class="ai-lbl">深入想象</div>
+      <div class="headline">让我们慢慢观察<br><em id="deepTitleImage">这个意象</em>的细节。</div>
+      <div class="sub" id="deepSub">在开始画之前，先看清它的形状、颜色、边缘、距离和运动方式。你不需要画完整故事，只需要找到最有生命力的那一部分。</div>
+
+
+      <div id="referenceChoiceCard" class="reference-choice-card hidden">
+        <div class="reference-choice-inner">
+          <div class="section-lbl">生成参考图之前</div>
+          <div class="reference-choice-title">你想先看一眼这个意象的大致形态吗？ <em id="referenceChoiceTerm">这个意象</em></div>
+          <div class="reference-choice-copy">
+            如果空白页面让你卡住，一张简单的形态参考可以帮助你开始。
+            <br><br>
+            你也可以选择不看参考图，保留更多空白，让自己的想象慢慢出现。
+          </div>
+          <div class="btn-row">
+            <button class="btn-p" onclick="requestReferenceImages()">是的，给我参考图</button>
+            <button class="btn-g" onclick="skipReferenceImages()">不用，我想自己想象</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="aiPrepLoading" class="ai-prep-loading hidden">
+        <div class="tiny-loader"></div>
+        <div>artimal 正在整理你的身体词、感官词和意象，准备几个不会替你解释、只帮助你继续观察的问题……</div>
+        <button class="btn-g" style="margin-top:18px;" onclick="skipAIPrepAndContinue()">跳过 AI 准备，直接进入引导问题</button>
+      </div>
+
+      <div class="lit-note"><strong>想象提示：</strong>图像越具体，越容易进入绘画。你可以观察形状、颜色、边缘、距离，也可以看它是否在压住、漂浮、下沉、生长或慢慢变化。</div>
+
+      <div class="reference-layout" id="referenceContent">
+        <div class="reference-card">
+          <div class="section-lbl">中性视觉锚点</div>
+          <div class="panel-title" id="neutralSubjectTitle">意象本身</div>
+          <p class="panel-copy">如果你选择使用 AI 参考图，请选择最接近你想象的一张。如果没有使用参考图，就继续保留你自己的内在图像。</p>
+          <div id="referenceNoteNoImage" class="reference-note hidden">你选择不使用 AI 参考图。请保留你自己的内在图像——右侧的引导问题仍然会帮助你描述它。</div>
+          <div class="reference-grid" id="referenceGrid"></div>
+          <div id="referenceRequired" class="required-note">继续之前请先选择一张参考图。</div>
+        </div>
+
+        <div class="deepen-card">
+          <div class="section-lbl">引导问题</div>
+          <div class="panel-title">不用急着解释它，先一起观察它。</div>
+          <div class="guidance-choice" aria-label="引导强度提示">
+            <span class="mini-choice">少一点提示</span>
+            <span class="mini-choice">现在刚好</span>
+            <span class="mini-choice">多一点提示</span>
+          </div>
+          <div class="guiding-questions" id="guidingQuestionsList"></div>
+
+          <label class="mini-label" for="imaginationDescriptionInput">你的描述 · 必填</label>
+          <textarea id="imaginationDescriptionInput" class="p-input imagination-input" rows="6" placeholder="请用你自己的话描述这个意象：它的形状、颜色、大小、边缘、距离和运动是什么样的？它哪一部分与你的身体感受相连？"></textarea>
+          <div id="descriptionRequired" class="required-note">继续之前请写下几句话。你的描述会帮助塑造最终图像。</div>
+
+          <div class="btn-row" style="margin-top:18px;">
+            <button class="btn-p" onclick="continueAfterDeepening()">把这个意象映射回身体 &nbsp;&rarr;</button>
+            <button class="btn-g" onclick="go(3)">&larr; 返回</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5: 3D Imagination Mapping -->
+    <div class="screen" id="s5">
+      <div class="ai-lbl">身体里的想象</div>
+      <div class="headline">现在，把这个意象<br><em>放回承托感受的身体里。</em></div>
+      <div class="sub">这里把“身体位置”和“隐喻意象”连接起来。拖动模型，找到它在身体里的位置：它是压在那里、长在那里、缠绕在那里，还是藏在那里？</div>
+
+      <div class="lit-note"><strong>身体—隐喻映射：</strong>这里不是在做医学定位，而是在把“身体里的感受”和“外化出来的意象”重新连接成一个可画的情绪场景。</div>
+
+      <div class="s5-stage">
+        <div class="s5-model-zone">
+          <div class="view-tabs compact-tabs">
+            <button class="view-tab on" onclick="setView(this,0)">正面</button>
+            <button class="view-tab" onclick="setView(this,1)">侧面</button>
+            <button class="view-tab" onclick="setView(this,2)">上方</button>
+          </div>
+          <div class="canvas-wrap open-canvas" id="modelDropZone">
+            <canvas id="c3d"></canvas>
+            <div id="modelMarkerLayer" class="marker-layer"></div>
+            <div class="model-status-line" id="bodyModelStatus">正在匹配身体输入……</div>
+          </div>
+        </div>
+
+        <div class="imagination-panel">
+          <div class="section-lbl">把想象放进身体</div>
+          <div class="panel-title">把刚刚看清的意象，放回你的身体地图里。</div>
+          <p class="panel-copy">点击下方按钮后，再点击 3D 模型。你可以放一个点，也可以放多个点，标记它停留、移动、堵住或扩散的位置。</p>
+
+          <div class="imagination-summary" id="imaginationSummary"></div>
+
+          <label class="mini-label" for="imaginationInput">要放置的意象 / 感受</label>
+          <textarea id="imaginationInput" class="p-input imagination-input" rows="3" placeholder="我想放进身体里的意象是……"></textarea>
+
+          <div class="btn-row imagination-actions">
+            <button class="btn-p" id="mapInsideBtn" onclick="startImaginationPlacement()">把想象放进身体</button>
+            <button class="btn-g" onclick="clearImaginationMarkers()">清除点</button>
+          </div>
+
+          <div class="placement-list" id="placementList">
+            <div class="empty-placement">还没有放置任何点。点击“把想象放进身体”后，再点击左侧 3D 身体。</div>
+          </div>
+
+          <div class="btn-row final-actions">
+            <button class="btn-p" id="generateImageBtn" onclick="prepareImageDirection();go(7)" disabled>先把它画出来，再一起反思 &nbsp;&rarr;</button>
+            <button class="btn-g" onclick="go(4)">&larr; 返回</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6: AI 图像辅助 -->
+    <div class="screen" id="s6">
+      <div class="ai-lbl">AI 图像辅助</div>
+      <div class="headline">如果你愿意，<br><em>也看看 AI 如何回应你的想象。</em></div>
+      <div class="sub">这一步不是必须的。你已经先完成了自己的绘画与反思；如果你愿意，现在可以再看看 AI 生成的一幅回应性图像。</div>
+
+
+      <div class="modal-overlay hidden ai-assist-modal" id="aiAssistModal" onclick="handleAIAssistBg(event)">
+        <div class="modal-box">
+          <button class="modal-close" onclick="closeAIAssistModal()">&times;</button>
+          <div class="modal-title">你想把自己的创作和 AI 的回应并置看看吗？</div>
+          <div class="modal-sub">你的画已经是主要作品。AI 只作为额外回应，不替代你的创作。</div>
+          <div class="ai-choice-warning">
+            你已经先完成了自己的创作，这是最重要的部分。
+            <br><br>
+            如果你愿意，AI 可以根据你的身体映射和绘画反思生成一幅回应性图像，帮助你比较、联想或继续整理；如果你不想看，也完全没有关系。
+          </div>
+          <div class="btn-row" style="margin-bottom:0;">
+            <button class="btn-p" onclick="chooseAIAssist(true)">我想看看 AI 生成的画</button>
+            <button class="btn-g" onclick="chooseAIAssist(false)">先不用，我已经有自己的画了</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="direction-layout live-generate-layout">
+        <div class="direction-card">
+          <div class="section-lbl">生成指令</div>
+          <textarea id="imagePromptOut" class="prompt-output" rows="13"></textarea>
+
+          <div class="api-panel">
+            <div class="section-lbl">本地 API 设置</div>
+            <label class="mini-label" for="apiKeyInput">OpenAI API 密钥</label>
+            <input id="apiKeyInput" class="custom-input api-key-input" type="password" placeholder="sk-..." autocomplete="off"/>
+
+            <div class="api-grid">
+              <div>
+                <label class="mini-label" for="imageModelSelect">模型</label>
+                <select id="imageModelSelect" class="custom-input">
+                  <option value="gpt-image-1-mini">gpt-image-1-mini · 更快演示</option>
+                  <option value="gpt-image-2">gpt-image-2 · 更高质量</option>
+                </select>
+              </div>
+              <div>
+                <label class="mini-label" for="imageQualitySelect">质量</label>
+                <select id="imageQualitySelect" class="custom-input">
+                  <option value="low">较快</option>
+                  <option value="medium">平衡</option>
+                  <option value="high">较高质量</option>
+                </select>
+              </div>
+              <div>
+                <label class="mini-label" for="imageSizeSelect">尺寸</label>
+                <select id="imageSizeSelect" class="custom-input">
+                  <option value="1024x1024">1024 × 1024</option>
+                  <option value="1024x1536">1024 × 1536 竖版</option>
+                  <option value="1536x1024">1536 × 1024 横版</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn-p" id="hiddenLiveGenerateBtn" onclick="generateLiveImage()">生成一张 AI 回应图</button>
+              <button class="btn-g" onclick="copyImagePrompt()">复制指令</button>
+            </div>
+            <p class="panel-copy small-note">这里只用于本地测试。请不要分享保存了 API 密钥的浏览器或文件夹。</p>
+          </div>
+        </div>
+
+        <div class="direction-card live-result-card">
+
+          <div class="final-generate-card hidden" id="finalGenerateCard">
+            <div class="section-lbl">最终作品</div>
+            <div class="panel-title" style="font-size:26px;margin-bottom:8px;">如果你愿意，现在可以看看 AI 生成的一幅图。</div>
+            <p class="panel-copy">这里会直接使用你在最开始输入的 API 密钥。AI 会根据你前面的身体映射、意象和描述，生成一幅回应性的图像。</p>
+            <div class="btn-row">
+              <button class="btn-p" id="liveGenerateBtn" onclick="generateLiveImage()">生成一张 AI 回应图 &nbsp;&rarr;</button>
+              <button class="btn-g" onclick="copyImagePrompt()">复制指令</button>
+            </div>
+          </div>
+
+          <div id="waitingPanel" class="waiting-panel hidden">
+            <div class="orb-loader"></div>
+            <div class="section-lbl">正在生成</div>
+            <div class="wait-title" id="waitTitle">正在倾听身体……</div>
+            <div class="wait-copy" id="waitCopy">artimal 正在把你的身体词语、隐喻路径和映射点转化成图像。</div>
+            <div class="wait-steps">
+              <div class="wait-step on" id="ws0">整理情绪材料</div>
+              <div class="wait-step" id="ws1">塑造内在景观</div>
+              <div class="wait-step" id="ws2">渲染最终图像</div>
+            </div>
+          </div>
+
+          <div id="resultPanel" class="result-panel hidden">
+            <div class="section-lbl">生成图像</div>
+            <img id="generatedImage" class="generated-image" alt="artimal 生成图像"/>
+            <div id="dataSaveStatusFinal" class="save-status">AI 图像生成后，系统会自动把最终图像和当前受访者编号绑定保存。</div>
+            <div class="btn-row">
+              <button class="btn-p" onclick="go(7)">回到绘画反思 &nbsp;&rarr;</button>
+              <button class="btn-g" onclick="downloadGeneratedImage()">下载图像</button>
+              <button class="btn-g" onclick="generateLiveImage()">重新生成</button>
+            </div>
+          </div>
+
+          <div id="errorPanel" class="error-panel hidden">
+            <div class="section-lbl">生成问题</div>
+            <div id="errorText" class="error-text"></div>
+          </div>
+
+          <div class="refine-box">
+            <div class="section-lbl">生成前微调</div>
+            <label class="mini-label" for="refineInput">你想调整什么？</label>
+            <textarea id="refineInput" class="p-input" rows="5" placeholder="例如：更柔和一点、不要太医学化、更有机、更像水彩……"></textarea>
+            <button class="btn-g" onclick="refineImagePrompt()">加入生成指令</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-g" onclick="go(7)">&larr; 返回绘画反思</button>
+      </div>
+    </div>
+
+
+    <!-- S7: Drawing reflection -->
+    <div class="screen" id="s7">
+      <div class="ai-lbl">和你的画待一会儿</div>
+      <div class="headline">先看看<br><em>你亲手画出来的东西。</em></div>
+      <div class="sub">请先上传你自己的绘画。AI 会先看画面本身，而不是急着解释你。接下来，它只会提出反思性问题，邀请你确认、修正或补充。</div>
+
+      <div class="lit-note"><strong>反思原则：</strong>AI 的角色是反思脚手架，不是诊断者。它会先回应你的画面和语言，再邀请你判断：哪一部分接近你？哪一部分不像你？下一步你想怎样照顾这个图像？</div>
+
+      <div class="reflection-layout">
+        <div class="reflection-card">
+          <div class="section-lbl">你的绘画</div>
+          <div class="upload-zone" id="drawingUploadZone">
+            <div class="upload-placeholder" id="drawingUploadPlaceholder">
+              请上传一张你自己的绘画。<br>
+              它可以未完成、凌乱、简单，也可以很抽象——重点不是画得像，而是它承载了什么。
+            </div>
+            <img id="drawingPreview" class="hidden" alt="上传绘画预览"/>
+          </div>
+          <div class="btn-row" style="margin-top:18px;">
+            <label class="btn-p" style="cursor:pointer;">
+              上传绘画
+              <input id="drawingUploadInput" type="file" accept="image/*" style="display:none;" onchange="handleDrawingUpload(this)"/>
+            </label>
+            <button class="btn-g" type="button" disabled style="opacity:.45;cursor:not-allowed;">请先上传自己的绘画</button>
+          </div>
+          <p class="panel-copy small-note">这不是诊断，也不是替你解释作品。AI 会优先看你上传的画面本身：画面内容约占 80%，前面文字约占 20%。如果两者不一致，会以画面为主，并邀请你判断哪些理解接近你、哪些不像你。</p>
+          <div id="dataSaveStatusReflection" class="save-status">上传绘画后，系统会自动保存：受访者编号、绘画图像、网站输入内容。</div>
+        </div>
+
+        <div class="reflection-card">
+          <div class="section-lbl">开放式反思</div>
+          <div class="panel-title">这些问题只是脚手架，你可以接受、修改，也可以完全不同意。</div>
+          <div id="drawingReflectionQuestions">
+            <div class="reflection-question">这幅画中，哪一部分最先吸引你的注意？</div>
+            <div class="reflection-question">你在哪里看见了流动、静止、压力或柔软？</div>
+            <div class="reflection-question">如果这个图像能温柔地说话，它可能想让你注意到什么？</div>
+            <div class="reflection-question">有没有一个小细节，是你想保留、改变、柔化或保护的？</div>
+          </div>
+          <div id="drawingReflectionOutput" class="reflection-output hidden"></div>
+          <div class="btn-row" style="margin-top:18px;">
+            <button class="btn-p" onclick="reflectOnDrawing()">请 AI 先看我的画，再提出反思问题</button>
+            <button class="btn-g" onclick="goToAIAssistFromReflection()">如果你愿意，再看看 AI 如何回应 &nbsp;&rarr;</button>
+            <button class="btn-g" onclick="go(5)">&larr; 返回身体映射</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="wm">artimal</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+var SITE_LANG = 'zh';
+var curScreen = 0;
+var chosenCat = 'animal';
+var chosenImage = 'creature';
+var chosenTrait = '';
+var selectedCats = [];
+var guidanceDepth = 'standard';
+var selectedBodyModelId = 'heart';
+var lastBodyMatch = null;
+var imaginationPlacements = [];
+var placingImagination = false;
+var activeImaginationText = '';
+var generatedImagePrompt = '';
+var customIntentionText = '';
+var neutralSubject = '';
+var guidingQuestions = [];
+var referenceImages = [];
+var selectedReferenceImage = '';
+var imaginationDescription = '';
+var apiKeyFromSetup = '';
+var serverHasApiKey = false;
+var participantId = '';
+var selectedImageryTerm = '';
+var wantsReferenceImage = null;
+var finalChoiceMade = false;
+var uploadedDrawingData = '';
+var lastSavedRecordId = '';
+var aiPrepSkipToken = 0;
+
+/* ============================================================
+   INTRO MODAL
+   ============================================================ */
+function openIntroModal(){
+  var m = document.getElementById('introModal');
+  m.classList.remove('hidden');
+  // re-trigger step animations
+  var steps = m.querySelectorAll('.modal-step');
+  steps.forEach(function(s){
+    s.style.animation = 'none';
+    s.offsetHeight;
+    s.style.animation = '';
+  });
+}
+function closeIntroModal(){
+  document.getElementById('introModal').classList.add('hidden');
+}
+function handleModalBg(e){
+  if(e.target === document.getElementById('introModal')) closeIntroModal();
+}
+
+
+/* ============================================================
+   API SETUP + BODY REFLECTION
+   ============================================================ */
+
+function sanitizeParticipantId(id){
+  return (id||'').trim().replace(/[^\w\u4e00-\u9fff-]/g,'_').slice(0,80);
+}
+function saveParticipantId(){
+  var input=document.getElementById('participantIdInput');
+  var status=document.getElementById('participantIdStatus');
+  var id=sanitizeParticipantId(input && input.value || '');
+  participantId=id;
+  try{ sessionStorage.setItem('artimal_participant_id',id); }catch(e){}
+  if(status){
+    if(id){ status.textContent='受访者编号已保存：'+id; status.classList.add('ok'); }
+    else { status.textContent='开始前必须输入受访者编号。'; status.classList.remove('ok'); }
+  }
+}
+function getParticipantId(){
+  if(participantId) return participantId;
+  try{ participantId=sessionStorage.getItem('artimal_participant_id')||''; }catch(e){}
+  return sanitizeParticipantId(participantId);
+}
+function ensureParticipantId(){
+  var id=getParticipantId();
+  if(!id){
+    alert('请先输入受访者编号。');
+    if(curScreen!==0) go(0);
+    var input=document.getElementById('participantIdInput');
+    if(input) input.focus();
+    return false;
+  }
+  return true;
+}
+
+function saveApiKeyFromSetup(){
+  var input=document.getElementById('apiKeySetupInput');
+  var status=document.getElementById('apiSetupStatus');
+  var key=(input&&input.value||'').trim();
+  apiKeyFromSetup=key;
+  try{ sessionStorage.setItem('artimal_openai_key',key); }catch(e){}
+  if(status){
+    if(key){ status.textContent='API 密钥已保存在当前本地会话中。'; status.classList.add('ok'); }
+    else { status.textContent='你的 key 只保存在当前浏览器会话中，并且只会通过这台电脑上的本地服务器发送。'; status.classList.remove('ok'); }
+  }
+}
+function getStoredApiKey(){
+  if(apiKeyFromSetup) return apiKeyFromSetup;
+  try{ apiKeyFromSetup=sessionStorage.getItem('artimal_openai_key')||''; }catch(e){}
+  return apiKeyFromSetup;
+}
+function ensureApiKey(){
+  var key=getStoredApiKey();
+  if(!key && !serverHasApiKey){
+    alert('开始前，请先在第一页输入你的 OpenAI API 密钥。');
+    if(curScreen!==0) go(0);
+    var input=document.getElementById('apiKeySetupInput');
+    if(input) input.focus();
+    return false;
+  }
+  return true;
+}
+function startExperience(){
+  if(!ensureParticipantId()) return;
+  if(!ensureApiKey()) return;
+  saveSessionData('session_started', null, {note:'participant started artimal'});
+  openIntroModal();
+}
+function getSelectedTags(){
+  var arr=[];
+  document.querySelectorAll('#s2 .tag.sel').forEach(function(t){
+    var txt=(t.textContent||'').replace('✓','').trim();
+    if(txt) arr.push(txt);
+  });
+  return arr;
+}
+function updateReflectionCard(){
+  var body=(document.getElementById('bodyInput')||{}).value.trim();
+  var texture=(document.getElementById('textureInput')||{}).value.trim();
+  var tags=getSelectedTags();
+  var extra=tags.slice(0,4).join('、');
+  var tw=[texture,extra].filter(Boolean).join('、');
+  var card=document.getElementById('reflectionCard');
+  var text=document.getElementById('reflectionText');
+  if(!card||!text) return;
+  if(!body && !tw){ card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  var b=body||'身体里的某个地方';
+  var t=tw||'一种还没完全说清的感觉';
+  text.innerHTML='我听见你了。你把感觉放在 <strong>'+escapeHtml(b)+'</strong>，并描述成 <strong>'+escapeHtml(t)+'</strong>。接下来，我们会把这些词当作想象的入口，而不是结论。';
+}
+function updateBecomeSubtitle(){
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var texture=(document.getElementById('textureInput')||{}).value||'';
+  var tags=getSelectedTags();
+  var parts=[];
+  if(texture.trim()) parts.push(texture.trim());
+  parts=parts.concat(tags);
+  var sub=document.getElementById('becomeSub');
+  if(sub){
+    var b=body.trim()||'你的身体';
+    var t=parts.length?parts.join('、'):'这个感觉';
+    sub.innerHTML='在 <strong>'+escapeHtml(b)+'</strong> 里，有一种像 <strong>'+escapeHtml(t)+'</strong> 的身体感受。先不急着解释它，也不需要说清原因；我们只让它慢慢外化成一个可以被看见的意象。';
+  }
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function tog(el){ el.classList.toggle('sel'); updateReflectionCard(); }
+
+function go(n){
+  document.getElementById('s'+curScreen).classList.remove('on');
+  document.getElementById('s'+n).classList.add('on');
+  for(var i=0;i<8;i++){
+    var d=document.getElementById('d'+i);
+    if(!d) continue;
+    d.style.cssText='width:6px;border-radius:50%;background:#4A7196;';
+  }
+  var dotIndex=(n===6?7:(n===7?6:n));
+  if(dotIndex<=7){
+    var ad=document.getElementById('d'+dotIndex);
+    if(ad) ad.style.cssText='width:18px;border-radius:3px;background:#CBAA76;';
+  }
+  curScreen=n;
+  if(n===2){ computeGuidanceDepth(); updateReflectionCard(); }
+  if(n===3){ updateBecomeSubtitle(); }
+  if(n===5){ initThree(); updateBodyModelFromInput(); updateImaginationSummary(); }
+  if(n===6){ finalChoiceMade=false; prepareImageDirection(); showAIAssistChoice(); }
+  if(n===7){ initDrawingReflection(); saveSessionData('mapping_completed_entered_drawing_reflection', null, {note:'entered drawing reflection screen'}); }
+}
+
+function goToAIAssistFromReflection(){
+  if(!uploadedDrawingData){
+    alert('请先上传你自己的绘画，再决定是否要查看 AI 生成的图像。');
+    return;
+  }
+  prepareImageDirection();
+  go(6);
+}
+
+/* ============================================================
+   SCREEN 2: empty state
+   ============================================================ */
+function tryProceed(){
+  if(!ensureApiKey()) return;
+  var body = (document.getElementById('bodyInput').value||'').trim();
+  var tex  = (document.getElementById('textureInput').value||'').trim();
+  var tags = document.querySelectorAll('#s2 .tag.sel').length;
+  if(!body && !tex && !tags){
+    document.getElementById('emptyOverlay').classList.remove('hidden');
+    return;
+  }
+  updateReflectionCard();
+  lastBodyMatch = detectBodyModel(body);
+  selectedBodyModelId = lastBodyMatch.id;
+  go(3);
+}
+function dismissEmptyCard(){
+  document.getElementById('emptyOverlay').classList.add('hidden');
+}
+
+/* ============================================================
+   MEDITATION SCENE — Three.js cosmic human figure
+   ============================================================ */
+var M = {
+  renderer:null, scene:null, camera:null,
+  humanGroup:null, particles:null, stars:null,
+  clock:0, breathTimer:null, phaseIdx:0
+};
+
+var PHASES = [
+  {text:'Find a comfortable position.\nGently close your eyes.', ms:8000},
+  {text:'Breathe in slowly...', ms:5000, dir:'in'},
+  {text:'Breathe out... let the body soften.', ms:5000, dir:'out'},
+  {text:'Breathe in slowly...', ms:5000, dir:'in'},
+  {text:'Breathe out... let the body soften.', ms:5000, dir:'out'},
+  {text:'Breathe in slowly...', ms:5000, dir:'in'},
+  {text:'Breathe out... let the body soften.', ms:5000, dir:'out'},
+  {text:'Breathe in slowly...', ms:5000, dir:'in'},
+  {text:'Breathe out... notice where you feel something.', ms:6000, dir:'out'}
+];
+
+function initMeditScene(){
+  if(M.renderer) return;
+  var canvas = document.getElementById('cMedit');
+  var W = canvas.parentElement.clientWidth || 600, H = 420;
+  canvas.width = W; canvas.height = H;
+
+  M.renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:false});
+  M.renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  M.renderer.setSize(W, H);
+  M.renderer.setClearColor(0x060e18, 1);
+
+  M.scene = new THREE.Scene();
+  M.camera = new THREE.PerspectiveCamera(44, W/H, 0.1, 200);
+  M.camera.position.set(0, 0.3, 7.2);
+
+  M.scene.add(new THREE.AmbientLight(0x1A3A5A, 1.0));
+  var key = new THREE.DirectionalLight(0x7ECFEF, 1.5);
+  key.position.set(2, 4, 5); M.scene.add(key);
+  var rim = new THREE.DirectionalLight(0xCBAA76, 0.55);
+  rim.position.set(-3, 0, -4); M.scene.add(rim);
+  var fill = new THREE.PointLight(0x4A9FBF, 1.4, 14);
+  fill.position.set(0, 1.5, 3); M.scene.add(fill);
+  var under = new THREE.PointLight(0xCBAA76, 0.4, 8);
+  under.position.set(0, -2, 1); M.scene.add(under);
+
+  buildStars();
+  buildHuman();
+  buildParticles();
+  renderMedit();
+}
+
+function buildStars(){
+  var n=1400, pos=new Float32Array(n*3);
+  for(var i=0;i<n*3;i++) pos[i]=(Math.random()-0.5)*140;
+  var g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  M.stars=new THREE.Points(g,new THREE.PointsMaterial({color:0x8FB3CE,size:0.16,transparent:true,opacity:0.5}));
+  M.scene.add(M.stars);
+}
+
+function buildHuman(){
+  var g=new THREE.Group();
+
+  var bMat=new THREE.MeshPhongMaterial({color:0x2A6085,emissive:0x0A2535,specular:0x8FCFEF,shininess:75,transparent:true,opacity:0.9});
+  var gMat=new THREE.MeshPhongMaterial({color:0x4AAFCF,emissive:0x103A50,specular:0xC7DCEA,shininess:95,transparent:true,opacity:0.85});
+  var aMat=new THREE.MeshPhongMaterial({color:0xCBAA76,emissive:0x5A4020,shininess:120,transparent:true,opacity:0.95});
+
+  function mk(geo,mat,x,y,z,rx,rz){
+    var m=new THREE.Mesh(geo,mat);
+    m.position.set(x||0,y||0,z||0);
+    if(rx) m.rotation.x=rx;
+    if(rz) m.rotation.z=rz;
+    g.add(m); return m;
+  }
+
+  // Head
+  mk(new THREE.SphereGeometry(0.38,32,32),gMat,0,2.85,0);
+  // Face highlight
+  var fh=new THREE.Mesh(new THREE.SphereGeometry(0.23,16,16),aMat);
+  fh.position.set(0,2.9,0.28); fh.scale.set(1.0,0.65,0.38); g.add(fh);
+  // Neck
+  mk(new THREE.CylinderGeometry(0.11,0.145,0.34,16),bMat,0,2.4,0);
+
+  // Torso upper
+  var tu=mk(new THREE.CylinderGeometry(0.46,0.38,0.98,20),bMat,0,1.82,0);
+  // Torso lower
+  mk(new THREE.CylinderGeometry(0.38,0.34,0.58,20),bMat,0,1.16,0);
+
+  // Clavicle bar
+  var cl=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,0.96,8),gMat);
+  cl.rotation.z=Math.PI/2; cl.position.set(0,2.26,0.1); g.add(cl);
+
+  // Shoulders
+  mk(new THREE.SphereGeometry(0.185,20,20),gMat,-0.63,2.22,0);
+  mk(new THREE.SphereGeometry(0.185,20,20),gMat,0.63,2.22,0);
+
+  // Upper arms (slightly open — relaxed meditation pose)
+  mk(new THREE.CylinderGeometry(0.095,0.08,0.76,14),bMat,-0.9,1.83,0,0,0,0.44);
+  mk(new THREE.CylinderGeometry(0.095,0.08,0.76,14),bMat,0.9,1.83,0,0,0,-0.44);
+
+  // Elbows
+  mk(new THREE.SphereGeometry(0.095,14,14),gMat,-1.16,1.5,0);
+  mk(new THREE.SphereGeometry(0.095,14,14),gMat,1.16,1.5,0);
+
+  // Lower arms (angling down toward resting position)
+  mk(new THREE.CylinderGeometry(0.075,0.062,0.72,12),bMat,-1.32,1.13,0,0,0,0.64);
+  mk(new THREE.CylinderGeometry(0.075,0.062,0.72,12),bMat,1.32,1.13,0,0,0,-0.64);
+
+  // Wrists
+  mk(new THREE.SphereGeometry(0.075,12,12),gMat,-1.42,0.8,0);
+  mk(new THREE.SphereGeometry(0.075,12,12),gMat,1.42,0.8,0);
+
+  // Hands (palms open — mudra)
+  mk(new THREE.SphereGeometry(0.1,16,16),aMat,-1.48,0.63,0.1);
+  mk(new THREE.SphereGeometry(0.1,16,16),aMat,1.48,0.63,0.1);
+
+  // Pelvis
+  mk(new THREE.CylinderGeometry(0.36,0.32,0.44,18),bMat,0,0.72,0);
+
+  // Hip joints
+  mk(new THREE.SphereGeometry(0.155,16,16),gMat,-0.4,0.56,0);
+  mk(new THREE.SphereGeometry(0.155,16,16),gMat,0.4,0.56,0);
+
+  // Upper legs
+  mk(new THREE.CylinderGeometry(0.13,0.11,0.9,14),bMat,-0.4,0.02,0);
+  mk(new THREE.CylinderGeometry(0.13,0.11,0.9,14),bMat,0.4,0.02,0);
+
+  // Knees
+  mk(new THREE.SphereGeometry(0.125,14,14),gMat,-0.4,-0.48,0);
+  mk(new THREE.SphereGeometry(0.125,14,14),gMat,0.4,-0.48,0);
+
+  // Lower legs
+  mk(new THREE.CylinderGeometry(0.095,0.08,0.94,12),bMat,-0.4,-0.98,0);
+  mk(new THREE.CylinderGeometry(0.095,0.08,0.94,12),bMat,0.4,-0.98,0);
+
+  // Ankles
+  mk(new THREE.SphereGeometry(0.09,12,12),gMat,-0.4,-1.5,0);
+  mk(new THREE.SphereGeometry(0.09,12,12),gMat,0.4,-1.5,0);
+
+  // Feet
+  var fGeo=new THREE.BoxGeometry(0.2,0.1,0.38);
+  mk(fGeo,bMat,-0.4,-1.62,0.1);
+  mk(fGeo,bMat,0.4,-1.62,0.1);
+
+  // Spine accent nodes
+  for(var i=0;i<8;i++){
+    var sn=new THREE.Mesh(new THREE.SphereGeometry(0.042,8,8),aMat);
+    sn.position.set(0,2.08-i*0.28,-0.13);
+    g.add(sn);
+  }
+
+  g.position.y=0.5;
+  M.humanGroup=g;
+  M.scene.add(g);
+}
+
+function buildParticles(){
+  var n=200, pos=new Float32Array(n*3), ph=new Float32Array(n);
+  for(var i=0;i<n;i++){
+    var t=Math.random()*Math.PI*2, r=0.7+Math.random()*1.6;
+    pos[i*3]=Math.cos(t)*r;
+    pos[i*3+1]=(Math.random()-0.35)*5.5;
+    pos[i*3+2]=Math.sin(t)*r;
+    ph[i]=Math.random()*Math.PI*2;
+  }
+  var g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.setAttribute('phase',new THREE.BufferAttribute(ph,1));
+  M.particles=new THREE.Points(g,new THREE.PointsMaterial({color:0xCBAA76,size:0.058,transparent:true,opacity:0.7}));
+  M.particles.position.y=0.5;
+  M.scene.add(M.particles);
+}
+
+function renderMedit(){
+  requestAnimationFrame(renderMedit);
+  M.clock+=0.016;
+
+  if(M.humanGroup){
+    M.humanGroup.rotation.y=Math.sin(M.clock*0.15)*0.07;
+    var s=1+Math.sin(M.clock*0.7)*0.022;
+    M.humanGroup.scale.x=s; M.humanGroup.scale.z=s;
+    M.humanGroup.position.y=0.5+Math.sin(M.clock*0.2)*0.04;
+  }
+
+  if(M.particles){
+    var pos=M.particles.geometry.attributes.position.array;
+    var ph=M.particles.geometry.attributes.phase.array;
+    for(var i=0;i<200;i++){
+      pos[i*3+1]+=0.0045;
+      if(pos[i*3+1]>3.8) pos[i*3+1]=-2.8;
+      pos[i*3]+=Math.sin(M.clock*0.28+ph[i])*0.0012;
+    }
+    M.particles.geometry.attributes.position.needsUpdate=true;
+    M.particles.rotation.y+=0.0016;
+  }
+
+  if(M.stars) M.stars.rotation.y+=0.00025;
+  M.renderer.render(M.scene,M.camera);
+}
+
+/* ============================================================
+   BREATHING SEQUENCE
+   ============================================================ */
+function startMeditation(){
+  document.getElementById('meditStart').style.display='none';
+  document.getElementById('meditSession').style.display='block';
+
+  // No avatar/robot visual in this version; keep the breathing text only.
+  // if(!M.renderer) initMeditScene();
+
+  var pips=document.getElementById('meditPips');
+  pips.innerHTML='';
+  PHASES.forEach(function(_,i){
+    var p=document.createElement('div');
+    p.className='medit-pip'+(i===0?' active':'');
+    p.id='pip'+i;
+    pips.appendChild(p);
+  });
+
+  M.phaseIdx=0;
+  runPhase();
+}
+
+function runPhase(){
+  if(M.phaseIdx>=PHASES.length){
+    document.getElementById('meditDoneBtn').style.display='inline-flex';
+    return;
+  }
+  var phase=PHASES[M.phaseIdx];
+  var el=document.getElementById('meditText');
+  el.style.opacity='0';
+  setTimeout(function(){
+    el.textContent=phase.text.replace('\n',' ');
+    el.style.opacity='1';
+  },350);
+
+  for(var i=0;i<PHASES.length;i++){
+    var pip=document.getElementById('pip'+i);
+    if(!pip) continue;
+    pip.className='medit-pip'+(i<M.phaseIdx?' done':i===M.phaseIdx?' active':'');
+  }
+
+  M.breathTimer=setTimeout(function(){
+    M.phaseIdx++;
+    runPhase();
+  }, phase.ms);
+}
+
+/* ============================================================
+   GUIDANCE DEPTH
+   ============================================================ */
+function computeGuidanceDepth(){
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var tex=(document.getElementById('textureInput')||{}).value||'';
+  var tags=document.querySelectorAll('#s2 .tag.sel').length;
+  var r=body.length+tex.length+tags*8;
+  guidanceDepth=r<15?'light':r>60?'deep':'standard';
+}
+
+/* ============================================================
+   STEP 3: category
+   ============================================================ */
+function selCat(el,cat){
+  var prevChosen=chosenCat;
+  el.classList.toggle('sel');
+  if(el.classList.contains('sel')){
+    if(selectedCats.indexOf(cat)===-1) selectedCats.push(cat);
+  } else {
+    selectedCats=selectedCats.filter(function(c){return c!==cat;});
+  }
+  chosenCat=selectedCats.length?selectedCats[selectedCats.length-1]:cat;
+  customIntentionText=getCustomIntention();
+  if(prevChosen!==chosenCat){
+    chosenTrait='';
+    chosenImage='';
+    selectedImageryTerm='';
+    var grid=document.getElementById('imgGridInline');
+    if(grid) grid.innerHTML='';
+    var sec=document.getElementById('imgSectionInline');
+    if(sec) sec.style.display='none';
+  }
+  renderCategoryDetails();
+}
+
+function useCustomCategory(){
+  var val=(document.getElementById('customCatInput')||{}).value.trim();
+  if(!val) return;
+  customIntentionText=val;
+  chosenImage=val;
+  selectedImageryTerm=val;
+  var input=document.getElementById('customCatInput');
+  if(input) input.classList.add('clicked-flash');
+  // 用户已经输入了自己的意象时，不再出现特征/卡片选择，直接进入下一步。
+  beginImaginationDeepening();
+}
+
+
+function renderCategoryDetails(){
+  var section=document.getElementById('catDetailSection');
+  var title=document.getElementById('catDetailTitle');
+  if(!section) return;
+
+  var typed=getCustomIntention();
+  if(!selectedCats.length && !typed){
+    section.classList.add('hidden');
+    return;
+  }
+  section.classList.remove('hidden');
+
+  if(title){
+    title.textContent = typed ? '你输入了自己的意象：“'+typed+'”' : '关于“'+(catLabelZh[chosenCat]||chosenCat)+'”，哪一种特质最接近？';
+  }
+
+  var traitWrap=document.getElementById('traitPillsInline');
+  if(traitWrap){
+    traitWrap.innerHTML='';
+    var list=catTraits[chosenCat] || [];
+    list.slice(0,10).forEach(function(tr){
+      var p=document.createElement('div');
+      p.className='pill';
+      p.textContent=tr;
+      p.onclick=function(){ selTraitInline(p,tr); };
+      traitWrap.appendChild(p);
+    });
+  }
+
+  if(typed){
+    // 用户自己输入意象后，跳过下面的卡片和物种推荐。
+    chosenImage=typed;
+    selectedImageryTerm=typed;
+    section.classList.add('hidden');
+    return;
+  }else if(!chosenTrait){
+    var sec=document.getElementById('imgSectionInline');
+    if(sec) sec.style.display='none';
+  }
+}
+
+
+function getImages(cat, trait){
+  var bucket = (catImages && catImages[cat]) ? catImages[cat] : null;
+  if(bucket && bucket[trait] && bucket[trait].length){
+    return bucket[trait];
+  }
+  // If exact trait matching fails, still give a gentle fallback from the chosen category.
+  if(bucket){
+    var keys=Object.keys(bucket);
+    for(var i=0;i<keys.length;i++){
+      if(bucket[keys[i]] && bucket[keys[i]].length) return bucket[keys[i]];
+    }
+  }
+  var fallback={
+    food:['一碗热汤','一块黑巧克力','一颗熟透的水果','一只盛满食物的陶碗'],
+    animal:['鲸鱼','蝴蝶','乌龟','狐狸'],
+    plant:['种子','苔藓','藤蔓','莲花'],
+    water:['河流','深海','雨水','潮汐'],
+    sky:['云','月亮','风','暮光'],
+    earth:['石头','洞穴','黑土','岩层'],
+    cosmos:['星云','月亮','星尘','黑洞'],
+    object:['旧镜子','空碗','钥匙','玻璃杯'],
+    structure:['小屋','桥','门口','石墙']
+  };
+  return fallback[cat] || ['一个还没命名的意象'];
+}
+
+var hintsByPart={
+  '形状':'它的轮廓像什么？哪里让你想靠近或远离？',
+  '质地':'它摸起来像什么？柔软、粗糙、湿润，还是干裂？',
+  '重量':'它是轻的、沉的，还是像压在某处？',
+  '颜色':'它带着什么颜色？这个颜色让你想到什么感受？',
+  '动作':'它在移动、停住、盘旋、下沉，还是慢慢展开？',
+  '边界':'它的边缘清楚吗？还是模糊、溢出、被包裹？',
+  '距离':'它离你很近，还是很远？你想靠近它吗？',
+  '核心':'这个意象最中心、最有力量的部分在哪里？',
+  '空间':'它像在一个怎样的空间里？开阔、封闭、拥挤，还是空旷？'
+};
+
+function getPartsForImage(name){
+  var s=(name||'').toLowerCase();
+  if(/汤|粥|水|河|海|雨|潮|湖|泉|波|浪|茶/.test(name)) return ['流动','温度','承载'];
+  if(/巧克力|苦瓜|柚子|茶叶|黑/.test(name)) return ['苦味','质地','余味'];
+  if(/碗|杯|罐|盒|瓶/.test(name)) return ['容器','边界','内部'];
+  if(/果|浆果|桃|无花果|水果/.test(name)) return ['颜色','成熟','甜味'];
+  if(/面包|米饭|谷物|土豆|面团/.test(name)) return ['重量','质地','滋养'];
+  if(/鸟|鹰|蝶|鱼|鲸|狼|狐|熊|龟|象|猫|鹿/.test(name)) return ['动作','距离','眼睛'];
+  if(/树|花|草|苔|藤|种子|根|莲/.test(name)) return ['生长','根部','方向'];
+  if(/石|土|洞|山|岩|晶|矿/.test(name)) return ['重量','表面','核心'];
+  return ['形状','质地','距离'];
+}
+
+function selTraitInline(el,trait){
+  chosenTrait=trait;
+  document.querySelectorAll('#traitPillsInline .pill').forEach(function(p){p.classList.remove('sel');});
+  el.classList.add('sel');
+  renderImageOptions(getImages(chosenCat,trait));
+}
+
+function useCustomImageInline(){
+  var val=(document.getElementById('customImageInputInline')||{}).value.trim();
+  if(!val) return;
+  document.querySelectorAll('.img-card').forEach(function(c){c.classList.remove('sel');});
+  chosenImage=val;
+  selectedImageryTerm=val;
+  customIntentionText=val;
+  renderImageOptions([val]);
+}
+
+function continueFromCategory(){
+  var typed=getCustomIntention();
+  if(typed){
+    customIntentionText=typed;
+    chosenImage=typed;
+    selectedImageryTerm=typed;
+  }
+  if(!selectedCats.length && !customIntentionText){
+    alert('继续之前，请选择一个类别，或者输入你自己的意象。');
+    return;
+  }
+  if(!selectedImageryTerm && !chosenImage && !customIntentionText){
+    alert('请在下面选择一个具体意象，或者输入你自己的意象。');
+    return;
+  }
+  beginImaginationDeepening();
+}
+
+function prepareStep4(){
+  // Old trait-card page removed. This is intentionally kept as a no-op for compatibility.
+}
+
+/* ============================================================
+   STEP 4: traits + images
+   ============================================================ */
+function selTrait(el,trait){
+  chosenTrait = trait;
+  document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});
+  el.classList.add('sel');
+  renderImageOptions(getImages(chosenCat,trait));
+}
+
+function useCustomTrait(){
+  var val=document.getElementById('customTraitInput').value.trim();
+  if(!val) return;
+  chosenTrait = val;
+  document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});
+  renderImageOptions(getImages(chosenCat,val));
+}
+
+function renderImageOptions(imgs){
+  var grid=document.getElementById('imgGridInline') || document.getElementById('imgGrid');
+  if(!grid) return;
+  imgs = (imgs && imgs.length) ? imgs : getImages(chosenCat, chosenTrait);
+  grid.innerHTML='';
+  imgs.forEach(function(name){
+    var card=document.createElement('div');
+    card.className='img-card text-only';
+    card.innerHTML='<div class="img-name">'+escapeHtml(name)+'</div>';
+    card.onclick=function(){
+      document.querySelectorAll('.img-card').forEach(function(c){c.classList.remove('sel');});
+      card.classList.add('sel');
+      chosenImage=name;
+      selectedImageryTerm=name;
+      customIntentionText=getCustomIntention();
+      applyPartsForChosenImage();
+    };
+    grid.appendChild(card);
+  });
+  var sec=document.getElementById('imgSectionInline') || document.getElementById('imgSection');
+  if(sec) sec.style.display='block';
+  // Bring the concrete imagery options into view so the user sees the required next step.
+  if(sec && sec.scrollIntoView){ setTimeout(function(){ sec.scrollIntoView({behavior:'smooth',block:'nearest'}); },60); }
+}
+
+function useCustomImage(){
+  var val=document.getElementById('customImageInput').value.trim();
+  if(!val) return;
+  document.querySelectorAll('.img-card').forEach(function(c){c.classList.remove('sel');});
+  chosenImage=val;
+  applyPartsForChosenImage();
+}
+
+function applyPartsForChosenImage(){
+  var parts=getPartsForImage(chosenImage);
+  for(var i=0;i<3;i++){
+    var b=document.getElementById('badge'+i);
+    if(b) b.textContent=parts[i]||'part '+(i+1);
+    var h=document.getElementById('hint'+i);
+    if(h) h.textContent=hintsByPart[parts[i]]||'这个部分似乎承托着什么？';
+  }
+  /* The S4 image is now metaphor-only. The S5 3D model is controlled by S2 Body input. */
+}
+
+/* ============================================================
+   STEP 5: Body-input-driven GLB 3D model
+   The 3D model is selected from S2 Body input, not S3/S4 image.
+   ============================================================ */
+var renderer,scene,camera,mesh,animId;
+var isDragging=false,prevMouse={x:0,y:0},rotX=0.15,rotY=0.45;
+var modelLoader=null;
+var modelCache={};
+
+var BODY_MODELS={
+  brain:{
+    id:'brain', zh:'大脑', en:'Brain', url:'../assets/brain.glb',
+    keywords:['大脑','脑子','脑袋','脑','头部','头','头脑','额头','后脑','brain','head','mind','skull','thoughts','thinking'],
+    badges:['thought','center','signal'],
+    hints:['What does this image do to your thoughts?','Where does it sit in your mind?','What signal does it carry?']
+  },
+  stomach:{
+    id:'stomach', zh:'胃', en:'Stomach', url:'../assets/stomach.glb',
+    keywords:['胃','胃部','肚子','腹部','小腹','腹','消化','恶心','stomach','belly','abdomen','gut','nausea'],
+    badges:['gut','center','holding'],
+    hints:['你的胃此刻承载着什么？','这个意象感觉是紧的、开放的，还是在转动？','你的身体深处想告诉你什么？']
+  },
+  heart:{
+    id:'heart', zh:'心脏', en:'Heart', url:'../assets/heart.glb',
+    keywords:['心脏','心口','心跳','心','胸口','胸腔','胸','heart','cardiac','heartbeat','chest'],
+    badges:['pulse','center','vessels'],
+    hints:['你的心跳像是在说什么？','这个感受的中心坐落着什么？','Where does this feeling want to move or flow?']
+  },
+  lungs:{
+    id:'lungs', zh:'肺部', en:'Lungs', url:'../assets/lungs.glb',
+    keywords:['肺部','肺','呼吸','气管','喘','窒息','breath','breathing','breathe','lungs','lung','respiration'],
+    badges:['breath','chest','release'],
+    hints:['此刻你的呼吸感觉如何？','你的胸口承载着什么？','有什么想被释放或呼出？']
+  },
+  face:{
+    id:'face', zh:'面部', en:'Face', url:'../assets/face.glb',
+    keywords:['脸','脸部','面部','脸颊','面颊','腮帮','腮','脸皮','颧骨','下巴','下颌','眉毛','眉心','额头','眼睛','眼','眼眶','眼泪','视线','看','鼻子','鼻','鼻腔','闻','呼吸不畅','嘴巴','嘴','口','嘴唇','舌头','牙','牙齿','下巴','喉咙','说不出','耳朵','耳','耳垂','听','声音','耳鸣','face','facial','cheek','cheeks','jaw','chin','forehead','brow','eye','eyes','sight','vision','tears','nose','nostril','smell','mouth','lips','tongue','teeth','throat','voice','ear','ears','hearing','sound','listen'],
+    badges:['面部','表情','感官'],
+    hints:['这个感觉落在面部的哪个位置？','它更靠近表情、视线、声音，还是呼吸？','你的脸想保护什么，或表达什么？']
+  },
+  eye:{id:'eye', zh:'眼睛', en:'Eye', url:'../assets/face.glb', keywords:['眼睛','眼','眼眶','眼泪','视线','看','eye','eyes','sight','vision','tears'], badges:['eyes','gaze','tears'], hints:['你的眼睛正在承载或回避什么？','Where does your attention want to look?','哪一种情绪似乎靠近表面？']},
+  ear:{id:'ear', zh:'耳朵', en:'Ear', url:'../assets/face.glb', keywords:['耳朵','耳','听','声音','耳鸣','ear','ears','hearing','sound','listen'], badges:['ears','sound','listening'], hints:['这里有什么声音、记忆或句子正在停留？','你是不是听见了太多什么？','你希望别人能听见你什么？']},
+  mouth:{id:'mouth', zh:'嘴巴', en:'Mouth', url:'../assets/face.glb', keywords:['嘴巴','嘴','口','嘴唇','舌头','牙','喉咙','说不出','mouth','lips','tongue','teeth','jaw','throat','voice'], badges:['mouth','voice','silence'], hints:['有什么卡在嘴里或喉咙里？','有什么想被说出来？','你正在安静地保留什么？']},
+  nose:{id:'nose', zh:'鼻子', en:'Nose', url:'../assets/face.glb', keywords:['鼻子','鼻','鼻腔','闻','呼吸不畅','nose','nostril','smell'], badges:['nose','air','scent'], hints:['此刻空气是怎样进入你身体的？','哪里感觉被堵住，哪里又是开放的？','这个感受连接着什么记忆或氛围？']},
+  limbs:{id:'limbs', zh:'肢体（手臂、脚...）', en:'Limbs', url:'../assets/limbs.glb', keywords:['肢体','四肢','手臂','胳膊','手','手掌','手背','手心','手指','指尖','手腕','手肘','肘','肩膀','肩','上臂','前臂','腿','腿部','大腿','小腿','膝盖','膝','脚','脚掌','脚背','脚趾','脚踝','踝','髋','髋部','臀腿','arm','arms','hand','hands','palm','finger','fingers','wrist','elbow','shoulder','leg','legs','thigh','knee','knees','calf','foot','feet','toe','toes','ankle','limb','limbs'], badges:['hands','legs','reach'], hints:['你的手想握住什么，或放开什么？','Where do your legs want to move, stop, or run?','你正在伸向什么，或远离什么？']}
+};
+
+function getSelectedTagsText(){
+  var tags=[];
+  document.querySelectorAll('#s2 .tag.sel').forEach(function(t){tags.push(t.textContent||'');});
+  return tags.join(' ');
+}
+
+function detectBodyModel(text){
+  var raw=(text||'').trim();
+  var lower=raw.toLowerCase();
+
+  // Explicit first-pass rules:
+  // 1) Anything face-related maps to the single Face model.
+  // 2) Anything limb-related maps to the single Limbs model.
+  // This avoids inputs like “脸颊 / cheek” falling back to heart.
+  var faceKeys=['脸','脸部','面部','脸颊','面颊','腮帮','腮','脸皮','颧骨','下巴','下颌','眉毛','眉心','额头','眼睛','眼','眼眶','眼泪','视线','看','鼻子','鼻','鼻腔','闻','呼吸不畅','嘴巴','嘴','口','嘴唇','舌头','牙','牙齿','喉咙','说不出','耳朵','耳','耳垂','听','声音','耳鸣','face','facial','cheek','cheeks','jaw','chin','forehead','brow','eye','eyes','sight','vision','tears','nose','nostril','smell','mouth','lips','tongue','teeth','throat','voice','ear','ears','hearing','sound','listen'];
+  for(var f=0; f<faceKeys.length; f++){
+    if(lower.indexOf(faceKeys[f].toLowerCase())>=0){
+      return {id:'face',score:99999,index:lower.indexOf(faceKeys[f].toLowerCase()),key:faceKeys[f],source:raw};
+    }
+  }
+
+  var limbKeys=['肢体','四肢','手臂','胳膊','手','手掌','手背','手心','手指','指尖','手腕','手肘','肘','肩膀','肩','上臂','前臂','腿','腿部','大腿','小腿','膝盖','膝','脚','脚掌','脚背','脚趾','脚踝','踝','髋','髋部','arm','arms','hand','hands','palm','finger','fingers','wrist','elbow','shoulder','leg','legs','thigh','knee','knees','calf','foot','feet','toe','toes','ankle','limb','limbs'];
+  for(var l=0; l<limbKeys.length; l++){
+    if(lower.indexOf(limbKeys[l].toLowerCase())>=0){
+      return {id:'limbs',score:99998,index:lower.indexOf(limbKeys[l].toLowerCase()),key:limbKeys[l],source:raw};
+    }
+  }
+
+  var best={id:'heart',score:-1,index:99999,key:'',source:raw};
+
+  Object.keys(BODY_MODELS).forEach(function(id){
+    var item=BODY_MODELS[id];
+    item.keywords.forEach(function(key){
+      var k=key.toLowerCase();
+      var idx=lower.indexOf(k);
+      if(idx>=0){
+        var score=10000-idx+(k.length*25);
+        if(score>best.score){
+          best={id:id,score:score,index:idx,key:key,source:raw};
+        }
+      }
+    });
+  });
+
+  // Very light English typo support: compare typed words to English keywords.
+  if(best.score<0 && lower){
+    var words=lower.split(/[^a-z]+/).filter(function(w){return w.length>=3;});
+    words.forEach(function(w){
+      Object.keys(BODY_MODELS).forEach(function(id){
+        BODY_MODELS[id].keywords.forEach(function(key){
+          if(!/^[a-z]+$/.test(key)) return;
+          var dist=levenshtein(w,key);
+          if(dist<=2){
+            var score=600-dist*100+key.length;
+            if(score>best.score){
+              best={id:id,score:score,index:0,key:key,source:raw};
+            }
+          }
+        });
+      });
+    });
+  }
+
+  if(best.score<0){
+    best={id:'heart',score:0,index:0,key:'default heartbeat',source:raw};
+  }
+  return best;
+}
+
+
+function levenshtein(a,b){
+  var m=[],i,j;
+  for(i=0;i<=b.length;i++) m[i]=[i];
+  for(j=0;j<=a.length;j++) m[0][j]=j;
+  for(i=1;i<=b.length;i++){
+    for(j=1;j<=a.length;j++){
+      m[i][j]=b.charAt(i-1)===a.charAt(j-1)
+        ? m[i-1][j-1]
+        : Math.min(m[i-1][j-1]+1, m[i][j-1]+1, m[i-1][j]+1);
+    }
+  }
+  return m[b.length][a.length];
+}
+
+
+/* Robust 3D dependency loader: if the main CDN fails, try alternatives before giving up. */
+var threeDependencyLoading=false;
+function loadScriptSequential(urls, done){
+  var i=0;
+  function next(){
+    if(i>=urls.length){ done(false); return; }
+    var src=urls[i++];
+    var s=document.createElement('script');
+    s.src=src;
+    s.async=false;
+    s.onload=function(){ done(true); };
+    s.onerror=function(){ try{s.remove();}catch(e){} next(); };
+    document.head.appendChild(s);
+  }
+  next();
+}
+function ensureThreeAndGLTF(done){
+  if(window.THREE && THREE.GLTFLoader){ done(true); return; }
+  if(threeDependencyLoading){
+    var tries=0;
+    var timer=setInterval(function(){
+      tries++;
+      if(window.THREE && THREE.GLTFLoader){ clearInterval(timer); done(true); }
+      else if(tries>80){ clearInterval(timer); done(false); }
+    },250);
+    return;
+  }
+  threeDependencyLoading=true;
+  var threeUrls=[
+    'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+    'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+    'https://unpkg.com/three@0.128.0/build/three.min.js'
+  ];
+  var loaderUrls=[
+    'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js',
+    'https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js',
+    'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/GLTFLoader.js'
+  ];
+  function loadLoader(){
+    if(window.THREE && THREE.GLTFLoader){ threeDependencyLoading=false; done(true); return; }
+    loadScriptSequential(loaderUrls,function(ok){
+      threeDependencyLoading=false;
+      done(!!(ok && window.THREE && THREE.GLTFLoader));
+    });
+  }
+  if(!window.THREE){
+    loadScriptSequential(threeUrls,function(ok){
+      if(!ok){ threeDependencyLoading=false; done(false); return; }
+      loadLoader();
+    });
+  }else{
+    loadLoader();
+  }
+}
+
+function updateBodyModelFromInput(){
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  lastBodyMatch=detectBodyModel(body);
+  selectedBodyModelId=lastBodyMatch.id;
+  updateBodyModelText();
+  if(renderer) loadBodyModel(selectedBodyModelId);
+}
+
+function updateBodyModelText(){
+  var cfg=BODY_MODELS[selectedBodyModelId]||BODY_MODELS.heart;
+  var status=document.getElementById('bodyModelStatus');
+  if(status){
+    var matched=(lastBodyMatch && lastBodyMatch.key) ? ' · 识别词：'+lastBodyMatch.key : '';
+    status.textContent='身体匹配：'+cfg.zh+' / '+cfg.en+matched;
+  }
+  updateImaginationSummary();
+}
+
+function escapeHtml(str){
+  return String(str||'').replace(/[&<>"']/g,function(s){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s];
+  });
+}
+
+function initThree(){
+  var canvas=document.getElementById('c3d');
+  if(!canvas) return;
+
+  if(!window.THREE || !THREE.GLTFLoader){
+    var status=document.getElementById('bodyModelStatus');
+    if(status) status.textContent='正在加载 3D 引擎……如果网络较慢，请稍等。';
+    ensureThreeAndGLTF(function(ok){
+      if(ok){
+        if(status) status.textContent='3D 引擎已加载，正在载入模型……';
+        initThree();
+        updateBodyModelFromInput();
+      }else{
+        if(status) status.textContent='3D 加载失败：当前网络无法访问 three.js / GLTFLoader。请换网络或使用能访问 CDN 的环境。';
+      }
+    });
+    return;
+  }
+
+  if(!renderer){
+    var wrap=canvas.parentElement;
+    var W=wrap.clientWidth||640, H=360;
+    renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setSize(W,H,false);
+    renderer.setClearColor(0x000000,0);
+
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(42,W/H,0.1,100);
+    camera.position.set(0,0.25,4.8);
+
+    scene.add(new THREE.AmbientLight(0x8FB3CE,0.9));
+    var dl=new THREE.DirectionalLight(0xE3EFF6,1.25); dl.position.set(2,3,4); scene.add(dl);
+    var fl=new THREE.DirectionalLight(0xCBAA76,0.55); fl.position.set(-3,-1,-2); scene.add(fl);
+    var rl=new THREE.DirectionalLight(0x4A7196,0.65); rl.position.set(0,0,-4); scene.add(rl);
+
+    if(THREE.GLTFLoader) modelLoader=new THREE.GLTFLoader();
+
+    function onDown(x,y){isDragging=true;prevMouse={x:x,y:y};}
+    function onMove(x,y){
+      if(!isDragging)return;
+      rotY+=(x-prevMouse.x)*0.009;
+      rotX+=(y-prevMouse.y)*0.009;
+      rotX=Math.max(-1.3,Math.min(1.3,rotX));
+      prevMouse={x:x,y:y};
+    }
+
+    canvas.addEventListener('mousedown',function(e){onDown(e.clientX,e.clientY);});
+    canvas.addEventListener('touchstart',function(e){onDown(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+    window.addEventListener('mouseup',function(){isDragging=false;});
+    window.addEventListener('touchend',function(){isDragging=false;});
+    canvas.addEventListener('mousemove',function(e){onMove(e.clientX,e.clientY);});
+    canvas.addEventListener('touchmove',function(e){onMove(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+
+    canvas.addEventListener('wheel',function(e){
+      e.preventDefault();
+      camera.position.z+=e.deltaY*0.003;
+      camera.position.z=Math.max(1.8,Math.min(10,camera.position.z));
+    },{passive:false});
+
+    var drop=document.getElementById('modelDropZone');
+    var clickTarget=drop||canvas;
+    clickTarget.addEventListener('click',function(e){
+      if(!placingImagination) return;
+      placeImaginationPoint(e);
+    });
+
+    window.addEventListener('resize',resizeThreeCanvas);
+    animateBodyModel();
+  }
+
+  updateBodyModelText();
+}
+
+function resizeThreeCanvas(){
+  if(!renderer||!camera) return;
+  var canvas=document.getElementById('c3d');
+  var wrap=canvas.parentElement;
+  var W=wrap.clientWidth||640, H=360;
+  renderer.setSize(W,H,false);
+  camera.aspect=W/H;
+  camera.updateProjectionMatrix();
+}
+
+function clearCurrentModel(){
+  if(mesh){
+    scene.remove(mesh);
+    mesh=null;
+  }
+}
+
+function fitGLBToView(obj){
+  // Preserve the original GLB proportions: use only uniform scaling, never stretch x/y/z separately.
+  obj.updateMatrixWorld(true);
+  var box=new THREE.Box3().setFromObject(obj);
+  var size=new THREE.Vector3();
+  var center=new THREE.Vector3();
+  box.getSize(size);
+  box.getCenter(center);
+
+  obj.position.sub(center);
+  var maxDim=Math.max(size.x,size.y,size.z)||1;
+  var scale=2.95/maxDim;
+  obj.scale.multiplyScalar(scale);
+
+  // Re-center after scaling so the model sits in the middle of the left stage.
+  obj.updateMatrixWorld(true);
+  box=new THREE.Box3().setFromObject(obj);
+  box.getCenter(center);
+  obj.position.sub(center);
+  obj.updateMatrixWorld(true);
+}
+
+function loadBodyModel(id){
+  var cfg=BODY_MODELS[id]||BODY_MODELS.heart;
+  updateBodyModelText();
+
+  var status=document.getElementById('bodyModelStatus');
+  if(status) status.textContent='正在加载 '+cfg.zh+' / '+cfg.en+'...';
+
+  if(!modelLoader){
+    if(status) status.textContent='3D 加载器仍在准备中……';
+    ensureThreeAndGLTF(function(ok){
+      if(ok){
+        modelLoader=new THREE.GLTFLoader();
+        loadBodyModel(id);
+      }else if(status){
+        status.textContent='3D 加载失败：当前网络无法访问 GLTFLoader。请换网络或允许 CDN 访问。';
+      }
+    });
+    return;
+  }
+
+  clearCurrentModel();
+
+  function place(source){
+    var obj=source.clone(true);
+    fitGLBToView(obj);
+    mesh=obj;
+    scene.add(mesh);
+    if(status) status.textContent='身体匹配：'+cfg.zh+' / '+cfg.en;
+    rotX=0.15; rotY=0.45;
+  }
+
+  if(modelCache[cfg.url]){
+    place(modelCache[cfg.url]);
+    return;
+  }
+
+  modelLoader.load(
+    cfg.url,
+    function(gltf){
+      modelCache[cfg.url]=gltf.scene;
+      place(gltf.scene);
+    },
+    function(xhr){
+      if(status && xhr.total){
+        var pct=Math.round(xhr.loaded/xhr.total*100);
+        status.textContent='正在加载 '+cfg.zh+' / '+cfg.en+' '+pct+'%';
+      }
+    },
+    function(err){
+      console.error(err);
+      if(status) status.textContent='模型加载失败：请确认对应的 .glb 文件存在于 web/assets/，并通过本地服务器打开网站。';
+    }
+  );
+}
+
+function animateBodyModel(){
+  requestAnimationFrame(animateBodyModel);
+  if(mesh){
+    mesh.rotation.x+=(rotX-mesh.rotation.x)*0.08;
+    mesh.rotation.y+=(rotY-mesh.rotation.y)*0.08;
+    if(!isDragging) rotY+=0.0035;
+  }
+  if(renderer&&scene&&camera) renderer.render(scene,camera);
+}
+
+function setView(btn,idx){
+  document.querySelectorAll('.view-tab').forEach(function(t){t.classList.remove('on');});
+  btn.classList.add('on');
+  var t=[[0.15,0.45],[0.0,1.57],[1.25,0]];
+  rotX=t[idx][0]; rotY=t[idx][1];
+}
+
+
+/* ============================================================
+   AI-ASSISTED NEUTRAL IMAGE + DEEPENING QUESTIONS
+   ============================================================ */
+function getCustomIntention(){
+  var v=(document.getElementById('customCatInput')||{}).value||'';
+  return v.trim();
+}
+function beginImaginationDeepening(){
+  if(!ensureApiKey()) return;
+  customIntentionText=getCustomIntention();
+  if(customIntentionText){
+    chosenImage=customIntentionText;
+    selectedImageryTerm=customIntentionText;
+  }
+  selectedImageryTerm = selectedImageryTerm || chosenImage || customIntentionText || chosenCat;
+  if(!selectedCats.length && !customIntentionText){
+    alert('继续之前，请选择一个类别，或者输入你自己的意象。');
+    return;
+  }
+  wantsReferenceImage=null;
+  go(4);
+  prepareNeutralReferenceWithAI();
+}
+function fallbackSubject(){
+  if(customIntentionText) return customIntentionText;
+  var map={animal:'animal',plant:'plant',water:'water',sky:'cloud',earth:'stone',cosmos:'star',food:'fruit',object:'vessel',structure:'doorway'};
+  return map[chosenCat] || chosenCat || 'image';
+}
+function fallbackQuestions(subject){
+  return [
+    '更具体地看，这个'+subject+'是什么形状、颜色和大小？边缘是清楚的还是模糊的？',
+    '它现在像是在做什么：压住、包裹、漂浮、下沉、生长、拉扯、躲藏，还是慢慢变化？',
+    '如果它待在你刚才选择的身体部位里，它会怎么存在：长在那里、堵在那里、缠绕在那里，还是藏在那里？',
+    '如果你要把它画到纸上，你会从一个点、一条线、一个形状，还是一片颜色开始？'
+  ];
+}
+function setReferenceLoading(on){
+  var loading=document.getElementById('aiPrepLoading');
+  var content=document.getElementById('referenceContent');
+  if(loading) loading.classList.toggle('hidden',!on);
+  if(content) content.classList.toggle('hidden',on);
+}
+function prepareNeutralReferenceWithAI(){
+  aiPrepSkipToken++;
+  var thisPrepToken=aiPrepSkipToken;
+  setReferenceLoading(true);
+  neutralSubject=''; guidingQuestions=[]; referenceImages=[]; selectedReferenceImage=''; imaginationDescription='';
+  wantsReferenceImage=null;
+  var desc=document.getElementById('imaginationDescriptionInput'); if(desc) desc.value='';
+  var req1=document.getElementById('referenceRequired'); if(req1) req1.classList.remove('on');
+  var req2=document.getElementById('descriptionRequired'); if(req2) req2.classList.remove('on');
+  var note=document.getElementById('referenceNoteNoImage'); if(note) note.classList.add('hidden');
+  var grid=document.getElementById('referenceGrid'); if(grid) grid.classList.add('hidden');
+
+  var selectedTerm=selectedImageryTerm || chosenImage || customIntentionText || chosenCat;
+  var payload={
+    api_key:getStoredApiKey(),
+    language:SITE_LANG,
+    body:(document.getElementById('bodyInput')||{}).value||'',
+    texture:(document.getElementById('textureInput')||{}).value||'',
+    tags:getSelectedTags(),
+    selected_categories:selectedCats.slice(),
+    chosen_category:chosenCat,
+    chosen_trait:chosenTrait,
+    selected_image:selectedTerm,
+    custom_intention:customIntentionText,
+    generate_references:false
+  };
+
+  fetch('/prepare-imagination',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){return r.json().then(function(d){ if(!r.ok || d.error){throw new Error(d.error||('Request failed '+r.status));} return d;});})
+    .then(function(data){
+      if(thisPrepToken!==aiPrepSkipToken) return;
+      neutralSubject=data.neutral_subject || selectedTerm || fallbackSubject();
+      chosenImage = selectedTerm || data.raw_intention || neutralSubject;
+      selectedImageryTerm=chosenImage;
+      guidingQuestions = data.guiding_questions && data.guiding_questions.length ? data.guiding_questions : fallbackQuestions(neutralSubject);
+      referenceImages = [];
+      renderNeutralReference();
+      setReferenceLoading(false);
+      showReferenceChoice();
+    })
+    .catch(function(err){
+      if(thisPrepToken!==aiPrepSkipToken) return;
+      console.error(err);
+      neutralSubject=selectedTerm || fallbackSubject();
+      chosenImage=selectedTerm || neutralSubject;
+      selectedImageryTerm=chosenImage;
+      guidingQuestions=fallbackQuestions(neutralSubject);
+      referenceImages=[];
+      renderNeutralReference('AI 准备没有完成，但你仍然可以继续使用文字反思。');
+      setReferenceLoading(false);
+      showReferenceChoice();
+    });
+}
+function renderNeutralReference(note){
+  var title=document.getElementById('neutralSubjectTitle');
+  if(title) title.textContent=selectedImageryTerm || neutralSubject || '意象本身';
+  var sub=document.getElementById('deepSub');
+  if(sub){
+    var body=(document.getElementById('bodyInput')||{}).value||'你的身体';
+    sub.textContent='在加入情绪之前，先和“'+(selectedImageryTerm||neutralSubject||'这个意象')+'”待一会儿，再描述它如何连接到'+body+'。';
+  }
+  var grid=document.getElementById('referenceGrid');
+  var noNote=document.getElementById('referenceNoteNoImage');
+  if(grid){
+    grid.innerHTML='';
+    if(wantsReferenceImage===true){
+      grid.classList.remove('hidden');
+      if(noNote) noNote.classList.add('hidden');
+    }else if(wantsReferenceImage===false){
+      grid.classList.add('hidden');
+      if(noNote) noNote.classList.remove('hidden');
+    }else{
+      grid.classList.add('hidden');
+      if(noNote) noNote.classList.add('hidden');
+    }
+    var labels=['自然形态','象征形态','简化轮廓'];
+    for(var i=0;i<3;i++){
+      var src=referenceImages[i]||'';
+      var card=document.createElement('div');
+      card.className='reference-option';
+      card.setAttribute('data-index',i);
+      if(src){
+        card.innerHTML='<img src="'+src+'" alt="'+escapeHtml(selectedImageryTerm||neutralSubject)+' 参考图 '+(i+1)+'"><div class="reference-name">'+labels[i]+'</div>';
+      }else{
+        card.innerHTML='<div class="reference-placeholder">'+escapeHtml(labels[i])+'<br>'+escapeHtml(selectedImageryTerm||neutralSubject||'意象')+'</div><div class="reference-name">'+labels[i]+'</div>';
+      }
+      card.onclick=function(){
+        document.querySelectorAll('.reference-option').forEach(function(c){c.classList.remove('sel');});
+        this.classList.add('sel');
+        var idx=Number(this.getAttribute('data-index'));
+        selectedReferenceImage=referenceImages[idx] || labels[idx]+' of '+(selectedImageryTerm||neutralSubject||'意象');
+        var req=document.getElementById('referenceRequired'); if(req) req.classList.remove('on');
+      };
+      grid.appendChild(card);
+    }
+  }
+  var qs=document.getElementById('guidingQuestionsList');
+  if(qs){
+    qs.innerHTML='';
+    guidingQuestions.slice(0,4).forEach(function(q){
+      var div=document.createElement('div'); div.className='guiding-question'; div.textContent=q; qs.appendChild(div);
+    });
+  }
+  if(note){
+    var qs2=document.getElementById('guidingQuestionsList');
+    if(qs2){ var n=document.createElement('div'); n.className='guiding-question'; n.style.color='#ffb7c8'; n.textContent=note; qs2.prepend(n); }
+  }
+}
+
+
+function skipAIPrepAndContinue(){
+  aiPrepSkipToken++;
+  var selectedTerm=selectedImageryTerm || chosenImage || customIntentionText || chosenCat || '这个意象';
+  neutralSubject=selectedTerm;
+  chosenImage=selectedTerm;
+  selectedImageryTerm=selectedTerm;
+  guidingQuestions=fallbackQuestions(selectedTerm);
+  referenceImages=[];
+  wantsReferenceImage=false;
+  selectedReferenceImage='没有使用 AI 参考图；用户选择直接进入引导问题。';
+  renderNeutralReference('已跳过 AI 准备。你可以直接使用右侧的问题继续描述这个意象。');
+  setReferenceLoading(false);
+}
+
+function showReferenceChoice(){
+  var card=document.getElementById('referenceChoiceCard');
+  var term=document.getElementById('referenceChoiceTerm');
+  if(term) term.textContent=selectedImageryTerm || neutralSubject || '这个意象';
+  if(card) card.classList.remove('hidden');
+}
+
+function hideReferenceChoice(){
+  var card=document.getElementById('referenceChoiceCard');
+  if(card) card.classList.add('hidden');
+}
+
+function requestReferenceImages(){
+  if(!ensureApiKey()) return;
+  hideReferenceChoice();
+  wantsReferenceImage=true;
+  setReferenceLoading(true);
+  var selectedTerm=selectedImageryTerm || chosenImage || customIntentionText || neutralSubject || chosenCat;
+  fetch('/generate-references',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      api_key:getStoredApiKey(),
+      language:SITE_LANG,
+      subject:selectedTerm,
+      body:(document.getElementById('bodyInput')||{}).value||'',
+      texture:(document.getElementById('textureInput')||{}).value||''
+    })
+  })
+  .then(function(r){return r.json().then(function(d){ if(!r.ok || d.error){throw new Error(d.error||('Request failed '+r.status));} return d;});})
+  .then(function(data){
+    referenceImages=data.reference_images || [];
+    selectedReferenceImage='';
+    renderNeutralReference();
+    setReferenceLoading(false);
+  })
+  .catch(function(err){
+    console.error(err);
+    referenceImages=[];
+    renderNeutralReference('参考图没有生成成功，但你仍然可以继续使用自己的想象。');
+    setReferenceLoading(false);
+  });
+}
+
+function skipReferenceImages(){
+  hideReferenceChoice();
+  wantsReferenceImage=false;
+  selectedReferenceImage='没有使用 AI 参考图；用户选择保留自己的内在图像。';
+  referenceImages=[];
+  renderNeutralReference();
+}
+
+function continueAfterDeepening(){
+  var req1=document.getElementById('referenceRequired');
+  var req2=document.getElementById('descriptionRequired');
+  if(wantsReferenceImage===true && !selectedReferenceImage){ if(req1) req1.classList.add('on'); return; }
+  if(wantsReferenceImage===null){
+    showReferenceChoice();
+    return;
+  }
+  var desc=(document.getElementById('imaginationDescriptionInput')||{}).value||'';
+  if(!desc.trim()){ if(req2) req2.classList.add('on'); return; }
+  imaginationDescription=desc.trim();
+  var input=document.getElementById('imaginationInput');
+  var label=(selectedImageryTerm||neutralSubject||chosenImage||customIntentionText||'imagination')+' — '+imaginationDescription;
+  if(input) input.value=label;
+  activeImaginationText=label;
+  go(5);
+}
+
+function collectImaginationMaterials(){
+  var materials=[];
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var texture=(document.getElementById('textureInput')||{}).value||'';
+  if(body.trim()) materials.push({label:'身体：'+body.trim(), value:body.trim()});
+  if(texture.trim()) materials.push({label:'质地：'+texture.trim(), value:texture.trim()});
+  document.querySelectorAll('#s2 .tag.sel').forEach(function(t){
+    var txt=(t.textContent||'').replace('✓','').trim();
+    if(txt) materials.push({label:txt, value:txt});
+  });
+  if(chosenCat) materials.push({label:'metaphor: '+chosenCat, value:chosenCat});
+  if(chosenTrait) materials.push({label:chosenTrait, value:chosenTrait});
+  if(customIntentionText) materials.push({label:'typed image: '+customIntentionText, value:customIntentionText});
+  if(neutralSubject) materials.push({label:'visual anchor: '+neutralSubject, value:neutralSubject});
+  if(chosenImage && chosenImage!=='creature') materials.push({label:chosenImage, value:chosenImage});
+  if(imaginationDescription) materials.push({label:'描述：'+imaginationDescription, value:imaginationDescription});
+  return materials;
+}
+
+function updateImaginationSummary(){
+  var box=document.getElementById('imaginationSummary');
+  if(!box) return;
+  var materials=collectImaginationMaterials();
+  box.innerHTML='';
+  if(!materials.length){
+    box.innerHTML='<span class="imagination-chip">还没有选中的意象</span>';
+    return;
+  }
+  materials.slice(0,10).forEach(function(m,idx){
+    var chip=document.createElement('span');
+    chip.className='imagination-chip';
+    chip.textContent=m.label;
+    chip.onclick=function(){
+      document.querySelectorAll('.imagination-chip').forEach(function(c){c.classList.remove('on');});
+      chip.classList.add('on');
+      document.getElementById('imaginationInput').value=m.value;
+      activeImaginationText=m.value;
+    };
+    box.appendChild(chip);
+    if(idx===0 && !document.getElementById('imaginationInput').value){
+      document.getElementById('imaginationInput').value=m.value;
+      activeImaginationText=m.value;
+    }
+  });
+}
+
+function startImaginationPlacement(){
+  var input=document.getElementById('imaginationInput');
+  var val=(input?input.value:'').trim();
+  if(!val){
+    val='quiet sensation';
+    if(input) input.value=val;
+  }
+  activeImaginationText=val;
+  placingImagination=true;
+  var btn=document.getElementById('mapInsideBtn');
+  if(btn) btn.textContent='现在点击 3D 身体来放置它';
+  var status=document.getElementById('bodyModelStatus');
+  if(status) status.textContent='放置模式：点击 3D 身体';
+}
+
+function placeImaginationPoint(e){
+  var canvas=document.getElementById('c3d');
+  var zone=document.getElementById('modelDropZone') || canvas;
+  var layer=document.getElementById('modelMarkerLayer');
+  if(!zone||!layer) return;
+  var rect=zone.getBoundingClientRect();
+  var x=((e.clientX-rect.left)/rect.width)*100;
+  var y=((e.clientY-rect.top)/rect.height)*100;
+  if(x<0||x>100||y<0||y>100) return;
+
+  var label=activeImaginationText || (document.getElementById('imaginationInput')||{}).value || 'imagination';
+  var marker=document.createElement('div');
+  marker.className='model-marker';
+  marker.style.left=x+'%';
+  marker.style.top=y+'%';
+  marker.setAttribute('data-label',label);
+  layer.appendChild(marker);
+
+  imaginationPlacements.push({text:label,x:Math.round(x),y:Math.round(y),bodyModel:selectedBodyModelId});
+  placingImagination=false;
+  var btn=document.getElementById('mapInsideBtn');
+  if(btn) btn.textContent='继续放置想象点';
+  updatePlacementList();
+}
+
+
+function clearImaginationMarkers(){
+  imaginationPlacements=[];
+  placingImagination=false;
+  activeImaginationText='';
+  var layer=document.getElementById('modelMarkerLayer');
+  if(layer) layer.innerHTML='';
+  var btn=document.getElementById('mapInsideBtn');
+  if(btn) btn.textContent='把想象放进身体';
+  updatePlacementList();
+}
+
+function updatePlacementList(){
+  var list=document.getElementById('placementList');
+  var nextBtn=document.getElementById('generateImageBtn');
+  if(!list) return;
+  if(!imaginationPlacements.length){
+    list.innerHTML='<div class="empty-placement">还没有放置任何点。点击“把想象放进身体”后，再点击左侧 3D 身体。</div>';
+    if(nextBtn) nextBtn.disabled=true;
+    return;
+  }
+  list.innerHTML=imaginationPlacements.map(function(p,i){
+    return '<div class="placement-item"><strong>点 '+(i+1)+'</strong> · '+escapeHtml(p.text)+' <span style="opacity:.55">('+p.x+'%, '+p.y+'%)</span></div>';
+  }).join('');
+  if(nextBtn) nextBtn.disabled=false;
+}
+
+function zhMetaTerm(v){
+  var map={
+    animal:'动物', plant:'植物', water:'水', sky:'天空', earth:'土地 / 石头',
+    cosmos:'宇宙', food:'食物', object:'物品', structure:'建筑 / 结构',
+    creature:'生物', image:'意象', 'not specified':'未填写', 'quiet sensation':'一种还没命名的感觉'
+  };
+  return map[v]||v;
+}
+
+function prepareImageDirection(){
+  var cfg=BODY_MODELS[selectedBodyModelId]||BODY_MODELS.heart;
+  var body=(document.getElementById('bodyInput')||{}).value||'';
+  var texture=(document.getElementById('textureInput')||{}).value||'';
+  var materials=collectImaginationMaterials().map(function(m){return zhMetaTerm(m.value||m.label);}).join('、');
+  var catPath=(selectedCats.length?selectedCats:[chosenCat]).filter(Boolean).map(function(c){return catLabelZh[c]||zhMetaTerm(c);}).join('、');
+  var placements=imaginationPlacements.map(function(p,i){
+    return '点 '+(i+1)+'，位于左侧 '+p.x+'%、顶部 '+p.y+'%：'+p.text;
+  }).join('\n');
+  var aiChoice=(wantsReferenceImage===true?'使用了 AI 参考图':(wantsReferenceImage===false?'保留了自己的想象，没有使用参考图':'未说明'));
+
+  generatedImagePrompt =
+    '创作任务：请基于一个“身体映射 + 想象意象”的艺术疗愈过程，生成一幅温和、富有情绪共鸣的视觉作品。\n\n' +
+    '身体部位 / 3D 器官：' + cfg.zh + ' / ' + cfg.en + '。\n' +
+    '用户最初写下的身体词语：' + (body || '未填写') + '。\n' +
+    '感受质地词：' + (texture || '未填写') + '。\n' +
+    '意象路径：' + (catPath || '未填写') + '；选中的意象 / 隐喻：' + zhMetaTerm(selectedImageryTerm || chosenImage || '未填写') + '；AI 提取的中性视觉锚点：' + (neutralSubject || '未填写') + '；用户自填意象：' + (customIntentionText || '未填写') + '。\n' +
+    '用户对这个意象的描述：' + (imaginationDescription || '未填写') + '。\n' +
+    'AI 参考图选择：' + aiChoice + '。\n' +
+    '本次想象材料：' + (materials || '一种还没命名的感觉') + '。\n\n' +
+    '映射到 3D 身体中的点位：\n' + (placements || '还没有放置点位。') + '\n\n' +
+    '请生成一幅情绪共鸣明确、亲密、有机、诗意，并适合艺术疗愈场景的图像。让这些想象元素像是生活在所选身体部位之中，或围绕着它展开。画面可以体现重量、温度、质地、运动方向、边界与距离，让内在感受像一个正在显形的情绪场景。避免医学解剖图式，不要画成冷冰冰的临床说明图。不要加入标签、界面文字、医学注释、说明文字或图表。让这幅图像像一幅可以陪伴用户继续反思的作品，而不是替用户下结论。';
+
+  var out=document.getElementById('imagePromptOut');
+  if(out) out.value=generatedImagePrompt;
+}
+
+function showAIAssistChoice(){
+  var card=document.getElementById('finalGenerateCard');
+  if(card) card.classList.add('hidden');
+  var modal=document.getElementById('aiAssistModal');
+  if(modal) setTimeout(function(){ modal.classList.remove('hidden'); },80);
+}
+function closeAIAssistModal(){
+  var modal=document.getElementById('aiAssistModal');
+  if(modal) modal.classList.add('hidden');
+}
+function handleAIAssistBg(e){
+  if(e.target===document.getElementById('aiAssistModal')) closeAIAssistModal();
+}
+function chooseAIAssist(useAI){
+  finalChoiceMade=true;
+  closeAIAssistModal();
+  if(useAI){
+    var card=document.getElementById('finalGenerateCard');
+    if(card) card.classList.remove('hidden');
+  }else{
+    go(7);
+  }
+}
+
+function initDrawingReflection(){
+  renderDefaultDrawingReflection();
+}
+function renderDefaultDrawingReflection(){
+  var list=document.getElementById('drawingReflectionQuestions');
+  if(!list) return;
+  if(list.getAttribute('data-custom')==='yes') return;
+  list.innerHTML='';
+  [
+    '先看画面本身：哪一部分最先抓住你的注意？它可能不是最漂亮的部分，而是最有生命力的部分。',
+    '画面里有没有重量、方向、边界、节奏或距离？这些视觉线索让你想到什么身体感受？',
+    '如果这个图像现在需要一点什么，它会需要空间、保护、温暖、距离、柔软、光，还是别的东西？',
+    '如果它朝着稍微轻一点、舒服一点的方向变化，最先改变的会是颜色、重量、位置、大小，还是和你的距离？'
+  ].forEach(function(q){
+    var div=document.createElement('div');
+    div.className='reflection-question';
+    div.textContent=q;
+    list.appendChild(div);
+  });
+}
+function handleDrawingUpload(input){
+  var file=input.files && input.files[0];
+  if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    uploadedDrawingData=e.target.result;
+    var img=document.getElementById('drawingPreview');
+    var ph=document.getElementById('drawingUploadPlaceholder');
+    if(img){ img.src=uploadedDrawingData; img.classList.remove('hidden'); }
+    if(ph) ph.classList.add('hidden');
+    saveSessionData('drawing_uploaded', uploadedDrawingData, {
+      drawing_file_name:file.name || '',
+      drawing_file_type:file.type || '',
+      drawing_file_size:file.size || 0
+    });
+  };
+  reader.readAsDataURL(file);
+}
+function useGeneratedAsDrawing(){
+  var gen=document.getElementById('generatedImage');
+  if(!gen || !gen.src){
+    alert('现在还没有 AI 生成图像。你可以先上传自己的绘画。');
+    return;
+  }
+  uploadedDrawingData=gen.src;
+  var img=document.getElementById('drawingPreview');
+  var ph=document.getElementById('drawingUploadPlaceholder');
+  if(img){ img.src=uploadedDrawingData; img.classList.remove('hidden'); }
+  if(ph) ph.classList.add('hidden');
+}
+function reflectOnDrawing(){
+  var apiKey=getStoredApiKey();
+  var list=document.getElementById('drawingReflectionQuestions');
+  var out=document.getElementById('drawingReflectionOutput');
+  if(list){
+    list.setAttribute('data-custom','yes');
+    list.innerHTML='<div class="reflection-question">正在准备温和的反思问题……</div>';
+  }
+  if(out){ out.classList.add('hidden'); out.textContent=''; }
+
+  var payload={
+    api_key:apiKey,
+    participant_id:getParticipantId(),
+    language:SITE_LANG,
+    image_data:uploadedDrawingData,
+    body:(document.getElementById('bodyInput')||{}).value||'',
+    texture:(document.getElementById('textureInput')||{}).value||'',
+    selected_image:selectedImageryTerm||chosenImage||neutralSubject||'',
+    imagination_description:imaginationDescription||''
+  };
+
+  if(!apiKey){
+    renderDrawingReflectionFallback('没有找到 API 密钥。下面先提供一些不依赖 AI 的温和反思问题。');
+    return;
+  }
+
+  fetch('/reflect-drawing',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){return r.json().then(function(d){ if(!r.ok || d.error){throw new Error(d.error||('Request failed '+r.status));} return d;});})
+    .then(function(data){
+      if(list){
+        list.innerHTML='';
+        (data.questions||[]).slice(0,5).forEach(function(q){
+          var div=document.createElement('div');
+          div.className='reflection-question';
+          div.textContent=q;
+          list.appendChild(div);
+        });
+      }
+      if(out && data.reflection){
+        out.textContent=data.reflection;
+        out.classList.remove('hidden');
+      }
+      saveSessionData('drawing_reflection_completed', uploadedDrawingData, {
+        ai_reflection_questions:data.questions || [],
+        ai_reflection:data.reflection || ''
+      });
+    })
+    .catch(function(err){
+      console.error(err);
+      renderDrawingReflectionFallback('AI 反思暂时没有完成。你仍然可以先使用下面这些温和的问题。');
+    });
+}
+function renderDrawingReflectionFallback(note){
+  var list=document.getElementById('drawingReflectionQuestions');
+  if(list){
+    list.setAttribute('data-custom','yes');
+    list.innerHTML='';
+    [
+      '先看画面本身：哪一个细节最有生命力，或者最像是在努力保护你？',
+      '如果画里有沉重、混乱或距离感，它旁边有没有一点点空间、光、边界或支撑？',
+      '画中的哪一部分可以被你轻轻照顾一下，而不是立刻改变？',
+      '如果这幅画在提醒你一个小小的需要，它可能是在说：我需要什么支持？'
+    ].forEach(function(q){
+      var div=document.createElement('div');
+      div.className='reflection-question';
+      div.textContent=q;
+      list.appendChild(div);
+    });
+  }
+  var out=document.getElementById('drawingReflectionOutput');
+  if(out){ out.textContent=note; out.classList.remove('hidden'); }
+}
+
+
+function getInputValue(id){
+  var el=document.getElementById(id);
+  return el ? (el.value||'') : '';
+}
+function getElementText(id){
+  var el=document.getElementById(id);
+  return el ? (el.textContent||'').trim() : '';
+}
+function collectSessionData(extra){
+  var reflectionQuestions=[];
+  document.querySelectorAll('#drawingReflectionQuestions .reflection-question').forEach(function(q){
+    reflectionQuestions.push((q.textContent||'').trim());
+  });
+  var generatedImg=document.getElementById('generatedImage');
+  var cfg=(typeof BODY_MODELS!=='undefined' && selectedBodyModelId && BODY_MODELS[selectedBodyModelId]) ? BODY_MODELS[selectedBodyModelId] : {};
+  return Object.assign({
+    participant_id:getParticipantId(),
+    saved_at_client:new Date().toISOString(),
+    screen:curScreen,
+    body_input:getInputValue('bodyInput'),
+    texture_input:getInputValue('textureInput'),
+    selected_tags:getSelectedTags(),
+    selected_categories:selectedCats.slice(),
+    chosen_category:chosenCat || '',
+    chosen_trait:chosenTrait || '',
+    chosen_image:chosenImage || '',
+    custom_intention:getCustomIntention ? getCustomIntention() : '',
+    selected_imagery_term:selectedImageryTerm || '',
+    neutral_subject:neutralSubject || '',
+    wants_reference_image:wantsReferenceImage,
+    imagination_description:imaginationDescription || getInputValue('imaginationDescriptionInput'),
+    selected_body_model_id:selectedBodyModelId || '',
+    selected_body_model_zh:cfg.zh || '',
+    selected_body_model_en:cfg.en || '',
+    body_match:lastBodyMatch || null,
+    imagination_materials:(typeof collectImaginationMaterials==='function') ? collectImaginationMaterials() : [],
+    imagination_placements:imaginationPlacements.slice(),
+    generated_image_prompt:generatedImagePrompt || getInputValue('imagePromptOut'),
+    drawing_reflection_questions:reflectionQuestions,
+    drawing_reflection_output:getElementText('drawingReflectionOutput'),
+    has_uploaded_drawing:!!uploadedDrawingData,
+    has_generated_ai_image:!!(generatedImg && generatedImg.src)
+  }, extra || {});
+}
+function updateSaveStatus(msg, ok){
+  ['dataSaveStatusReflection','dataSaveStatusFinal'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el) return;
+    el.textContent=msg;
+    el.classList.remove('ok','warn');
+    el.classList.add(ok?'ok':'warn');
+  });
+}
+function saveSessionData(eventName, imageData, extra){
+  var pid=getParticipantId();
+  if(!pid){
+    console.warn('No participant id; skip save.');
+    updateSaveStatus('尚未输入受访者编号，无法保存。', false);
+    return Promise.resolve(null);
+  }
+  var payload={
+    participant_id:pid,
+    event:eventName || 'snapshot',
+    image_data:imageData || '',
+    session_data:collectSessionData(extra || {})
+  };
+  return fetch('/save-session',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  })
+  .then(function(r){return r.json().then(function(d){ if(!r.ok || d.error){throw new Error(d.error||('Save failed '+r.status));} return d;});})
+  .then(function(data){
+    lastSavedRecordId=data.record_id || lastSavedRecordId;
+    var folder=data.participant_folder || '';
+    updateSaveStatus('已自动保存到本地数据文件夹：'+folder, true);
+    return data;
+  })
+  .catch(function(err){
+    console.error(err);
+    updateSaveStatus('保存失败：'+(err && err.message ? err.message : err), false);
+    return null;
+  });
+}
+
+function copyImagePrompt(){
+  var out=document.getElementById('imagePromptOut');
+  if(!out) return;
+  out.select();
+  document.execCommand('copy');
+  alert('生成指令已复制。');
+}
+
+function refineImagePrompt(){
+  var refine=(document.getElementById('refineInput')||{}).value||'';
+  var out=document.getElementById('imagePromptOut');
+  if(!out) return;
+  if(refine.trim()){
+    out.value=out.value+'\n\n补充调整：'+refine.trim();
+    generatedImagePrompt=out.value;
+  }
+}
+
+function setGenerationState(state,msg){
+  var wait=document.getElementById('waitingPanel');
+  var result=document.getElementById('resultPanel');
+  var err=document.getElementById('errorPanel');
+  var errorText=document.getElementById('errorText');
+  var btn=document.getElementById('liveGenerateBtn');
+  if(wait) wait.classList.toggle('hidden',state!=='waiting');
+  if(result) result.classList.toggle('hidden',state!=='result');
+  if(err) err.classList.toggle('hidden',state!=='error');
+  if(btn){
+    btn.disabled=(state==='waiting');
+    if(state==='waiting') btn.innerHTML='正在生成……';
+    else if(state==='result') btn.innerHTML='重新生成一张 AI 回应图 &nbsp;↻';
+    else btn.innerHTML='生成一张 AI 回应图 &nbsp;→';
+  }
+  if(state==='error' && errorText) errorText.textContent=msg||'发生了一个未预期的问题。';
+}
+
+function updateWaitStep(i){
+  for(var k=0;k<3;k++){
+    var el=document.getElementById('ws'+k);
+    if(el) el.classList.toggle('on',k===i);
+  }
+  var title=document.getElementById('waitTitle');
+  var copy=document.getElementById('waitCopy');
+  var titles=['正在倾听你的身体……','正在编织内在景观……','正在让图像慢慢出现……'];
+  var copies=['artimal 正在整理你写下的身体词语、感觉质地、意象路径和映射点。','AI 正在把这些材料转化成一幅更清晰的视觉方向。','正在调用图像模型，请稍等片刻。'];
+  if(title) title.textContent=titles[i]||titles[0];
+  if(copy) copy.textContent=copies[i]||copies[0];
+}
+
+async function generateLiveImage(){
+  var out=document.getElementById('imagePromptOut');
+  if(!out || !out.value.trim()){
+    prepareImageDirection();
+  }
+  var prompt=((document.getElementById('imagePromptOut')||{}).value||generatedImagePrompt||'').trim();
+  var apiKey=getStoredApiKey();
+  var model='gpt-image-2';
+  var quality='high';
+  var size='1024x1024';
+
+  if(!apiKey){
+    setGenerationState('error','请先在第一页输入 OpenAI API key。你可以回到开头粘贴 key，再回到这里；最后一页不会再要求输入。');
+    return;
+  }
+  if(!prompt){
+    setGenerationState('error','没有找到生成指令。请返回并至少放置一个想象点。');
+    return;
+  }
+
+  try{
+    sessionStorage.setItem('artimal_openai_key',apiKey);
+  }catch(e){}
+
+  setGenerationState('waiting');
+  updateWaitStep(0);
+  setTimeout(function(){updateWaitStep(1);},1400);
+  setTimeout(function(){updateWaitStep(2);},3200);
+
+  try{
+    var response=await fetch('/generate-image',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        api_key:apiKey,
+        participant_id:getParticipantId(),
+        prompt:prompt,
+        model:model,
+        quality:quality,
+        size:size
+      })
+    });
+
+    var data=await response.json().catch(function(){return {};});
+    if(!response.ok || data.error){
+      throw new Error(data.error || ('Request failed with status '+response.status));
+    }
+    if(!data.image){
+      throw new Error('API 没有返回图像数据。');
+    }
+
+    var img=document.getElementById('generatedImage');
+    if(img) img.src=data.image;
+    setGenerationState('result');
+    saveSessionData('ai_final_image_generated', data.image, {
+      ai_image_prompt:prompt,
+      ai_image_model:model,
+      ai_image_quality:quality,
+      ai_image_size:size
+    });
+  }catch(err){
+    console.error(err);
+    setGenerationState('error',
+      'Image generation failed.\\n\\n'+
+      (err && err.message ? err.message : String(err))+
+      '\\n\\nIf this says 401, check your API key. If it says model access or organization verification, try another model or check your OpenAI API account.'
+    );
+  }
+}
+
+function downloadGeneratedImage(){
+  var img=document.getElementById('generatedImage');
+  if(!img || !img.src) return;
+  var a=document.createElement('a');
+  a.href=img.src;
+  a.download='artimal-generated-image.png';
+  a.click();
+}
+
+function sendGeneratedPrompt(){
+  generateLiveImage();
+}
+
+function updatePhrase(){
+  // Kept for compatibility with older inputs. New flow uses mapped imagination points.
+  prepareImageDirection();
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  fetch('/config').then(function(r){return r.json();}).then(function(config){
+    serverHasApiKey=Boolean(config.server_api_key_configured);
+    if(serverHasApiKey){
+      var status=document.getElementById('apiSetupStatus');
+      if(status){ status.textContent='本地服务器已配置 API 密钥。'; status.classList.add('ok'); }
+    }
+  }).catch(function(){});
+  try{
+    var saved=sessionStorage.getItem('artimal_openai_key');
+    if(saved && document.getElementById('apiKeyInput')) document.getElementById('apiKeyInput').value=saved;
+  }catch(e){}
+});
+
+
+
+/* ============================================================
+   DATA
+   ============================================================ */
+var catLabelZh={
+  animal:'动物', plant:'植物', water:'水', sky:'天空', earth:'土地 / 石头',
+  cosmos:'宇宙', food:'食物', object:'物品', structure:'建筑 / 结构'
+};
+
+var catTraits={
+  animal:['安静的力量','流动感','韧性','孤独','古老的智慧','深度','转化','野性','隐身感','本能'],
+  plant:['缓慢生长','扎根','向上伸展','季节性脱落','坚韧','隐藏的网络','安静更新','耐心','开花','脆弱'],
+  water:['持续流动','深度','映照','溶解','承载','侵蚀','透明','静止','奔涌','清洗'],
+  sky:['辽阔','无常','清澈','容纳一切','开放','风暴','变化的光','见证','不可触及','呼吸感'],
+  earth:['稳定','重量','古老层理','肥沃黑暗','托住','裂开的表面','落地感','埋藏','矿物感','结构感'],
+  cosmos:['无限距离','寂静','燃烧','无时间感','扩张','轨道','坍缩','发光','散落','寒冷辽阔'],
+  food:['滋养','甜味','苦味','安慰','仪式性的温暖','腐熟','丰盛','保存','质地','分享'],
+  object:['映照','被时间磨损','中空','透明','有重量','破碎','单独存在','被遗忘','熟悉','精确'],
+  structure:['持久','包围','门槛','废墟','基础','庇护','边界','回声','迷宫感','坚固']
+};
+
+var catImages={
+  animal:{
+    '安静的力量':['鲸鱼','大象','熊','乌龟'],
+    '流动感':['章鱼','鳗鱼','蝠鲼','水獭'],
+    '韧性':['乌龟','乌鸦','蝾螈','蟑螂'],
+    '孤独':['雪豹','孤狼','深海鱼','北极狐'],
+    '古老的智慧':['鳄鱼','猫头鹰','鲎','乌龟'],
+    '深度':['鲸鱼','深海鱼','水母','巨型乌贼'],
+    '转化':['蝴蝶','蛇','青蛙','蝉'],
+    '野性':['马','鹰','狼','鹿'],
+    '隐身感':['变色龙','章鱼','猫','飞蛾'],
+    '本能':['狐狸','鹰','豹','鲨鱼']
+  },
+  plant:{
+    '缓慢生长':['古老橡树','苔藓','竹子','仙人掌'],
+    '扎根':['红树林','榕树','树根','土豆藤'],
+    '向上伸展':['向日葵','藤蔓','竹笋','白杨树'],
+    '季节性脱落':['落叶树','枯枝','松果','凋谢花瓣'],
+    '坚韧':['仙人掌','野草','松树','地衣'],
+    '隐藏的网络':['菌丝','地下根系','苔藓层','森林根网'],
+    '安静更新':['新芽','蕨类展开','莲花','春天枝条'],
+    '耐心':['树苗','年轮','慢开的花','种子'],
+    '开花':['莲花','牡丹','野花','樱花'],
+    '脆弱':['薄叶','蒲公英','小花','幼芽']
+  },
+  water:{
+    '持续流动':['河流','溪水','潮汐','雨线'],
+    '深度':['深海','湖底','海沟','蓝色水洞'],
+    '映照':['静湖','水面倒影','雨后水洼','镜面海'],
+    '溶解':['雾气','融化的冰','水墨扩散','盐水'],
+    '承载':['海浪','河床','漂浮的船','水中叶片'],
+    '侵蚀':['海蚀洞','峡谷水流','磨圆的石头','潮水痕迹'],
+    '透明':['清泉','玻璃杯水','冰层','浅溪'],
+    '静止':['静湖','冻住的池塘','深井','无风的海'],
+    '奔涌':['瀑布','汹涌海浪','暴雨','急流'],
+    '清洗':['雨水','泉水','白色浪花','洗过的石头']
+  },
+  sky:{
+    '辽阔':['开阔地平线','高空','晴天','远方云层'],
+    '无常':['流云','变天','黄昏天空','风中的云'],
+    '清澈':['蓝天','透明空气','高原天空','清晨光'],
+    '容纳一切':['夜空','云层穹顶','天空盆地','远山上空'],
+    '开放':['地平线','大风天空','明亮天空','开阔云隙'],
+    '风暴':['雷暴云','暴风眼','黑云','闪电前的天空'],
+    '变化的光':['暮光','晨光','云间光','金色天边'],
+    '见证':['月亮','远星','静止云','高处的天空'],
+    '不可触及':['远云','高空月亮','极光','天际线'],
+    '呼吸感':['轻云','风','薄雾','清晨空气']
+  },
+  earth:{
+    '稳定':['花岗岩','山体','大石头','土坡'],
+    '重量':['巨石','山脊','沉重泥土','岩壁'],
+    '古老层理':['岩层','化石层','峡谷壁','沉积岩'],
+    '肥沃黑暗':['黑土','湿泥','种子土壤','森林地面'],
+    '托住':['地面','山谷','土地掌心','厚土层'],
+    '裂开的表面':['干裂土地','裂石','火山岩','龟裂泥土'],
+    '落地感':['泥土路','草地','石板路','根部土壤'],
+    '埋藏':['洞穴','地下种子','埋着的石头','土中骨片'],
+    '矿物感':['水晶','矿石','盐晶','石英'],
+    '结构感':['岩柱','石阶','地层剖面','山体断面']
+  },
+  cosmos:{
+    '无限距离':['星云','银河','深空','遥远星群'],
+    '寂静':['黑洞','暗星空','月背','无声宇宙'],
+    '燃烧':['恒星','太阳耀斑','流星','红色星云'],
+    '无时间感':['星轨','古老星光','宇宙尘埃','行星环'],
+    '扩张':['星云扩散','宇宙膨胀','光晕','爆发星尘'],
+    '轨道':['行星','月亮轨道','环形星轨','土星环'],
+    '坍缩':['黑洞','暗色漩涡','碎星','塌陷星云'],
+    '发光':['极光','星尘','发光星云','月光'],
+    '散落':['星屑','陨石带','碎光','银河尘'],
+    '寒冷辽阔':['冰蓝星空','远行星','冷色星云','深空']
+  },
+  food:{
+    '滋养':['热粥','米饭','清汤','烤面包','一碗面','温热的土豆'],
+    '甜味':['蜂蜜','熟无花果','桃子','糖渍果子','焦糖','蜜枣'],
+    '苦味':['黑巧克力','浓茶','柚子皮','苦瓜','咖啡豆','烤焦的面包边'],
+    '安慰':['热汤','白粥','烤土豆','温牛奶','软面包','一碗热面'],
+    '仪式性的温暖':['茶','热可可','围炉食物','香料汤','姜茶','炖菜'],
+    '腐熟':['发酵罐','泡菜','熟成奶酪','落果','酸面团','酿造中的酒糟'],
+    '丰盛':['浆果碗','果盘','满溢的餐桌','谷物丰收堆','装满的便当盒','盛满食物的陶碗'],
+    '保存':['果酱罐','腌菜瓶','干果','密封罐','蜜饯','晒干的橘皮'],
+    '质地':['软面团','颗粒谷物','果皮','融化巧克力','黏稠蜂蜜','酥脆饼干'],
+    '分享':['一碗汤','切开的水果','餐桌','面包篮','分开的橘子','两只杯子']
+  },
+  object:{
+    '映照':['旧镜子','水晶球','玻璃片','金属盘'],
+    '被时间磨损':['旧钥匙','磨损石头','旧布料','旧书'],
+    '中空':['空碗','瓶子','贝壳','空房间'],
+    '透明':['玻璃杯','冰块','透明盒子','水晶'],
+    '有重量':['铁球','石锤','厚书','沉重箱子'],
+    '破碎':['碎瓷片','裂开的杯子','破镜','断线'],
+    '单独存在':['一把椅子','一颗石头','一个杯子','一只鞋'],
+    '被遗忘':['旧玩具','落灰盒子','遗失钥匙','空信封'],
+    '熟悉':['枕头','毛衣','杯子','台灯'],
+    '精确':['指南针','针','齿轮','尺子']
+  },
+  structure:{
+    '持久':['石桥','古墙','城堡','拱门'],
+    '包围':['围墙花园','内院','贝壳状空间','小房间'],
+    '门槛':['门口','桥','台阶','入口'],
+    '废墟':['废弃神庙','倒塌墙体','残柱','空城'],
+    '基础':['地基','石座','柱子','根基'],
+    '庇护':['小屋','帐篷','洞穴','屋檐'],
+    '边界':['围栏','墙','门框','窗框'],
+    '回声':['走廊','回音室','空大厅','拱廊'],
+    '迷宫感':['迷宫','曲折小巷','楼梯间','密林小路'],
+    '坚固':['石塔','堡垒','厚墙','桥墩']
+  }
+};
+
+var faceEmoji={animal:'🦑',plant:'🌿',water:'🌊',sky:'☁️',earth:'🪨',cosmos:'🌌',food:'🫐',object:'🪞',structure:'🏛️'};
+
+
+
+document.addEventListener('DOMContentLoaded',function(){
+  try{
+    var saved=sessionStorage.getItem('artimal_openai_key')||'';
+    apiKeyFromSetup=saved;
+    var setup=document.getElementById('apiKeySetupInput');
+    if(setup && saved){ setup.value=saved; }
+    saveApiKeyFromSetup();
+  }catch(e){}
+  var b=document.getElementById('bodyInput');
+  var t=document.getElementById('textureInput');
+  if(b) b.addEventListener('input',updateReflectionCard);
+  if(t) t.addEventListener('input',updateReflectionCard);
+});
+</script>
+</body>
+</html>

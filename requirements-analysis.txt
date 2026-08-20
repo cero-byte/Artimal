@@ -1,0 +1,18 @@
+-r requirements.txt
+
+# Research notebooks and data-preprocessing scripts
+anthropic
+jupyter
+matplotlib
+numpy
+openpyxl
+opencv-python
+pandas
+Pillow
+scikit-learn
+scikit-posthocs
+scipy
+statsmodels
+torch
+torchvision
+tqdm

@@ -1,0 +1,56 @@
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+config.json
+!config.example.json
+
+# Research inputs and generated results (may contain participant data)
+data/
+artimal_collected_data/
+processed_painting/
+processed_painting.zip
+art_data.csv
+art_data.xlsx
+image_labels.csv
+features.npy
+filenames.npy
+processed_scores.csv
+*.inspect.ndjson
+!sample_data/art_data.csv
+!sample_data/art_data.xlsx
+output/
+output_steps/
+
+# Generated packages
+*.zip
+dist/
+build/
+
+# Large 3D assets; download them locally as described in README.md
+web/assets/*.glb
+
+# Local legacy copies
+artimal/
+artimal_live_image_SSL_FIXED/
+artimal_english_site/
+artimal_chinese_IMAGINATION_LITERATURE_8918/
+artimal_chinese_WINDOWS_STANDALONE_8920/
