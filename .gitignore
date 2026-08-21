@@ -24,6 +24,7 @@ config.json
 !config.example.json
 
 # Research inputs and generated results (may contain participant data)
+Dataset/*
 data/
 artimal_collected_data/
 processed_painting/
@@ -39,6 +40,12 @@ processed_scores.csv
 !sample_data/art_data.xlsx
 output/
 output_steps/
+
+# Public synthetic examples and their documentation
+!Dataset/README.md
+!Dataset/example/
+!Dataset/example/**
+Dataset/example/*.inspect.ndjson
 
 # Generated packages
 *.zip

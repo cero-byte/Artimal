@@ -13,7 +13,7 @@ Artimal 是一个面向艺术疗愈研究的 HCI 原型，包含中英文交互�
 | `web/` | 中英文网站、本地服务器和共享 3D 模型 |
 | `data_preprocessing/` | 绘画裁剪、问卷标准化和 ResNet 特征提取脚本 |
 | `notebooks/` | 统计分析与 Claude 图像语义标注 Notebook |
-| `sample_data/` | 可公开使用的合成示例数据和示例绘画 |
+| `Dataset/` | 本地研究数据说明，以及可公开的 `example/` 合成样例 |
 | `tests/` | 不调用外部 API 的服务器测试 |
 | `config.example.json` | OpenAI API 配置模板 |
 | `requirements.txt` | 仅运行网站所需的依赖 |
@@ -140,18 +140,18 @@ python data_preprocessing/extract_image_features.py INPUT_DIR OUTPUT_DIR
 
 ## 使用示例数据
 
-仓库中的 `sample_data/` 全部是合成数据，可以直接测试三个预处理脚本：
+仓库中的 `Dataset/example/` 全部是合成数据，可以直接测试三个预处理脚本。生成结果写入已被 Git 忽略的 `output/`：
 
 ```bash
 python data_preprocessing/preprocess_drawings.py \
-  sample_data/drawings/raw sample_data/drawings/processed \
+  Dataset/example/painting output/example_processed_painting \
   --min-area 1000 --padding 30
 
 python data_preprocessing/preprocess_questionnaire_scores.py \
-  sample_data/art_data.xlsx sample_data/processed_scores.csv
+  Dataset/example/art_data.xlsx output/example_scores.csv
 
 python data_preprocessing/extract_image_features.py \
-  sample_data/drawings/processed sample_data/features --no-pretrained
+  Dataset/example/processed_painting output/example_features --no-pretrained
 ```
 
 `--no-pretrained` 只用于快速检查程序能否运行，生成的随机网络特征不能用于正式研究。正式提取特征时请移除该参数。
@@ -166,7 +166,7 @@ jupyter lab notebooks/
 
 ### `art_therapy_analysis_hci.ipynb`
 
-读取 `sample_data/art_data.xlsx`，进行描述统计、相关分析和探索性回归。示例数据已验证可以完整运行，但不能作为真实研究结果。
+优先读取本地 `Dataset/art_data.xlsx`；如果不存在，则自动读取可公开的 `Dataset/example/art_data.xlsx`。Notebook 会先检查16个必需字段，再进行描述统计、相关分析、Elastic Net、梯度提升、分层回归和 Cross-fitting。
 
 ### `analyze_images_with_claude.ipynb`
 
@@ -183,14 +183,16 @@ jupyter lab notebooks/
 export ANTHROPIC_API_KEY="your-key"
 ```
 
-结果写入 `sample_data/image_labels.csv`。这些标签目前尚未合并进主要统计 Notebook。
+Notebook 使用与统计 Notebook 相同的数据选择规则，并读取其中的图片路径。结果写入已被 Git 忽略的 `output/image_labels.csv`。这些标签目前尚未合并进主要统计 Notebook。
 
 ## 数据与输出
 
 - 中文网站收集的数据默认保存在 `data/collected/<participant_id>/`。
 - 预处理结果保存在命令指定的输出路径。
 - `data/`、真实研究数据、API 配置和生成结果默认被 Git 忽略。
-- `sample_data/` 仅用于演示，不包含真实参与者信息。
+- `Dataset/` 根目录用于本地真实研究数据，这些文件不会提交到 GitHub。
+- `Dataset/example/` 只包含合成示例数据和示例图片，可以安全提交。
+- 16个字段的含义和当前观察范围见 `Dataset/README.md`。
 
 ## 测试
 

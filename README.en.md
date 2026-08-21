@@ -13,7 +13,7 @@ Artimal is an HCI research prototype for art-therapy studies. It includes a bili
 | `web/` | Chinese and English websites, local server, and the 3D asset directory |
 | `data_preprocessing/` | Drawing crop, questionnaire standardization, and ResNet feature scripts |
 | `notebooks/` | Statistical analysis and Claude semantic-labeling notebooks |
-| `sample_data/` | Synthetic example data and drawings that are safe to publish |
+| `Dataset/` | Local research-data guidance and publishable synthetic examples under `example/` |
 | `tests/` | Server tests that do not call external APIs |
 | `config.example.json` | OpenAI API configuration template |
 | `requirements.txt` | Minimal dependencies for the website |
@@ -140,18 +140,18 @@ These features are not yet connected to the main statistics notebook. They can s
 
 ## Sample data
 
-`sample_data/` contains synthetic data only. Run the following commands from the repository root:
+`Dataset/example/` contains synthetic data only. The following commands write generated outputs to the ignored `output/` directory:
 
 ```bash
 python data_preprocessing/preprocess_drawings.py \
-  sample_data/drawings/raw sample_data/drawings/processed \
+  Dataset/example/painting output/example_processed_painting \
   --min-area 1000 --padding 30
 
 python data_preprocessing/preprocess_questionnaire_scores.py \
-  sample_data/art_data.xlsx sample_data/processed_scores.csv
+  Dataset/example/art_data.xlsx output/example_scores.csv
 
 python data_preprocessing/extract_image_features.py \
-  sample_data/drawings/processed sample_data/features --no-pretrained
+  Dataset/example/processed_painting output/example_features --no-pretrained
 ```
 
 `--no-pretrained` only checks whether the code runs. Its random-network features must not be used for research. Remove this option for real feature extraction.
@@ -164,7 +164,7 @@ jupyter lab notebooks/
 
 ### `art_therapy_analysis_hci.ipynb`
 
-Reads `sample_data/art_data.xlsx` and runs descriptive statistics, correlation analysis, and exploratory regression. The synthetic example runs end to end but is not research evidence.
+Prefers the local `Dataset/art_data.xlsx`; if it is absent, the notebook automatically uses the publishable `Dataset/example/art_data.xlsx`. It validates all 16 required columns before running descriptive statistics, correlation analysis, Elastic Net, gradient boosting, hierarchical regression, and cross-fitting.
 
 ### `analyze_images_with_claude.ipynb`
 
@@ -176,14 +176,16 @@ Set a separate Anthropic API key before running:
 export ANTHROPIC_API_KEY="your-key"
 ```
 
-Results are written to `sample_data/image_labels.csv`. These labels are not yet merged into the main statistics notebook.
+The notebook uses the same real-data/example-data selection rule and resolves the image paths stored in the workbook. Results are written to the ignored `output/image_labels.csv`. These labels are not yet merged into the main statistics notebook.
 
 ## Data and outputs
 
 - Chinese-site session data is saved to `data/collected/<participant_id>/` by default.
 - Preprocessing results are written to the output paths supplied in each command.
 - Real research data, local API configuration, and generated analysis outputs are ignored by Git.
-- `sample_data/` is for demonstration only and contains no participant information.
+- Files placed directly under `Dataset/` are local research data and are not committed.
+- `Dataset/example/` contains only synthetic data and drawings that are safe to publish.
+- See `Dataset/README.md` for the 16-column data dictionary and observed ranges.
 
 ## Tests
 
