@@ -2,9 +2,9 @@
 
 [中文](README.md) | [**English**](README.en.md)
 
-Artimal is an HCI research prototype for art-therapy studies. It includes a bilingual interactive website, optional AI-assisted guidance and image generation, and tools for processing drawings and questionnaire data.
+Artimal investigates how generative AI can support adolescents in developing, elaborating, and externalizing their mental imagery from vague emotional experiences to therapeutic art-making, while preserving their imagination and agency throughout the creative process.
 
-> This project is for research and education only. It does not provide medical diagnosis or replace professional mental-health support.
+> This project is for research only. It does not provide medical diagnosis or replace professional mental-health support.
 
 ## Repository contents
 
